@@ -167,6 +167,8 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/':                ['permitAll'],
 	'/index':           allRoles,
 	'/home/**':           allRoles,
+	'/centroCusto/**':           allRoles,
+	'/anexo/**':           allRoles,
 	'/user/**':           ['ROLE_SUPORTE'],
 	'/console/**':           ['ROLE_SUPORTE'],
 	'/plugins/console*/**':           ['ROLE_SUPORTE'],
@@ -177,6 +179,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/js/**':        ['permitAll'],
 	'/**/css/**':       ['permitAll'],
 	'/**/images/**':    ['permitAll'],
-	'/**/favicon.ico':  ['permitAll']
+	'/**/favicon.ico':  ['permitAll'],
+	'/img/**':  ['permitAll']
 ]
 
