@@ -7,7 +7,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title><g:layoutTitle default="Gerência Fase"/></title>
+		<title><g:layoutTitle default="Sistem de Gerência (Fase Amazonia)"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="${assetPath(src: 'fase-icon.ico')}" type="image/x-icon">
 <link rel="apple-touch-icon" href="${assetPath(src: 'apple-touch-icon.png')}">
@@ -46,10 +46,10 @@
             <!-- LOGO SECTION -->
             <header class="navbar-header">
 
-             %{--   <a href="index.html" class="navbar-brand">
-                    <img src="${assetPath(src: 'logo-fase.png')}" alt=""/>
+                %{--   <a href="index.html" class="navbar-brand">
+                       <img src="${assetPath(src: 'logo-fase.png')}" alt=""/>
 
-                </a>--}%
+                   </a>--}%
             </header>
             <!-- END LOGO SECTION -->
             <ul class="nav navbar-top-links navbar-right">
@@ -295,7 +295,8 @@
                         <li><a href="#"><i class="icon-gear"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="icon-signout"></i> Logout</a>
+                        <li><g:link controller="logout" class="usuario-logado"><i
+                                class="icon-signout"></i> Sair</g:link>
                         </li>
                     </ul>
 
@@ -314,21 +315,22 @@
     <div id="left">
         <div class="media user-media well-small">
             <a class="user-link" href="#">
-                <img class="media-object img-thumbnail user-img" alt="User Picture" src="${assetPath(src: 'logo-fase.png')}/"/>
+                <img class="media-object img-thumbnail user-img" alt="User Picture"
+                     src="${assetPath(src: 'logo-fase.png')}/"/>
             </a>
             <br/>
 
-          %{--  <div class="media-body">
-                <h5 class="media-heading">Joe Romlin</h5>
-                <ul class="list-unstyled user-info">
+            %{--  <div class="media-body">
+                  <h5 class="media-heading">Joe Romlin</h5>
+                  <ul class="list-unstyled user-info">
 
-                    <li>
-                        <a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"></a> Online
+                      <li>
+                          <a class="btn btn-success btn-xs btn-circle" style="width: 10px;height: 12px;"></a> Online
 
-                    </li>
+                      </li>
 
-                </ul>
-            </div>--}%
+                  </ul>
+              </div>--}%
             <br/>
         </div>
 
@@ -354,17 +356,33 @@
                 </a>
                 <ul class="collapse" id="component-nav">
 
-                    <li class=""><a href="button.html"><i class="icon-angle-right"></i> Linha de Ação</a></li>
-                    <li class=""><a href="icon.html"><i class="icon-angle-right"></i> Atividade</a></li>
-                    <li class=""><a href="progress.html"><i class="icon-angle-right"></i> Centro de Custo</a></li>
-                    <li class=""><a href="tabs_panels.html"><i class="icon-angle-right"></i> Orçamento</a></li>
-                    <li class=""><a href="notifications.html"><i class="icon-angle-right"></i> Item do Orçamento</a></li>
-                    <li class=""><a href="more_notifications.html"><i class="icon-angle-right"></i> Lançamento
-                    </a></li>
-                    <li class=""><a href="modals.html"><i class="icon-angle-right"></i> Funcionário</a></li>
-                    <li class=""><a href="wizard.html"><i class="icon-angle-right"></i> Financiador</a></li>
+                    <li class=""><a href="button.html">Linha de Ação</a></li>
+                    <li class=""><a href="icon.html">Atividade</a></li>
+                    <li class=""><a href="progress.html">Centro de Custo</a></li>
+                    <li class=""><a href="tabs_panels.html">Orçamento</a></li>
+                    <li class=""><a href="notifications.html">Item do Orçamento</a></li>
+                    <li class=""><a href="more_notifications.html">Lançamento</a></li>
+                    <li class=""><a href="modals.html">Funcionário</a></li>
+                    <li class=""><a href="wizard.html">Financiador</a></li>
                 </ul>
             </li>
+
+            <sec:ifAnyGranted roles="ROLE_SUPORTE">
+                <li class="panel ">
+                    <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle"
+                       data-target="#component-sistema">
+                        <i class="icon-tasks"></i> Sistema
+
+                        <span class="pull-right">
+                            <i class="icon-angle-left"></i>
+                        </span>
+                    </a>
+                    <ul class="collapse"  id="component-sistema">
+
+                        <li class=""><g:link controller="console" target="Console">Console</g:link></li>
+                    </ul>
+                </li>
+            </sec:ifAnyGranted>
             <li class="panel ">
                 <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle collapsed"
                    data-target="#form-nav">
@@ -375,7 +393,20 @@
                     </span>
                 </a>
                 <ul class="collapse" id="form-nav">
-                    <li class=""><a href="forms_general.html"><i class="icon-angle-right"></i> Meu Usuário</a></li>
+
+                    <li>
+                        <g:link controller="user" class="submenu-logado" action="meuUsuario">Meu Usuário</g:link>
+                    </li>
+                    <sec:ifAnyGranted roles="ROLE_MASTER, ROLE_SUPORTE">
+                        <li>
+                            <g:link controller="user" action="index" class="submenu-logado"
+                                    >Cadastro de Usuários</g:link>
+                        </li>
+                        <li>
+                            <g:link controller="role" class="submenu-logado" action="index">Perfis de Acesso</g:link>
+                        </li>
+                    </sec:ifAnyGranted>
+
                 </ul>
             </li>
 
@@ -390,7 +421,6 @@
                 </a>
             </li>
 
-
         </ul>
 
     </div>
@@ -399,55 +429,9 @@
 
 
     <!--PAGE CONTENT -->
-        <g:layoutBody/>
+    <g:layoutBody/>
     <!--END PAGE CONTENT -->
 
-    <!-- RIGHT STRIP  SECTION -->
-    <div id="right">
-
-        <div class="well well-small">
-            <ul class="list-unstyled">
-                <li>Visitor &nbsp; : <span>23,000</span></li>
-                <li>Users &nbsp; : <span>53,000</span></li>
-                <li>Registrations &nbsp; : <span>3,000</span></li>
-            </ul>
-        </div>
-
-        <div class="well well-small">
-            <button class="btn btn-block">Help</button>
-            <button class="btn btn-primary btn-block">Tickets</button>
-            <button class="btn btn-info btn-block">New</button>
-            <button class="btn btn-success btn-block">Users</button>
-            <button class="btn btn-danger btn-block">Profit</button>
-            <button class="btn btn-warning btn-block">Sales</button>
-            <button class="btn btn-inverse btn-block">Stock</button>
-        </div>
-
-        <div class="well well-small">
-            <span>Profit</span><span class="pull-right"><small>20%</small></span>
-
-            <div class="progress mini">
-                <div class="progress-bar progress-bar-info" style="width: 20%"></div>
-            </div>
-            <span>Sales</span><span class="pull-right"><small>40%</small></span>
-
-            <div class="progress mini">
-                <div class="progress-bar progress-bar-success" style="width: 40%"></div>
-            </div>
-            <span>Pending</span><span class="pull-right"><small>60%</small></span>
-
-            <div class="progress mini">
-                <div class="progress-bar progress-bar-warning" style="width: 60%"></div>
-            </div>
-            <span>Summary</span><span class="pull-right"><small>80%</small></span>
-
-            <div class="progress mini">
-                <div class="progress-bar progress-bar-danger" style="width: 80%"></div>
-            </div>
-        </div>
-
-    </div>
-    <!-- END RIGHT STRIP  SECTION -->
 </div>
 
 <!--END MAIN WRAPPER -->
