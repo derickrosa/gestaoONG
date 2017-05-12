@@ -21,4 +21,8 @@ class Anexo {
         formato nullable: true
         filedata blank: true, nullable:true, maxSize:1073741824
     }
+
+    String toString(){
+        "Anexo | ${nome}"
+    }
 }

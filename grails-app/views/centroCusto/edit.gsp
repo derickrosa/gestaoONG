@@ -46,7 +46,7 @@
                                 </ul>
                             </div>
                         </g:hasErrors>
-                        <g:form url="[resource: centroCustoInstance, action: 'update']" method="PUT">
+                        <g:form url="[resource: centroCustoInstance, action: 'update']" enctype="multipart/form-data">
 
                             <g:hiddenField name="version" value="${centroCustoInstance?.version}"/>
                             <g:render template="form"/>
