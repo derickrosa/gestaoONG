@@ -6,7 +6,7 @@ class Orcamento {
     Double valorTotal
     Integer moeda
 
-//    static hasMany = [itensOrcamentarios: ItemOrcamentario]
+    static hasMany = [itensOrcamentarios: ItemOrcamentario]
 
     static belongsTo = [centroCusto: CentroCusto]
 
