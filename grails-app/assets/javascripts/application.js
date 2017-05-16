@@ -8,6 +8,8 @@
 //= require /plugins/jquery-2.0.3.min.js
 //= require /plugins/bootstrap/bootstrap.min.js
 //= require /plugins/modernizr-2.6.2-respond-1.1.0.min.js
+//= require jquery.edittable.js
+
 
 if (typeof jQuery !== 'undefined') {
 	(function($) {

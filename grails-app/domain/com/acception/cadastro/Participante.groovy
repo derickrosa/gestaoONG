@@ -17,6 +17,9 @@ class Participante {
     Telefone telefone2
     Telefone celular*/
 
+    Telefone telefone
+    Telefone telefoneAdicional
+
     String email
     String emailAdicional
 
@@ -27,10 +30,16 @@ class Participante {
 
     static constraints = {
         nome maxSize:100
+        telefone nullable: true
+        telefoneAdicional nullable: true
         email email:true, nullable:true
         emailAdicional email:true, nullable:true
         user nullable:true
         papeis nullable:true
         senhaInicial nullable:true, maxSize:64
+    }
+
+    String toString() {
+        nome
     }
 }
