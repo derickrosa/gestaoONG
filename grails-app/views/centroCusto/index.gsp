@@ -6,6 +6,11 @@
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'centroCusto.label', default: 'CentroCusto')}"/>
     <title><g:message code="default.list.label" args="[entityName]"/></title>
+    <style>
+        th {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -32,45 +37,61 @@
             <table class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    
+                    <g:sortableColumn property="codigo"
+                                      title="${message(code: 'centroCusto.codigo.label', default: 'Código')}"/>
+
+                    <g:sortableColumn property="nome"
+                                      title="${message(code: 'centroCusto.nome.label', default: 'Nome')}"/>
+
+                    <g:sortableColumn property="ano"
+                                      title="${message(code: 'centroCusto.ano.label', default: 'Ano')}"/>
+
                     <g:sortableColumn property="dataInicio"
-                                      title="${message(code: 'centroCusto.dataInicio.label', default: 'Data Inicio')}"/>
+                                      title="${message(code: 'centroCusto.dataInicio.label', default: 'Data Início')}"/>
                     
                     <g:sortableColumn property="dataFinal"
                                       title="${message(code: 'centroCusto.dataFinal.label', default: 'Data Final')}"/>
                     
                     <th><g:message code="centroCusto.planoDeTrabalho.label" default="Plano De Trabalho"/></th>
-                    
-                    <g:sortableColumn property="ano"
-                                      title="${message(code: 'centroCusto.ano.label', default: 'Ano')}"/>
-                    
-                    <g:sortableColumn property="codigo"
-                                      title="${message(code: 'centroCusto.codigo.label', default: 'Codigo')}"/>
-                    
-                    <g:sortableColumn property="dateCreated"
-                                      title="${message(code: 'centroCusto.dateCreated.label', default: 'Date Created')}"/>
-                    
+
+                    <g:sortableColumn property="statusProjeto"
+                                      title="${message(code: 'centroCusto.statusProjeto.label', default: 'Status Projeto')}"/>
+
+
                 </tr>
                 </thead>
-                <tbody>
-                <g:each in="${centroCustoInstanceList}" status="i" var="centroCustoInstance">
-                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        
-                        <td><g:link action="show"
-                                    id="${centroCustoInstance.id}">${fieldValue(bean: centroCustoInstance, field: "dataInicio")}</g:link></td>
-                        
-                        <td><g:formatDate date="${centroCustoInstance.dataFinal}"/></td>
-                        
-                        <td>${fieldValue(bean: centroCustoInstance, field: "planoDeTrabalho")}</td>
-                        
-                        <td>${fieldValue(bean: centroCustoInstance, field: "ano")}</td>
-                        
-                        <td>${fieldValue(bean: centroCustoInstance, field: "codigo")}</td>
-                        
-                        <td><g:formatDate date="${centroCustoInstance.dateCreated}"/></td>
-                        
+                <tbody class="text-center">
+                <g:if test="${centroCustoInstanceList}">
+                    <g:each in="${centroCustoInstanceList}" status="i" var="centroCustoInstance">
+                        <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+
+                            <td><g:link action="show"
+                                        id="${centroCustoInstance.id}">${fieldValue(bean: centroCustoInstance, field: "codigo")}</g:link></td>
+
+                            <td>${fieldValue(bean: centroCustoInstance, field: "nome")}</td>
+
+                            <td><g:formatNumber number="${centroCustoInstance.ano}" format="##0" /></td>
+
+                            <td><g:formatDate format="dd/MM/yyyy" date="${centroCustoInstance.dataInicio}"/></td>
+
+                            <td><g:formatDate format="dd/MM/yyyy" date="${centroCustoInstance.dataFinal}"/></td>
+
+                            <td><g:link controller="anexo" action="show" id="${centroCustoInstance?.planoDeTrabalho?.id}">${centroCustoInstance?.planoDeTrabalho}</g:link></td>
+
+                            <td>${fieldValue(bean: centroCustoInstance, field: "statusProjeto")}</td>
+
+                        </tr>
+                    </g:each>
+                </g:if>
+                <g:else>
+                    <tr>
+                        <th colspan="7">
+                            Sem registros!
+                        </th>
                     </tr>
-                </g:each>
+                </g:else>
+
+
                 </tbody>
             </table>
 

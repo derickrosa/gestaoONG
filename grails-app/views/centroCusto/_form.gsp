@@ -39,7 +39,8 @@
                 <g:message code="centroCusto.descricao.label" default="Descrição"/>
 
             </label>
-            <g:textField class="form-control" required="required" name="descricao" value="${centroCustoInstance?.descricao}"/>
+            <g:textField class="form-control" required="required" name="descricao"
+                         value="${centroCustoInstance?.descricao}"/>
         </div>
     </div>
 </div>
@@ -51,7 +52,8 @@
                 <g:message code="centroCusto.ano.label" default="Ano"/>
 
             </label>
-            <g:field class="form-control" id="ano" equired="required" name="ano" type="number" min="0" value="${centroCustoInstance.ano}"/>
+            <g:field class="form-control" id="ano" equired="required" name="ano" type="number" min="0"
+                     value="${centroCustoInstance.ano}"/>
         </div>
     </div>
 
@@ -61,7 +63,9 @@
                 <g:message code="centroCusto.statusProjeto.label" default="Status Projeto"/>
 
             </label>
-            <g:select name="statusProjeto" required="required" from="${StatusProjeto?.values()}" class="form-control" keys="${StatusProjeto.values()*.name()}" value="${centroCustoInstance?.statusProjeto?.name()}"  noSelection="['': 'Selecione um status...']"/>
+            <g:select name="statusProjeto" required="required" from="${StatusProjeto?.values()}" class="form-control"
+                      keys="${StatusProjeto.values()*.name()}" value="${centroCustoInstance?.statusProjeto?.name()}"
+                      noSelection="['': 'Selecione um status...']"/>
 
         </div>
     </div>
@@ -93,19 +97,17 @@
 <div class="form-group fieldcontain ${hasErrors(bean: centroCustoInstance, field: 'planoDeTrabalho', 'error')} ">
     <label for="planoDeTrabalho">
         <g:message code="centroCusto.planoDeTrabalho.label" default="Plano De Trabalho"/>
-        
     </label>
 
-    <input required="required" type="file" class="file" id="planoDeTrabalho" name="planoDeTrabalho" value="${centroCustoInstance?.planoDeTrabalho}"
-           data-preview-file-type="text" data-language="pt-BR" data-show-upload="false">
+    <input type="file" id="planoDeTrabalho" name="planoDeTrabalho">
 </div>
 
 %{--<div class="form-group fieldcontain ${hasErrors(bean: centroCustoInstance, field: 'orcamento', 'error')} ">--}%
-    %{--<label for="orcamento">--}%
-        %{--<g:message code="centroCusto.orcamento.label" default="Orcamento"/>--}%
-        %{----}%
-    %{--</label>--}%
-    %{--<g:select class="form-control" id="orcamento" name="orcamento.id" from="${com.acception.cadastro.Orcamento.list()}" optionKey="id" value="${centroCustoInstance?.orcamento?.id}" class="form-control" noSelection="['null': '']"/>--}%
+%{--<label for="orcamento">--}%
+%{--<g:message code="centroCusto.orcamento.label" default="Orcamento"/>--}%
+%{----}%
+%{--</label>--}%
+%{--<g:select class="form-control" id="orcamento" name="orcamento.id" from="${com.acception.cadastro.Orcamento.list()}" optionKey="id" value="${centroCustoInstance?.orcamento?.id}" class="form-control" noSelection="['null': '']"/>--}%
 
 %{--</div>--}%
 
@@ -116,15 +118,29 @@
             language: 'pt-BR',
             autoclose: true
         });
-    })
+
+        $('#planoDeTrabalho').fileinput({
+            language: 'pt-BR',
+            showUpload: false,
+            maxFileCount: 1,
+            overwriteInitial: true,
+            previewFileType: 'text',
+            <g:if test="${centroCustoInstance?.planoDeTrabalho}">
+                initialPreview: [
+                    "${createLink(controller: 'anexo', action: 'download', id: "${centroCustoInstance?.planoDeTrabalho?.id}")}"
+                ],
+                initialPreviewAsData: true,
+                initialPreviewConfig: [
+                    {
+                        type: "object",
+                        caption: "${centroCustoInstance?.planoDeTrabalho?.nome}"
+                    }
+                ],
+                initialPreviewShowDelete: false
+            </g:if>
+        });
+    });
 
 
-    %{--console.log('Hi');--}%
-
-    %{--var bytes = ${centroCustoInstance.planoDeTrabalho.filedata.toString()};--}%
-
-    %{--var file = new File(bytes, "xxx.txt");--}%
-
-    %{--$('#planoDeTrabalho').fileinput('addToStack', file);--}%
 
 </script>

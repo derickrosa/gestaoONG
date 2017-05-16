@@ -7,7 +7,7 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class CentroCustoController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -29,15 +29,17 @@ class CentroCustoController {
             return
         }
 
-        println params
-
         if (centroCustoInstance.hasErrors()) {
             respond centroCustoInstance.errors, view: 'create'
             return
         }
 
+        if (params.planoDeTrabalho.isEmpty()) {
+            centroCustoInstance.planoDeTrabalho = null
+        } else {
+            centroCustoInstance.planoDeTrabalho.save flush: true
+        }
 
-        centroCustoInstance.planoDeTrabalho.save flush: true
         centroCustoInstance.save flush: true
 
         request.withFormat {
@@ -63,6 +65,12 @@ class CentroCustoController {
         if (centroCustoInstance.hasErrors()) {
             respond centroCustoInstance.errors, view: 'edit'
             return
+        }
+
+        if (params.planoDeTrabalho.isEmpty()) {
+            centroCustoInstance.planoDeTrabalho = null
+        } else {
+            centroCustoInstance.planoDeTrabalho.save flush: true
         }
 
         centroCustoInstance.save flush: true
