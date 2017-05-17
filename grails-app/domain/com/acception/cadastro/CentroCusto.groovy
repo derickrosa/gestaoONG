@@ -13,13 +13,13 @@ class CentroCusto {
     Date dataFinal
 
     Anexo planoDeTrabalho
-//    Responsavel responsavel
+    Responsavel responsavel
     StatusProjeto statusProjeto
     Orcamento orcamento
 
 //    static hasMany = [atividades: Atividade]
 
-//    static belongsTo = [financiador: Financiador]
+    static belongsTo = [financiador: Financiador]
 
     static constraints = {
         dataInicio nullable: true

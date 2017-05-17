@@ -9,6 +9,15 @@
         <webroots>
           <root url="file://$MODULE_DIR$/target/work/plugins/jquery-1.11.1/web-app" relative="/" />
           <root url="file://$MODULE_DIR$/target/work/plugins/database-migration-1.4.0/grails-app/views" relative="/" />
+          <root url="file://$MODULE_DIR$/target/work/plugins/jquery-ui-1.10.4/web-app" relative="/" />
+          <root url="file://$MODULE_DIR$/target/work/plugins/console-1.5.5/web-app" relative="/" />
+          <root url="file://$MODULE_DIR$/target/work/plugins/console-1.5.5/grails-app/views" relative="/" />
+          <root url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/views" relative="/" />
+          <root url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4/web-app" relative="/" />
+          <root url="file://$MODULE_DIR$/target/work/plugins/audit-logging-1.0.7/grails-app/views" relative="/" />
+          <root url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5/grails-app/views" relative="/" />
+          <root url="file://$MODULE_DIR$/target/work/plugins/export-1.6/web-app" relative="/" />
+          <root url="file://$MODULE_DIR$/target/work/plugins/mail-1.0.7/grails-app/views" relative="/" />
         </webroots>
         <sourceRoots />
       </configuration>
@@ -29,15 +38,41 @@
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/asset-pipeline-2.1.5/grails-app/services" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/asset-pipeline-2.1.5/grails-app/taglib" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/audit-logging-1.0.7">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/audit-logging-1.0.7/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/audit-logging-1.0.7/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/audit-logging-1.0.7/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/audit-logging-1.0.7/grails-app/domain" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/cache-1.1.8">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/cache-1.1.8/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/cache-1.1.8/src/groovy" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/cache-1.1.8/grails-app/services" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/cache-1.1.8/grails-app/taglib" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/cache-headers-1.1.7">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/cache-headers-1.1.7/grails-app/services" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/console-1.5.5">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/console-1.5.5/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/console-1.5.5/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/console-1.5.5/grails-app/services" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/database-migration-1.4.0">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/database-migration-1.4.0/src/groovy" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/database-migration-1.4.0/grails-app/controllers" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/export-1.6">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/export-1.6/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/export-1.6/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/export-1.6/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/fixed-flat-file-0.4.1">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/fixed-flat-file-0.4.1/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/fixed-flat-file-0.4.1/grails-app/services" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/fixtures-1.3">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/fixtures-1.3/src/groovy" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/hibernate4-4.3.8.1">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/hibernate4-4.3.8.1/src/java" isTestSource="false" />
@@ -47,13 +82,54 @@
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/jquery-1.11.1/grails-app/services" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/jquery-1.11.1/grails-app/taglib" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/jquery-ui-1.10.4">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/jquery-ui-1.10.4/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/mail-1.0.7">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/mail-1.0.7/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/mail-1.0.7/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/mail-1.0.7/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/mail-1.0.7/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/quartz-1.0.2">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/quartz-1.0.2/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/quartz-1.0.2/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/quartz-1.0.2/grails-app/services" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/rest-0.8">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/rest-0.8/src/groovy" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/scaffolding-2.1.2">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/scaffolding-2.1.2/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/scaffolding-2.1.2/src/groovy" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/simple-captcha-1.0.0">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/simple-captcha-1.0.0/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/simple-captcha-1.0.0/grails-app/services" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/domain" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/taglib" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/tomcat-7.0.55.2">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/tomcat-7.0.55.2/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/tomcat-7.0.55.2/src/groovy" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4/grails-app/taglib" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/webxml-1.4.1">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/webxml-1.4.1/src/groovy" isTestSource="false" />
@@ -99,6 +175,38 @@
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/tomcat/embed/tomcat-embed-el/7.0.55/tomcat-embed-el-7.0.55.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/tomcat/embed/tomcat-embed-jasper/7.0.55/tomcat-embed-jasper-7.0.55.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/tomcat/tomcat-catalina-ant/7.0.55/tomcat-catalina-ant-7.0.55.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpclient/4.2.1/httpclient-4.2.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/groovy/modules/http-builder/http-builder/0.6/http-builder-0.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/quartz-scheduler/quartz/2.2.1/quartz-2.2.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/javax/mail/javax.mail-api/1.5.1/javax.mail-api-1.5.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/xml-resolver/xml-resolver/1.2/xml-resolver-1.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/net/sourceforge/nekohtml/nekohtml/1.9.16/nekohtml-1.9.16.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/net/sf/ezmorph/ezmorph/1.0.6/ezmorph-1.0.6.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/net/sourceforge/jexcelapi/jxl/2.6.12/jxl-2.6.12.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/odftoolkit/odfdom-java/0.8.5/odfdom-java-0.8.5.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/com/lowagie/itext-rtf/2.1.7/itext-rtf-2.1.7.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/bouncycastle/bcmail-jdk14/1.38/bcmail-jdk14-1.38.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/bouncycastle/bcprov-jdk14/1.38/bcprov-jdk14-1.38.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/bouncycastle/bctsp-jdk14/1.38/bctsp-jdk14-1.38.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/com/lowagie/itext/2.1.7/itext-2.1.7.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/net/sf/opencsv/opencsv/2.3/opencsv-2.3.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/xerces/xercesImpl/2.9.0/xercesImpl-2.9.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/springframework/security/spring-security-web/3.2.7.RELEASE/spring-security-web-3.2.7.RELEASE.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/springframework/security/spring-security-core/3.2.7.RELEASE/spring-security-core-3.2.7.RELEASE.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/commons-beanutils/commons-beanutils/1.8.3/commons-beanutils-1.8.3.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/geronimo/specs/geronimo-stax-api_1.0_spec/1.0/geronimo-stax-api_1.0_spec-1.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/stax/stax-api/1.0.1/stax-api-1.0.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/xmlbeans/xmlbeans/2.3.0/xmlbeans-2.3.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml-schemas/3.7/poi-ooxml-schemas-3.7.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi/3.7/poi-3.7.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/poi/poi-ooxml/3.7/poi-ooxml-3.7.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/net/sf/json-lib/json-lib/2.3/json-lib-2.3-jdk15.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpcore/4.2.1/httpcore-4.2.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/postgresql/postgresql/9.3-1101-jdbc41/postgresql-9.3-1101-jdbc41.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/com/sun/mail/javax.mail/1.5.1/javax.mail-1.5.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

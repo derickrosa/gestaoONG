@@ -12,4 +12,6 @@
 *= require theme.css
 *= require MoneAdmin.css
 *= require /Font-Awesome/css/font-awesome.css
+*= require jquery.edittable.css
 */
+
