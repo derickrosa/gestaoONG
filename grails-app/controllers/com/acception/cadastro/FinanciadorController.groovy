@@ -23,7 +23,6 @@ class FinanciadorController {
         def financiador
         if(params.idFinanciador)
             financiador = Financiador.get(Long.parseLong(params.idFinanciador))
-
         def json = financiador?.responsaveis?.sort { it.nome }.collect { it ->
             [it.nome ?: '', it.email ?: '', it.telefone ?: '']
         }
@@ -36,17 +35,78 @@ class FinanciadorController {
 
     @Transactional
     def save(Financiador financiadorInstance) {
+        log.debug("Chegou")
         if (financiadorInstance == null) {
             notFound()
             return
         }
 
+        def participante = new PessoaJuridica(params.participante)
+        participante.addToPapeis(financiadorInstance)
+        participante.save(failOnError:true, flush:true)
+
+        log.debug("Antes de entrar ${params?.listaResponsaveis} - TAM ${params?.listaResponsaveis?.nome?.size()}")
+
+        if (params?.listaResponsaveis?.nome?.class?.array && params?.listaResponsaveis?.email?.class?.array && params?.listaResponsaveis?.telefone?.class?.array) {
+            for (int i = 0; i < params?.listaResponsaveis?.nome?.size(); i++) {
+                log.debug("Entrou primeiro TAM ${params?.listaResponsaveis?.ano?.size()} / $i")
+                def participanteResponsavel = new Participante()
+
+                if (params.listaResponsaveis?.nome[i])
+                    participanteResponsavel.nome = params.listaResponsaveis?.nome[i]
+                if (params.listaResponsaveis?.email[i])
+                    participanteResponsavel.email = params.listaResponsaveis?.email[i]
+                if (params.listaResponsaveis?.telefone) {
+                    participanteResponsavel.telefone = new Telefone()
+                    participanteResponsavel.telefone.numero = params.listaResponsaveis?.telefone[i]
+                    participanteResponsavel.telefone.save(failOnError:true, flush:true)
+                }
+
+
+                participanteResponsavel.save(failOnError:true, flush:true)
+                def responsavel = new Responsavel()
+                responsavel.participante = participanteResponsavel
+                responsavel.financiador = financiadorInstance
+                responsavel.save(failOnError:true, flush:true)
+                log.debug(" RESP: ${responsavel.properties}")
+                participanteResponsavel.addToPapeis(responsavel)
+                financiadorInstance.addToResponsaveis(responsavel)
+                participanteResponsavel.save(failOnError:true, flush:true)
+                financiadorInstance.save(failOnError:true, flush:true)
+
+            }
+        } else if (params?.listaResponsaveis?.nome && params?.listaResponsaveis?.email && params?.listaResponsaveis?.telefone) {
+            def participanteResponsavel = new Participante()
+            log.debug("Entrou segundo")
+            if (params.listaResponsaveis?.nome)
+                participanteResponsavel.nome = params.listaResponsaveis?.nome
+            if (params.listaResponsaveis?.email)
+                participanteResponsavel.email = params.listaResponsaveis?.email
+            if (params.listaResponsaveis?.telefone) {
+                participanteResponsavel.telefone = new Telefone()
+                participanteResponsavel.telefone.numero = params.listaResponsaveis?.telefone
+                participanteResponsavel.telefone.save(failOnError:true, flush:true)
+            }
+            participanteResponsavel.save(failOnError:true, flush:true)
+            def responsavel = new Responsavel()
+            responsavel.participante = participanteResponsavel
+            responsavel.financiador = financiadorInstance
+            responsavel.save(failOnError:true, flush:true)
+            participanteResponsavel.addToPapeis(responsavel)
+            financiadorInstance.addToResponsaveis(responsavel)
+            participanteResponsavel.save(failOnError:true, flush:true)
+            financiadorInstance.save(failOnError:true, flush:true)
+
+        }
+        /*log.debug("Chegou 3")
         if (financiadorInstance.hasErrors()) {
+            log.debug("Chegou 4")
             respond financiadorInstance.errors, view:'create'
             return
         }
 
-        financiadorInstance.save flush:true
+        log.debug("Finalizar")
+        financiadorInstance.save flush:true*/
 
         request.withFormat {
             form multipartForm {

@@ -11,6 +11,8 @@ class Financiador extends Papel {
 
     static constraints = {
         nomeFantasia maxSize:100
+        centrosCusto nullable:true
+        responsaveis nullable:true
         sigla maxSize:10, nullable:true
     }
 }

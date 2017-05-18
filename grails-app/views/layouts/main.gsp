@@ -13,7 +13,9 @@
 <link rel="apple-touch-icon" href="${assetPath(src: 'apple-touch-icon.png')}">
 <link rel="apple-touch-icon" sizes="114x114" href="${assetPath(src: 'apple-touch-icon-retina.png')}">
 <asset:stylesheet src="application.css"/>
+<asset:stylesheet src="sweet-alert.css"/>
 <asset:javascript src="application.js"/>
+<asset:javascript src="sweet-alert.js"/>
 <link href="${assetPath(src: 'layout2.css')}" rel="stylesheet"/>
 <link href="${assetPath(src: 'flot/examples/examples.css')}" rel="stylesheet"/>
 <link href="${assetPath(src: 'timeline/timeline.css')}" rel="stylesheet"/>
