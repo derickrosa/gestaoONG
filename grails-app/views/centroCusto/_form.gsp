@@ -9,6 +9,7 @@
 <asset:javascript src="plugins/fileinput/locales/pt-BR.js"/>
 
 <asset:javascript src="plugins/jquery/jquery.maskMoney.min.js"/>
+<asset:javascript src="jquery.edittable2.js"/>
 
 <style>
     #itensOrcamentarios td {

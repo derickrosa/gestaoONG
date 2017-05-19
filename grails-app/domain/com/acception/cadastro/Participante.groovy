@@ -26,6 +26,7 @@ class Participante {
     String senhaInicial
 
     User user
+
     static hasMany=[papeis:Papel]
 
     static constraints = {

@@ -9,6 +9,10 @@
 //= require /plugins/bootstrap/bootstrap.min.js
 //= require /plugins/modernizr-2.6.2-respond-1.1.0.min.js
 //= require jquery.edittable.js
+//= require /plugins/bootstrap/bootstrap-datepicker.min.js
+//= require /plugins/jquery/jquery.mask.min.js
+//= require /plugins/jquery/jquery.maskMoney.min.js
+//= require input.masks.js
 
 
 if (typeof jQuery !== 'undefined') {
