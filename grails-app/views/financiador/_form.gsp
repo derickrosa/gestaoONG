@@ -8,7 +8,8 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
 
-
+<div class="row">
+<div class="col-md-2">
 <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'codigo', 'error')} ">
     <label for="codigo">
         <g:message code="financiador.codigo.label" default="Codigo"/>
@@ -17,7 +18,21 @@
     <g:textField class="form-control"  name="codigo" maxlength="20" value="${financiadorInstance?.codigo}"/>
 
 </div>
+</div>
+    <div class="col-md-10">
+<div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'nome', 'error')} ">
+    <label for="nome">
+        <g:message code="financiador.participante.nome.label" default="Nome"/>
 
+    </label>
+    <g:textField class="form-control"  name="participante.nome" maxlength="100" value="${financiadorInstance?.participante?.nome}"/>
+
+</div>
+        </div>
+</div>
+
+<div class="row">
+<div class="col-md-10">
 <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'nomeFantasia', 'error')} ">
     <label for="nomeFantasia">
         <g:message code="financiador.nomeFantasia.label" default="Nome Fantasia"/>
@@ -26,7 +41,8 @@
     <g:textField class="form-control"  name="nomeFantasia" maxlength="100" value="${financiadorInstance?.nomeFantasia}"/>
 
 </div>
-
+</div>
+    <div class="col-md-2">
 <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'sigla', 'error')} ">
     <label for="sigla">
         <g:message code="financiador.sigla.label" default="Sigla"/>
@@ -35,13 +51,7 @@
     <g:textField class="form-control"  name="sigla" maxlength="10" value="${financiadorInstance?.sigla}"/>
 
 </div>
-
-<div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'participante', 'error')} ">
-    <label for="participante">
-        <g:message code="financiador.participante.label" default="Participante"/>
-        
-    </label>
-    <g:select class="form-control" id="participante" name="participante.id" from="${com.acception.cadastro.Participante.list()}" optionKey="id" value="${financiadorInstance?.participante?.id}" class="form-control" noSelection="['null': '']"/>
+</div>
 
 </div>
 
@@ -62,7 +72,18 @@
 
 
 </div>--}%
+<div class="row">
+<div class="col-md-10">
+    <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'cnpj', 'error')} ">
+        <label for="cnpj">
+            <g:message code="financiador.participante.cnpj.label" default="Cnpj"/>
 
+        </label>
+        <g:textField class="form-control"  name="participante.cnpj" maxlength="14" value="${financiadorInstance?.participante?.cnpj}"/>
+
+    </div>
+</div>
+    <div class="col-md-2">
 <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'setor', 'error')} ">
     <label for="setor">
         <g:message code="financiador.setor.label" default="Setor"/>
@@ -71,6 +92,8 @@
     <g:select name="setor" from="${com.acception.cadastro.enums.Setor?.values()}" class="form-control" keys="${com.acception.cadastro.enums.Setor.values()*.name()}" value="${financiadorInstance?.setor?.name()}"  noSelection="['': '']"/>
 
 </div>
+        </div>
+    </div>
 
         </div>
         </div>
@@ -97,7 +120,7 @@
     var table = $("#edittableResponsaveis").editTable({
         field_templates: {
             'nome': {
-                html: '<input type="text" class="form-control" name="responsavel.nome"/>',
+                html: '<input type="text" class="form-control" name="listaResponsaveis.nome"/>',
                 getValue: function (input) {
                     return $(input).val();
                 },
@@ -105,7 +128,7 @@
                     return $(input).text(value);
                 }
             }, 'email': {
-                html: '<input type="text" class="form-control"   name="responsavel.email" />',
+                html: '<input type="text" class="form-control"   name="listaResponsaveis.email" />',
                 getValue: function (input) {
                     return $(input).val();
                 },
@@ -113,7 +136,7 @@
                     return $(input).text(value);
                 }
             }, 'telefone': {
-                html: '<input type="text" class="form-control"   name="responsavel.telefone" />',
+                html: '<input type="text" class="form-control"   name="listaResponsaveis.telefone" />',
                 getValue: function (input) {
                     return $(input).val();
                 },
@@ -123,7 +146,7 @@
             }
         },
         row_template: ['nome', 'email', 'telefone'],
-        names: ['responsavel.nome', 'responsavel.email', 'responsavel.telefone'],
+        names: ['listaResponsaveis.nome', 'listaResponsaveis.email', 'listaResponsaveis.telefone'],
         first_row: true,
         parcelas: false,
         financiador: true,

@@ -39,7 +39,7 @@
                 class: s.tableClass + ((s.first_row) ? ' wh' : ''),
                 html: defaultTableContent
             }),
-            defaultth = '<th><a class="addcol icon-button" href="#">+</a> <a class="delcol icon-button" href="#">-</a></th>',
+            defaultth = '<th><a class="addcol glyphicon glyphicon-plus" href="#">+</a> <a class="delcol glyphicon glyphicon-trash" href="#">-</a></th>',
             colnumber,
             rownumber,
             reset,
@@ -166,10 +166,10 @@
 
             return $('<tr/>', {
                 html: rowcontent + '<td class="text-center" style="font-size: large;">' +
-                '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                 '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                 '</a> ' +
-                '<a class="delrow icon-button fa-5" href="#">' +
+                '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                 '<i class="fa fa-trash" aria-hidden="true"></i>' +
                 '</a>' +
                 '</td>'
@@ -203,10 +203,10 @@
 
             return $('<tr/>', {
                 html: rowcontent + '<td class="text-center" style="font-size: large;">' +
-                '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                 '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                 '</a> ' +
-                '<a class="delrow icon-button fa-5" href="#">' +
+                '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                 '<i class="fa fa-trash" aria-hidden="true"></i>' +
                 '</a>' +
                 '</td>'
@@ -521,10 +521,10 @@
                             ;
                         $('<tr/>', {
                             html: rowcontent + '<td class="text-center" style="font-size: large;text-align: center;">' +
-                            '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                             '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                             '</a> ' +
-                            '<a class="delrow icon-button fa-5" href="#">' +
+                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>' +
                             '</td>'
@@ -536,7 +536,7 @@
             } else if (s.financiador) {
                 swal({
                     title: "Você tem certeza?",
-                    text: "A solicitação aprovada selecionada será removida.",
+                    text: "O responsável selecionado será removido.",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
@@ -565,10 +565,10 @@
                         $('<tr/>', {
                             html: rowcontent +
                             '<td style="font-size: large;text-align: center;">' +
-                            '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                             '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                             '</a> ' +
-                            '<a class="delrow icon-button fa-5" href="#">' +
+                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>' +
                             '</td>'
@@ -616,10 +616,10 @@
                         $('<tr/>', {
                             html: rowcontent +
                             '<td style="font-size: large;text-align: center;">' +
-                            '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                             '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                             '</a> ' +
-                            '<a class="delrow icon-button fa-5" href="#">' +
+                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>' +
                             '</td>'
@@ -667,10 +667,10 @@
                         $('<tr/>', {
                             html: rowcontent +
                             '<td style="font-size: large;text-align: center;">' +
-                            '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                             '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                             '</a> ' +
-                            '<a class="delrow icon-button fa-5" href="#">' +
+                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>' +
                             '</td>'
@@ -718,10 +718,10 @@
                         $('<tr/>', {
                             html: rowcontent +
                             '<td style="font-size: large;text-align: center;">' +
-                            '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                             '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                             '</a> ' +
-                            '<a class="delrow icon-button fa-5" href="#">' +
+                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>' +
                             '</td>'
@@ -766,10 +766,10 @@
                         $('<tr/>', {
                             html: rowcontent +
                             '<td style="font-size: large;text-align: center;"">' +
-                            '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                             '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                             '</a> ' +
-                            '<a class="delrow icon-button fa-5" href="#">' +
+                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>' +
                             '</td>'
@@ -814,10 +814,10 @@
                         $('<tr/>', {
                             html: rowcontent +
                             '<td style="font-size: large;text-align: center;">' +
-                            '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                             '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                             '</a> ' +
-                            '<a class="delrow icon-button fa-5" href="#">' +
+                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>' +
                             '</td>'
@@ -865,10 +865,10 @@
                         $('<tr/>', {
                             html: rowcontent +
                             '<td style="font-size: large;text-align: center;">' +
-                            '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                             '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                             '</a> ' +
-                            '<a class="delrow icon-button fa-5" href="#">' +
+                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>' +
                             '</td>'
@@ -916,10 +916,10 @@
                         $('<tr/>', {
                             html: rowcontent +
                             '<td style="font-size: large;text-align: center;">' +
-                            '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                             '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                             '</a> ' +
-                            '<a class="delrow icon-button fa-5" href="#">' +
+                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>' +
                             '</td>'
@@ -973,10 +973,10 @@
                         $('<tr/>', {
                             html: rowcontent +
                             '<td style="font-size: large;text-align: center;">' +
-                            '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                             '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                             '</a> ' +
-                            '<a class="delrow icon-button fa-5" href="#">' +
+                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>' +
                             '</td>'
@@ -1021,10 +1021,10 @@
                         $('<tr/>', {
                             html: rowcontent +
                             '<td style="font-size: large;text-align: center;">' +
-                            '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                             '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                             '</a> ' +
-                            '<a class="delrow icon-button fa-5" href="#">' +
+                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>' +
                             '</td>'
@@ -1057,10 +1057,10 @@
 
                     $('<tr/>', {
                         html: rowcontent + '<td style="font-size: large;">' +
-                        '<a class="addrow icon-button" href="#" style=" color: green; ">' +
+                        '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
                         '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                         '</a> ' +
-                        '<a class="delrow icon-button fa-5" href="#">' +
+                        '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
                         '<i class="fa fa-trash" aria-hidden="true"></i>' +
                         '</a>' +
                         '</td>'
