@@ -9,6 +9,8 @@ class ItemOrcamentario {
     Double valor
     TipoCusto tipoCusto
 
+    static belongsTo = [orcamento: Orcamento]
+
 //    static hasMany = [despesas: Despesa]
 
     static constraints = {

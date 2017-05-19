@@ -112,4 +112,18 @@ class FinanciadorController {
             '*'{ render status: NOT_FOUND }
         }
     }
+
+    def getResponsaveis() {
+        def financiador
+
+        if (params.idFinanciador) {
+            financiador = Financiador.get(Long.parseLong(params.idFinanciador))
+        }
+
+        def json = financiador?.responsaveis?.sort { it.nome }.collect { it ->
+            ['nome': it.participante?.nome, 'id': it.id]
+        }
+
+        render(json as JSON)
+    }
 }

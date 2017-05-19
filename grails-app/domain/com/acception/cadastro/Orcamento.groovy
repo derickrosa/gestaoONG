@@ -1,10 +1,12 @@
 package com.acception.cadastro
 
+import com.acception.cadastro.enums.Moeda
+
 class Orcamento {
 
     Integer ano
     Double valorTotal
-    Integer moeda
+    Moeda moeda
 
     static hasMany = [itensOrcamentarios: ItemOrcamentario]
 

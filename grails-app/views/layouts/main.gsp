@@ -363,7 +363,7 @@
                     <li class=""><a href="tabs_panels.html">Orçamento</a></li>
                     <li class=""><a href="notifications.html">Item do Orçamento</a></li>
                     <li class=""><a href="more_notifications.html">Lançamento</a></li>
-                    <li class=""><a href="modals.html">Funcionário</a></li>
+                    <li class=""><g:link controller="funcionario" action="index">Funcionário</g:link></a></li>
                     <li class=""><g:link controller="financiador" action="index">Financiador</g:link></li>
                     <li class=""><g:link controller="responsavel" action="index">Responsável</g:link></li>
                 </ul>

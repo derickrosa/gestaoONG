@@ -93,7 +93,7 @@ class AnexoController {
 
     def download() {
         def anexo = Anexo.get(params.id)
-        if ( anexo == null) {
+        if (anexo == null) {
             flash.message = "Anexo não encontrado!"
             redirect (action:'list')
         } else {

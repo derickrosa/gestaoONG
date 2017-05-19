@@ -6,4 +6,8 @@ class Responsavel extends Papel{
 
     static constraints = {
     }
+
+    String toString() {
+        participante?.nome
+    }
 }

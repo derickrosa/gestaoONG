@@ -1,4 +1,4 @@
-<%@ page import="com.acception.cadastro.enums.StatusProjeto; com.acception.cadastro.CentroCusto" %>
+<%@ page import="com.acception.cadastro.enums.Moeda; com.acception.cadastro.Responsavel; com.acception.cadastro.Financiador; com.acception.cadastro.enums.StatusProjeto; com.acception.cadastro.CentroCusto" %>
 
 <asset:stylesheet src="bootstrap-datepicker.css"/>
 <asset:javascript src="plugins/bootstrap/bootstrap-datepicker.min.js"/>
@@ -7,6 +7,33 @@
 <asset:stylesheet src="fileinput.min.css"/>
 <asset:javascript src="plugins/fileinput/fileinput.min.js"/>
 <asset:javascript src="plugins/fileinput/locales/pt-BR.js"/>
+
+<asset:javascript src="plugins/jquery/jquery.maskMoney.min.js"/>
+
+<style>
+    #itensOrcamentarios td {
+        padding: 5px
+    }
+
+    .inputtable.wh td:nth-child(1) {
+        width: 15%;
+    }
+
+    .inputtable.wh td:nth-child(3) {
+        width: 15%;
+    }
+
+    .inputtable.wh td:nth-child(4) {
+        width: 15%;
+    }
+
+    /* First body row cells & input on table without columns header */
+    table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-child(1) input {
+        font-weight: normal;
+    }
+</style>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
 <div class="row">
     <div class="col-md-2">
@@ -41,6 +68,35 @@
             </label>
             <g:textField class="form-control" required="required" name="descricao"
                          value="${centroCustoInstance?.descricao}"/>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="financiador">Financiador</label>
+
+            <g:select class="form-control" required="required" name="financiador" from="${Financiador.list()}"
+                      optionValue="nomeFantasia" optionKey="id" value="${centroCustoInstance.financiador?.id}" noSelection="['': 'Selecione um financiador...']"/>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="responsavel">Responsável</label>
+
+            <g:if test="${centroCustoInstance.financiador}">
+                <g:select name="responsavel" class="form-control" from="${Responsavel.findAllByFinanciador(centroCustoInstance.financiador)}"
+                          optionKey="id" noSelection="['': 'Selecione um responsável...']" value="${centroCustoInstance.responsavel.id}"/>
+            </g:if>
+            <g:else>
+                <select id="responsavel" required="required" name="responsavel" class="form-control">
+                    <option disabled>Selecione um responsável...</option>
+                </select>
+            </g:else>
+
+
         </div>
     </div>
 </div>
@@ -99,19 +155,83 @@
         <g:message code="centroCusto.planoDeTrabalho.label" default="Plano De Trabalho"/>
     </label>
 
+    <input type="hidden" id="previousPlanoDeTrabalho" name="previousPlanoDeTrabalho" value="${centroCustoInstance.planoDeTrabalho?.id}">
+    <input type="hidden" id="numFilesUploaded" name="numFilesUploaded" value="${centroCustoInstance.planoDeTrabalho ? 1 : 0}">
     <input type="file" id="planoDeTrabalho" name="planoDeTrabalho">
 </div>
 
-%{--<div class="form-group fieldcontain ${hasErrors(bean: centroCustoInstance, field: 'orcamento', 'error')} ">--}%
-%{--<label for="orcamento">--}%
-%{--<g:message code="centroCusto.orcamento.label" default="Orcamento"/>--}%
-%{----}%
-%{--</label>--}%
-%{--<g:select class="form-control" id="orcamento" name="orcamento.id" from="${com.acception.cadastro.Orcamento.list()}" optionKey="id" value="${centroCustoInstance?.orcamento?.id}" class="form-control" noSelection="['null': '']"/>--}%
 
-%{--</div>--}%
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading control-label">
+                Orçamento
+            </div>
+
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label for="orcamento.ano">Ano</label>
+
+                        <input type="number" min="0" id="orcamento.ano" name="orcamento.ano" class="form-control"
+                               value="${centroCustoInstance.orcamento?.ano}" required>
+                    </div>
+
+                    <div class="col-md-4 form-group">
+                        <label for="orcamento.valorTotal">Valor Total</label>
+
+                        <input type="text" id="orcamento.valorTotal" name="orcamento.valorTotal" class="form-control currency"
+                               required>
+                    </div>
+
+                    <div class="col-md-4 form-group">
+                        <label for="orcamento.moeda">Moeda</label>
+
+                        <g:select class="form-control" name="orcamento.moeda" from="${Moeda.values()}"
+                                  keys="${Moeda.values()*.name()}" value="${centroCustoInstance.orcamento?.moeda?.name()}"/ required="required"/>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading control-label">
+                Itens Orçamentários
+            </div>
+
+            <div class="panel-body">
+                <div id="itensOrcamentarios"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
+    var table;
+
+    var atualizarSelectResponsaveis = function (dados) {
+        var selectResponsaveis = $("#responsavel");
+        selectResponsaveis.empty(); // remove old options
+
+        $.each(dados, function(index, value) {
+            selectResponsaveis.append($("<option></option>")
+                    .attr("value", value.id).text(value.nome));
+        });
+    };
+
+    var atualizarValorTotalOrcamento = function () {
+        var valorTotalOrcamento = ${centroCustoInstance.orcamento?.valorTotal ?: 0};
+
+        if (valorTotalOrcamento) {
+            $("[name='orcamento.valorTotal']").maskMoney('mask', valorTotalOrcamento)
+        }
+    };
+
     $(function () {
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
@@ -133,14 +253,136 @@
                 initialPreviewConfig: [
                     {
                         type: "object",
-                        caption: "${centroCustoInstance?.planoDeTrabalho?.nome}"
+                        caption: "${centroCustoInstance?.planoDeTrabalho?.nome}",
                     }
                 ],
-                initialPreviewShowDelete: false
+                initialPreviewShowDelete: false,
             </g:if>
         });
+
+        $('#planoDeTrabalho').on('change', function(event) {
+            var numFilesUploaded = $('#numFilesUploaded');
+
+            numFilesUploaded.val(1);
+        });
+
+        $('.fileinput-remove-button').on('click', function() {
+            var numFilesUploaded = $('#numFilesUploaded');
+
+            numFilesUploaded.val(0);
+        });
+
+        var html = `<g:select class='form-control' from='${com.acception.cadastro.enums.TipoCusto.values()}'
+                    name='itensOrcamento.tipoCusto' keys="${com.acception.cadastro.enums.TipoCusto.values()*.name()}"/>`
+
+        table = $("#itensOrcamentarios").editTable({
+            field_templates: {
+                'codigo' : {
+                    html: '<input type="number" class="form-control text-center" name="itensOrcamento.codigo">',
+                    getValue: function (input) {
+                        return $(input).val();
+                    },
+                    setValue: function (input, value) {
+                        return $(input).text(value);
+                    }
+                },
+
+                'nome' : {
+                    html: '<input type="text" class="form-control text-center" name="itensOrcamento.nome">',
+//                    html: '<textarea class="form-control" rows="2">',
+                    getValue: function (input) {
+                        return $(input).val();
+                    },
+                    setValue: function (input, value) {
+                        return $(input).text(value);
+                    }
+                },
+
+                'currency' : {
+                    html: '<input type="text" class="form-control currency text-center" name="itensOrcamento.valor">',
+                    getValue: function (input) {
+                        return $(input).val();
+                    },
+                    setValue: function (input, value) {
+                        return $(input).text(value);
+                    }
+                },
+
+                'select_tipo_custo' : {
+                    html: html,
+                    getValue: function (input) {
+                        return $(input).val();
+                    },
+                    setValue: function (input, value) {
+                        var select = $(input);
+                        select.find('option').filter(function() {
+                            return $(this).val() == value;
+                        }).attr('selected', true);
+                        return select;
+                    }
+                }
+            },
+
+            row_template: ['codigo', 'nome', 'currency', 'select_tipo_custo'],
+
+            headerCols: [
+                'Código',
+                'Nome',
+                'Valor',
+                'Tipo Custo'
+            ]
+        });
+
+        $("#itensOrcamentarios").on("focusin", "td:nth-child(3) input", function () {
+            $(this).maskMoney({prefix: 'R$ ', allowNegative: true, thousands: '.', decimal: ',', affixesStay: false});
+        });
+
+        $(".currency").maskMoney({
+            prefix: 'R$ ',
+            allowNegative: true,
+            thousands: '.',
+            decimal: ',',
+            affixesStay: false
+        });
+
+        atualizarValorTotalOrcamento();
+
+        $("#financiador").change(function () {
+            var financiadorID_selected = $(this).find("option:selected")[0].value;
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '${createLink(action: 'getResponsaveis',controller:'financiador')}',
+                data: 	{
+                    idFinanciador: financiadorID_selected
+                },
+                complete: function (response) {
+                    if (response.status == 200) {
+                        atualizarSelectResponsaveis(response.responseJSON)
+                    }
+                }
+            })
+        });
+
+        $.ajax({
+            url: '${createLink(action: 'getItensOrcamentarios',controller:'centroCusto')}',
+            type: 'POST',
+            data: 	{
+                idOrcamento: '${centroCustoInstance.orcamento?.id}'
+            },
+            complete: function (result) {
+                console.log(result);
+
+                if (result.responseText == '[]') {
+                    table.loadJsonData('[["",""]]');
+                }
+                else {
+                    table.loadJsonData(result.responseText);
+                }
+
+            }
+        });
     });
-
-
 
 </script>

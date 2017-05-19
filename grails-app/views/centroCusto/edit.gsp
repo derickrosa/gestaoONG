@@ -36,6 +36,12 @@
                         <g:if test="${flash.message}">
                             <div class="message" role="status">${flash.message}</div>
                         </g:if>
+
+                        <g:if test="${flash.error}">
+                            <div class="alert alert-danger">
+                                ${flash.error}
+                            </div>
+                        </g:if>
                         <g:hasErrors bean="${centroCustoInstance}">
                             <div class="alert alert-danger">
                                 <ul role="alert">
