@@ -142,6 +142,14 @@
                     return '<td>' + '<input type="text"name="' + name + '" class="form-control" value="' + content + '" />' + '</td>';
                 } else if (name == 'visitaMonitoramento.observacao') {
                     return '<td>' + '<textarea type="text"name="' + name + '" class="form-control" value="' + content + '">' + content + '</textarea>' + '</td>';
+                } else if (type == 'codigo') {
+                    return '<td>' + '<input type="text" name="itensOrcamento.codigo" class="form-control text-center" value="' + content + '" />' + '</td>';
+                } else if (type == 'select_tipo_custo') {
+                    return '<td>' + '<select name="itensOrcamento.tipoCusto" class="form-control" value="' + content + '" />' + '</td>';
+                } else if (type == 'nome') {
+                    return '<td>' + '<input type="text" name="itensOrcamento.nome" class="form-control text-center" value="' + content + '" />' + '</td>';
+                } else if (type == 'currency') {
+                    return '<td>' + '<input type="text" name="itensOrcamento.valor" class="form-control text-center" value="' + content + '" />' + '</td>';
                 }
                 else return '' + '<input type="hidden" name="listaResponsaveis.id" value="' + content + '" />' + '';
             }
@@ -175,10 +183,8 @@
             return $('<tr/>', {
                 html: rowcontent + '<td class="text-center" style="font-size: large;">' +
                 '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
-                '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                 '</a> ' +
                 '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
-                '<i class="fa fa-trash" aria-hidden="true"></i>' +
                 '</a>' +
                 '</td>'
             });
@@ -213,10 +219,8 @@
             return $('<tr/>', {
                 html: rowcontent + '<td class="text-center" style="font-size: large;">' +
                 '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
-                '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
                 '</a> ' +
                 '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
-                '<i class="fa fa-trash" aria-hidden="true"></i>' +
                 '</a>' +
                 '</td>'
             });

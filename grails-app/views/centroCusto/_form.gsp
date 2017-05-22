@@ -1,4 +1,4 @@
-<%@ page import="com.acception.cadastro.enums.Moeda; com.acception.cadastro.Responsavel; com.acception.cadastro.Financiador; com.acception.cadastro.enums.StatusProjeto; com.acception.cadastro.CentroCusto" %>
+<%@ page import="com.acception.cadastro.enums.TipoCusto; com.acception.cadastro.enums.Moeda; com.acception.cadastro.Responsavel; com.acception.cadastro.Financiador; com.acception.cadastro.enums.StatusProjeto; com.acception.cadastro.CentroCusto" %>
 
 <asset:stylesheet src="bootstrap-datepicker.css"/>
 <asset:javascript src="plugins/bootstrap/bootstrap-datepicker.min.js"/>
@@ -9,32 +9,33 @@
 <asset:javascript src="plugins/fileinput/locales/pt-BR.js"/>
 
 <asset:javascript src="plugins/jquery/jquery.maskMoney.min.js"/>
-<asset:javascript src="jquery.edittable2.js"/>
+%{--<asset:javascript src="jquery.edittable2.js"/>--}%
 
 <style>
-    #itensOrcamentarios td {
-        padding: 5px
-    }
+#itensOrcamentarios td {
+    padding: 5px
+}
 
-    .inputtable.wh td:nth-child(1) {
-        width: 15%;
-    }
+.inputtable.wh td:nth-child(1) {
+    width: 15%;
+}
 
-    .inputtable.wh td:nth-child(3) {
-        width: 15%;
-    }
+.inputtable.wh td:nth-child(3) {
+    width: 15%;
+}
 
-    .inputtable.wh td:nth-child(4) {
-        width: 15%;
-    }
+.inputtable.wh td:nth-child(4) {
+    width: 15%;
+}
 
-    /* First body row cells & input on table without columns header */
-    table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-child(1) input {
-        font-weight: normal;
-    }
+/* First body row cells & input on table without columns header */
+table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-child(1) input {
+    font-weight: normal;
+}
 </style>
 
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
 <div class="row">
     <div class="col-md-2">
@@ -69,6 +70,8 @@
             </label>
             <g:textField class="form-control" required="required" name="descricao"
                          value="${centroCustoInstance?.descricao}"/>
+
+            ${com.acception.cadastro.enums.TipoCusto.toList()}
         </div>
     </div>
 </div>
@@ -79,7 +82,8 @@
             <label for="financiador">Financiador</label>
 
             <g:select class="form-control" required="required" name="financiador" from="${Financiador.list()}"
-                      optionValue="nomeFantasia" optionKey="id" value="${centroCustoInstance.financiador?.id}" noSelection="['': 'Selecione um financiador...']"/>
+                      optionValue="nomeFantasia" optionKey="id" value="${centroCustoInstance.financiador?.id}"
+                      noSelection="['': 'Selecione um financiador...']"/>
         </div>
     </div>
 
@@ -88,15 +92,16 @@
             <label for="responsavel">Responsável</label>
 
             <g:if test="${centroCustoInstance.financiador}">
-                <g:select name="responsavel" class="form-control" from="${Responsavel.findAllByFinanciador(centroCustoInstance.financiador)}"
-                          optionKey="id" noSelection="['': 'Selecione um responsável...']" value="${centroCustoInstance.responsavel.id}"/>
+                <g:select name="responsavel" class="form-control"
+                          from="${Responsavel.findAllByFinanciador(centroCustoInstance.financiador)}"
+                          optionKey="id" noSelection="['': 'Selecione um responsável...']"
+                          value="${centroCustoInstance.responsavel.id}"/>
             </g:if>
             <g:else>
                 <select id="responsavel" required="required" name="responsavel" class="form-control">
                     <option disabled>Selecione um responsável...</option>
                 </select>
             </g:else>
-
 
         </div>
     </div>
@@ -156,10 +161,13 @@
         <g:message code="centroCusto.planoDeTrabalho.label" default="Plano De Trabalho"/>
     </label>
 
-    <input type="hidden" id="previousPlanoDeTrabalho" name="previousPlanoDeTrabalho" value="${centroCustoInstance.planoDeTrabalho?.id}">
-    <input type="hidden" id="numFilesUploaded" name="numFilesUploaded" value="${centroCustoInstance.planoDeTrabalho ? 1 : 0}">
+    <input type="hidden" id="previousPlanoDeTrabalho" name="previousPlanoDeTrabalho"
+           value="${centroCustoInstance.planoDeTrabalho?.id}">
+    <input type="hidden" id="numFilesUploaded" name="numFilesUploaded"
+           value="${centroCustoInstance.planoDeTrabalho ? 1 : 0}">
     <input type="file" id="planoDeTrabalho" name="planoDeTrabalho">
 </div>
+%{--
 
 
 <div class="row">
@@ -181,7 +189,8 @@
                     <div class="col-md-4 form-group">
                         <label for="orcamento.valorTotal">Valor Total</label>
 
-                        <input type="text" id="orcamento.valorTotal" name="orcamento.valorTotal" class="form-control currency"
+                        <input type="text" id="orcamento.valorTotal" name="orcamento.valorTotal"
+                               class="form-control currency"
                                required>
                     </div>
 
@@ -189,7 +198,8 @@
                         <label for="orcamento.moeda">Moeda</label>
 
                         <g:select class="form-control" name="orcamento.moeda" from="${Moeda.values()}"
-                                  keys="${Moeda.values()*.name()}" value="${centroCustoInstance.orcamento?.moeda?.name()}"/ required="required"/>
+                                  keys="${Moeda.values()*.name()}"
+                                  value="${centroCustoInstance.orcamento?.moeda?.name()}"/ required="required"/>
 
                     </div>
                 </div>
@@ -211,6 +221,7 @@
         </div>
     </div>
 </div>
+--}%
 
 <script>
     var table;
@@ -219,7 +230,7 @@
         var selectResponsaveis = $("#responsavel");
         selectResponsaveis.empty(); // remove old options
 
-        $.each(dados, function(index, value) {
+        $.each(dados, function (index, value) {
             selectResponsaveis.append($("<option></option>")
                     .attr("value", value.id).text(value.nome));
         });
@@ -247,27 +258,27 @@
             overwriteInitial: true,
             previewFileType: 'text',
             <g:if test="${centroCustoInstance?.planoDeTrabalho}">
-                initialPreview: [
-                    "${createLink(controller: 'anexo', action: 'download', id: "${centroCustoInstance?.planoDeTrabalho?.id}")}"
-                ],
-                initialPreviewAsData: true,
-                initialPreviewConfig: [
-                    {
-                        type: "object",
-                        caption: "${centroCustoInstance?.planoDeTrabalho?.nome}",
-                    }
-                ],
-                initialPreviewShowDelete: false,
+            initialPreview: [
+                "${createLink(controller: 'anexo', action: 'download', id: "${centroCustoInstance?.planoDeTrabalho?.id}")}"
+            ],
+            initialPreviewAsData: true,
+            initialPreviewConfig: [
+                {
+                    type: "object",
+                    caption: "${centroCustoInstance?.planoDeTrabalho?.nome}",
+                }
+            ],
+            initialPreviewShowDelete: false,
             </g:if>
         });
 
-        $('#planoDeTrabalho').on('change', function(event) {
+        $('#planoDeTrabalho').on('change', function (event) {
             var numFilesUploaded = $('#numFilesUploaded');
 
             numFilesUploaded.val(1);
         });
 
-        $('.fileinput-remove-button').on('click', function() {
+        $('.fileinput-remove-button').on('click', function () {
             var numFilesUploaded = $('#numFilesUploaded');
 
             numFilesUploaded.val(0);
@@ -278,7 +289,7 @@
 
         table = $("#itensOrcamentarios").editTable({
             field_templates: {
-                'codigo' : {
+                'codigo': {
                     html: '<input type="number" class="form-control text-center" name="itensOrcamento.codigo">',
                     getValue: function (input) {
                         return $(input).val();
@@ -288,7 +299,7 @@
                     }
                 },
 
-                'nome' : {
+                'nome': {
                     html: '<input type="text" class="form-control text-center" name="itensOrcamento.nome">',
 //                    html: '<textarea class="form-control" rows="2">',
                     getValue: function (input) {
@@ -299,7 +310,7 @@
                     }
                 },
 
-                'currency' : {
+                'currency': {
                     html: '<input type="text" class="form-control currency text-center" name="itensOrcamento.valor">',
                     getValue: function (input) {
                         return $(input).val();
@@ -309,14 +320,14 @@
                     }
                 },
 
-                'select_tipo_custo' : {
+                'select_tipo_custo': {
                     html: html,
                     getValue: function (input) {
                         return $(input).val();
                     },
                     setValue: function (input, value) {
                         var select = $(input);
-                        select.find('option').filter(function() {
+                        select.find('option').filter(function () {
                             return $(this).val() == value;
                         }).attr('selected', true);
                         return select;
@@ -355,7 +366,7 @@
                 type: 'GET',
                 dataType: 'json',
                 url: '${createLink(action: 'getResponsaveis',controller:'financiador')}',
-                data: 	{
+                data: {
                     idFinanciador: financiadorID_selected
                 },
                 complete: function (response) {
@@ -369,21 +380,36 @@
         $.ajax({
             url: '${createLink(action: 'getItensOrcamentarios',controller:'centroCusto')}',
             type: 'POST',
-            data: 	{
+            data: {
                 idOrcamento: '${centroCustoInstance.orcamento?.id}'
             },
             complete: function (result) {
-                console.log(result);
-
-                if (result.responseText == '[]') {
-                    table.loadJsonData('[["",""]]');
+                if (result.responseText !== '{}') {
+                    if (result.responseText == '[]') {
+                        table.loadJsonData('[["",""]]');
+                    }
+                    else {
+                        table.loadJsonData(result.responseText);
+                    }
                 }
-                else {
-                    table.loadJsonData(result.responseText);
-                }
 
+
+                var select_tipo_custo = $('[name="itensOrcamento.tipoCusto"]');
+
+                var dados = ['PESSOAL', 'ATIVIDADE', 'INVESTIMENTO', 'EQUIPAMENTO', 'IMPREVISTO'];
+
+                $.each(select_tipo_custo, function(index, element) {
+                    console.log(element);
+
+                    $.each(dados, function (index, value) {
+                        $(element).append($("<option></option>")
+                                .attr("value", value).text(value));
+                    });
+
+                })
             }
         });
     });
+
 
 </script>

@@ -1,10 +1,10 @@
 
-<%@ page import="com.acception.cadastro.Funcionario" %>
+<%@ page import="com.acception.util.Util; com.acception.cadastro.Funcionario" %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'funcionario.label', default: 'Funcionario')}" />
+		<g:set var="entityName" value="${message(code: 'funcionario.label', default: 'Funcionário')}" />
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
 	</head>
 	<body>
@@ -19,14 +19,16 @@
 			<!--BLOCK SECTION -->
 		<div class="nav" role="navigation">
 			<p>
-				<g:link class="btn btn-default" action="index"><span class="glyphicon glyphicon-list"></span> <g:message code="default.list.label" args="[entityName]" /></g:link>
-				<g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="[entityName]" /></g:link>
+				<g:link class="btn btn-default" action="index"><span class="glyphicon glyphicon-list"></span> Listagem de Funcionários</g:link>
+				<g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span> Novo Funcionário </g:link>
 			</p>
 		</div>
 
 		<div id="show-funcionario" class="content scaffold-show" role="main">
 			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
+				<div class="alert alert-info" role="status">
+					${flash.message}
+				</div>
 			</g:if>
 
 			<table class="table table-bordered funcionario">
@@ -36,24 +38,6 @@
 						<th id="nome-label" class="property-label"><g:message code="funcionario.nome.label" default="Nome" /></th>
 						
 						<td  aria-labelledby="nome-label"><g:fieldValue bean="${funcionarioInstance}" field="nome"/></td>
-						
-					</tr>
-				</g:if>
-				
-				<g:if test="${funcionarioInstance?.telefone}">
-					<tr>
-						<th id="telefone-label" class="property-label"><g:message code="funcionario.telefone.label" default="Telefone" /></th>
-						
-						<td  aria-labelledby="telefone-label"><g:link controller="telefone" action="show" id="${funcionarioInstance?.telefone?.id}">${funcionarioInstance?.telefone?.encodeAsHTML()}</g:link></td>
-						
-					</tr>
-				</g:if>
-				
-				<g:if test="${funcionarioInstance?.telefoneAdicional}">
-					<tr>
-						<th id="telefoneAdicional-label" class="property-label"><g:message code="funcionario.telefoneAdicional.label" default="Telefone Adicional" /></th>
-						
-						<td  aria-labelledby="telefoneAdicional-label"><g:link controller="telefone" action="show" id="${funcionarioInstance?.telefoneAdicional?.id}">${funcionarioInstance?.telefoneAdicional?.encodeAsHTML()}</g:link></td>
 						
 					</tr>
 				</g:if>
@@ -73,6 +57,24 @@
 						
 						<td  aria-labelledby="emailAdicional-label"><g:fieldValue bean="${funcionarioInstance}" field="emailAdicional"/></td>
 						
+					</tr>
+				</g:if>
+
+				<g:if test="${funcionarioInstance?.telefone}">
+					<tr>
+						<th id="telefone-label" class="property-label"><g:message code="funcionario.telefone.label" default="Telefone" /></th>
+
+						<td  aria-labelledby="telefone-label"><g:link controller="telefone" action="show" id="${funcionarioInstance?.telefone?.id}">${funcionarioInstance?.telefone?.encodeAsHTML()}</g:link></td>
+
+					</tr>
+				</g:if>
+
+				<g:if test="${funcionarioInstance?.telefoneAdicional}">
+					<tr>
+						<th id="telefoneAdicional-label" class="property-label"><g:message code="funcionario.telefoneAdicional.label" default="Telefone Adicional" /></th>
+
+						<td  aria-labelledby="telefoneAdicional-label"><g:link controller="telefone" action="show" id="${funcionarioInstance?.telefoneAdicional?.id}">${funcionarioInstance?.telefoneAdicional?.encodeAsHTML()}</g:link></td>
+
 					</tr>
 				</g:if>
 				
@@ -107,9 +109,11 @@
 				
 				<g:if test="${funcionarioInstance?.cpf}">
 					<tr>
-						<th id="cpf-label" class="property-label"><g:message code="funcionario.cpf.label" default="Cpf" /></th>
+						<th id="cpf-label" class="property-label"><g:message code="funcionario.cpf.label" default="CPF" /></th>
 						
-						<td  aria-labelledby="cpf-label"><g:fieldValue bean="${funcionarioInstance}" field="cpf"/></td>
+						<td  aria-labelledby="cpf-label">
+							${com.acception.util.Util.rawToCpf(funcionarioInstance.cpf)}
+						</td>
 						
 					</tr>
 				</g:if>
@@ -122,34 +126,16 @@
 						
 					</tr>
 				</g:if>
-				
-				<g:if test="${funcionarioInstance?.dateCreated}">
-					<tr>
-						<th id="dateCreated-label" class="property-label"><g:message code="funcionario.dateCreated.label" default="Date Created" /></th>
-						
-						<td  aria-labelledby="dateCreated-label"><g:formatDate date="${funcionarioInstance?.dateCreated}" /></td>
-						
-					</tr>
-				</g:if>
-				
+
 				<g:if test="${funcionarioInstance?.funcao}">
 					<tr>
-						<th id="funcao-label" class="property-label"><g:message code="funcionario.funcao.label" default="Funcao" /></th>
+						<th id="funcao-label" class="property-label"><g:message code="funcionario.funcao.label" default="Função" /></th>
 						
 						<td  aria-labelledby="funcao-label"><g:fieldValue bean="${funcionarioInstance}" field="funcao"/></td>
 						
 					</tr>
 				</g:if>
-				
-				<g:if test="${funcionarioInstance?.lastUpdated}">
-					<tr>
-						<th id="lastUpdated-label" class="property-label"><g:message code="funcionario.lastUpdated.label" default="Last Updated" /></th>
-						
-						<td  aria-labelledby="lastUpdated-label"><g:formatDate date="${funcionarioInstance?.lastUpdated}" /></td>
-						
-					</tr>
-				</g:if>
-				
+
 			</table>
 
 			<g:form url="[resource:funcionarioInstance, action:'delete']" method="DELETE">
@@ -166,5 +152,6 @@
 			</g:form>
 		</div>
 		</div>
+	</div>
 	</body>
 </html>

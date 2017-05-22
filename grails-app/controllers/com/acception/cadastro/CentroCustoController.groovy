@@ -82,7 +82,7 @@ class CentroCustoController {
             centroCustoInstance.planoDeTrabalho.save flush: true
         }
 
-        centroCustoInstance.orcamento.valorTotal = parse(params.orcamento.valorTotal)
+        /*centroCustoInstance.orcamento.valorTotal = parse(params.orcamento.valorTotal)
 
         def itensOrcamentarios = centroCustoInstance.orcamento?.itensOrcamentarios
 
@@ -98,7 +98,7 @@ class CentroCustoController {
             createUpdateItemOrcamentario(itensOrcamentarios, params.itensOrcamento.codigo,
                     params.itensOrcamento.nome, params.itensOrcamento.valor, params.itensOrcamento.tipoCusto,
                     centroCustoInstance)
-        }
+        }*/
 
         centroCustoInstance.save flush: true
 

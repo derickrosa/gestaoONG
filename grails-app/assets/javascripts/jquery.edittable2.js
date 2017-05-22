@@ -14,6 +14,7 @@
                 maxRows: 999,
                 first_row: true,
                 row_template: false,
+                names: false,
                 field_templates: false,
                 validate_field: function (col_id, value, col_type, $element) {
                     return true;
@@ -172,6 +173,126 @@
             return data;
         }
 
+        function buildCellAjax(content, type, i) {
+
+            console.log(content);
+            console.log(type);
+            console.log(i);
+            console.log('---------------');
+
+            content = (content === 0) ? "0" : (content || '');
+            // Custom type
+            if (type && 'text' !== type) {
+                var field = s.field_templates[type];
+                if (name == 'parcelasOrcamento.numeroParcela')
+                    return '<td>' + '<input type="text" style="text-align:center;" name="' + name + '" class="form-control" value="' + content + '" />' + '</td>';
+                else if (name == 'parcelasOrcamento.valorRepassado') {
+                    var valorRepassado = content.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                    return '<td>' + '<input type="text" name="' + name + '" class="form-control currency text-center" value="' + valorRepassado + '" />' + '</td>';
+                } else if (type == 'codigo' || type == 'nome' || type == 'currency') {
+                    return '<td>' + '<input type="text" name="' + type + '" class="form-control text-center" value="' + content + '" />' + '</td>';
+                } else if (type == 'select_tipo_custo') {
+                    return '<td>' + '<input type="" name="' + type + '" class="form-control text-center" value="' + content + '" />' + '</td>';
+
+                }
+                else return '' + '<input type="hidden" name="listaResponsaveis.id" value="' + content + '" />' + '';
+            }
+            // Default
+            var htmlDefined = '<input type="hidden" name="listaResponsaveis.id" value="' + content + '" />';
+            return htmlDefined
+        }
+
+        function buildRowAjax(data, len) {
+
+            var rowcontent = '', b;
+
+            data = data || '';
+
+            if (!s.row_template) {
+                // Without row template
+                console.log("Entrou data length");
+                for (b = 0; b < (len || data.length); b += 1) {
+
+                    rowcontent += buildCellAjax(data[b]);
+                }
+            } else {
+                console.log("Entrou row template");
+                // With row template
+                for (b = 0; b < s.row_template.length + 1; b += 1) {
+
+                    // For each field in the row
+                    rowcontent += buildCellAjax(data[b], s.row_template[b], b);
+                }
+            }
+
+
+            return $('<tr/>', {
+                html: rowcontent + '<td class="text-center" style="font-size: large;">' +
+                '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
+                '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
+                '</a> ' +
+                '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
+                '<i class="fa fa-trash" aria-hidden="true"></i>' +
+                '</a>' +
+                '</td>'
+            });
+
+        }
+
+        function fillTableDataAjax(data) {
+
+            var a, crow = Math.min(s.maxRows, data.length);
+
+            // Clear table
+            $table.html(defaultTableContent);
+
+            // If headers or row_template are set
+            if (s.headerCols || s.row_template) {
+
+                // Fixed columns
+                var col = s.headerCols || s.row_template;
+
+                // Table headers
+                for (a = 0; a < col.length; a += 1) {
+                    var col_title = s.headerCols[a] || '';
+                    if (col_title[0] == 'N' && s.parcelas) {
+                        $table.find('thead tr').append('<th class="text-center" style="width:80px;">' + col_title + '</th>');
+                    } else {
+                        $table.find('thead tr').append('<th class="text-center" >' + col_title + '</th>');
+                    }
+
+                }
+
+                // Table content
+                for (a = 0; a < crow; a += 1) {
+
+                    // For each row in data
+                    buildRowAjax(data[a], col.length).appendTo($table.find('tbody'));
+                }
+
+            } else if (data[0]) {
+
+                // Variable columns
+                for (a = 0; a < data[0].length; a += 1) {
+                    $table.find('thead tr').append(defaultth);
+                }
+
+                for (a = 0; a < crow; a += 1) {
+                    buildRowAjax(data[a]).appendTo($table.find('tbody'));
+                }
+
+            }
+
+            // Append missing th
+            $table.find('thead tr').append('<th></th>');
+
+            // Count rows and columns
+            colnumber = $table.find('thead th').length - 1;
+            rownumber = $table.find('tbody tr').length;
+
+            checkButtons();
+        }
+
         // Fill the table with data from textarea or given properties
         if ($el.is('textarea')) {
 
@@ -294,7 +415,7 @@
             },
             // Load a JSON rappresentation of data
             loadJsonData: function (data) {
-                fillTableData(JSON.parse(data));
+                fillTableDataAjax(JSON.parse(data));
             },
             // Reset data to the first instance
             reset: function () {

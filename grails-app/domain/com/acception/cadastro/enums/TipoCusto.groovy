@@ -16,4 +16,8 @@ enum TipoCusto {
     String toString() {
         descricao
     }
+
+    def static toList() {
+        [PESSOAL, ATIVIDADE, INVESTIMENTO, EQUIPAMENTO, IMPREVISTO]
+    }
 }

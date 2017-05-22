@@ -15,4 +15,14 @@ class Financiador extends Papel {
         responsaveis nullable:true
         sigla maxSize:10, nullable:true
     }
+
+    String toString() {
+        def nome = nomeFantasia
+
+        if (sigla) {
+            nome += " (${sigla})"
+        }
+
+        nome
+    }
 }

@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'centroCusto.label', default: 'CentroCusto')}"/>
+    <g:set var="entityName" value="${message(code: 'centroCusto.label', default: 'Centro de Custo')}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
 </head>
 
@@ -160,13 +160,13 @@
 
             </div>
 
-            <g:if test="${centroCustoInstance.orcamento}">
+            %{--<g:if test="${centroCustoInstance.orcamento}">--}%
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         Orçamento
                     </div>
 
-                    <div class="panel-body">
+                   %{-- <div class="panel-body">
                         <table class="table table-bordered centroCusto">
 
                             <g:if test="${centroCustoInstance?.orcamento?.ano}">
@@ -200,16 +200,16 @@
                             <tr></tr>
                         </table>
 
-                    </div>
+                    </div>--}%
                 </div>
 
-                <g:if test="${centroCustoInstance.orcamento.itensOrcamentarios}">
+                %{--<g:if test="${centroCustoInstance.orcamento.itensOrcamentarios}">--}%
                     <div class="panel panel-success">
                         <div class="panel-heading">
                             Itens Orçamentários
                         </div>
 
-                        <div class="panel-body">
+                        %{--<div class="panel-body">
                             <table class="table table-hover text-center">
                                 <thead>
                                     <tr>
@@ -231,10 +231,10 @@
                                     </g:each>
                                 </tbody>
                             </table>
-                        </div>
+                        </div>--}%
                     </div>
-                </g:if>
-            </g:if>
+                %{--</g:if>--}%
+            %{--</g:if>--}%
 
             <g:form url="[resource: centroCustoInstance, action: 'delete']" method="DELETE">
                 <fieldset class="buttons">

@@ -41,7 +41,7 @@
                 <g:message code="funcionario.cpf.label" default="CPF"/>
 
             </label>
-            <g:textField class="form-control cpf" name="cpf" value="${funcionarioInstance?.cpf}"/>
+            <g:textField class="form-control cpf" required='required' name="cpf" value="${funcionarioInstance?.cpf}"/>
 
         </div>
     </div>

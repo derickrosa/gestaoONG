@@ -123,8 +123,7 @@ class Util {
         }
         Util.leftPad(raw, 14, (char) '0')
     }
-    // 01 234 567 8901 23
-    // 99.999.999/9999-99
+
     static String rawToCnpj(raw) {
         if (!raw) return null
         raw = raw.replace('.', '')

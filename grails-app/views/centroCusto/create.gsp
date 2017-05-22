@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'centroCusto.label', default: 'CentroCusto')}"/>
+    <g:set var="entityName" value="${message(code: 'centroCusto.label', default: 'Centro de Custo')}"/>
     <title><g:message code="default.create.label" args="[entityName]"/></title>
 </head>
 
