@@ -136,14 +136,14 @@ class FinanciadorController {
 
         def participante = financiadorInstance.participante
         participante.save(failOnError:true, flush:true)
-        log.debug(" IDS: ${params?.listaResponsaveis?.id}")
+
         //financiadorInstance?.responsaveis?.clear()
         if (params?.listaResponsaveis?.nome?.class?.array && params?.listaResponsaveis?.email?.class?.array && params?.listaResponsaveis?.telefone?.class?.array) {
             def ids = financiadorInstance?.responsaveis?.collect {it.id}
             ids.each {id->
-                log.debug("PARAM ID: ${params?.listaResponsaveis?.id}  ID: ${id.toString()}")
-                if(!params?.listaResponsaveis?.id.contains(id.toString()) && !params?.listaResponsaveis?.id == id.toString() ){
-                    log.debug("ENTROU DELETAR")
+
+                if(!params?.listaResponsaveis?.id.contains(id.toString())){
+
                     def responsavel = Responsavel.get(id)
                     def partic = responsavel.participante
                     financiadorInstance.removeFromResponsaveis(responsavel)
@@ -155,15 +155,22 @@ class FinanciadorController {
                 }
             }
             for (int i = 0; i < params?.listaResponsaveis?.nome?.size(); i++) {
-                log.debug("Entrou primeiro RESP DATA ${params?.listaResponsaveis} / Ind: $i")
+
                 def responsavel = null
-                if(params.listaResponsaveis?.id[i])
+                if(params?.listaResponsaveis?.id?.class?.array && params?.listaResponsaveis?.id?.size() > i) {
                     responsavel = Responsavel.get(Long.parseLong(params.listaResponsaveis?.id[i]))
 
+                } else if(i==0){
+                    responsavel = Responsavel.get(Long.parseLong(params.listaResponsaveis?.id))
+
+                }
+
                 def participanteResponsavel
-                if(responsavel)
+                if(responsavel) {
                     participanteResponsavel = responsavel.participante
-                else {
+                    log.debug("Adiciona participante existente: $participanteResponsavel")
+                } else {
+                    log.debug("Cria participante: ${params.listaResponsaveis?.nome[i]}")
                     responsavel = new Responsavel()
                     participanteResponsavel = new Participante()
                 }
@@ -182,7 +189,7 @@ class FinanciadorController {
                 responsavel.participante = participanteResponsavel
                 responsavel.financiador = financiadorInstance
                 responsavel.save(failOnError:true, flush:true)
-                log.debug(" RESP: ${responsavel.properties}")
+
                 if(!participanteResponsavel?.papeis?.contains(responsavel))
                     participanteResponsavel.addToPapeis(responsavel)
                 if(!financiadorInstance?.responsaveis?.contains(responsavel))
