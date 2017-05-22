@@ -35,20 +35,25 @@
                     
                     <g:sortableColumn property="codigo"
                                       title="${message(code: 'financiador.codigo.label', default: 'Codigo')}"/>
+
+                    <g:sortableColumn property="participante.nome"
+                                      title="${message(code: 'financiador.nome.label', default: 'Nome')}"/>
                     
                     <g:sortableColumn property="nomeFantasia"
                                       title="${message(code: 'financiador.nomeFantasia.label', default: 'Nome Fantasia')}"/>
-                    
+
+                    <g:sortableColumn property="participante.cnpj"
+                                      title="${message(code: 'financiador.cnpj.label', default: 'CNPJ')}"/>
+
                     <g:sortableColumn property="sigla"
                                       title="${message(code: 'financiador.sigla.label', default: 'Sigla')}"/>
                     
                     <g:sortableColumn property="dateCreated"
-                                      title="${message(code: 'financiador.dateCreated.label', default: 'Date Created')}"/>
+                                      title="${message(code: 'financiador.dateCreated.label', default: 'Data de Cadastro')}"/>
                     
-                    <g:sortableColumn property="lastUpdated"
-                                      title="${message(code: 'financiador.lastUpdated.label', default: 'Last Updated')}"/>
+
                     
-                    <th><g:message code="financiador.participante.label" default="Participante"/></th>
+
                     
                 </tr>
                 </thead>
@@ -58,16 +63,17 @@
                         
                         <td><g:link action="show"
                                     id="${financiadorInstance.id}">${fieldValue(bean: financiadorInstance, field: "codigo")}</g:link></td>
-                        
+
+                        <td>${fieldValue(bean: financiadorInstance, field: "participante.nome")}</td>
+
                         <td>${fieldValue(bean: financiadorInstance, field: "nomeFantasia")}</td>
+
+                        <td>${fieldValue(bean: financiadorInstance, field: "participante.cnpj")}</td>
                         
                         <td>${fieldValue(bean: financiadorInstance, field: "sigla")}</td>
                         
-                        <td><g:formatDate date="${financiadorInstance.dateCreated}"/></td>
-                        
-                        <td><g:formatDate date="${financiadorInstance.lastUpdated}"/></td>
-                        
-                        <td>${fieldValue(bean: financiadorInstance, field: "participante")}</td>
+                        <td><g:formatDate date="${financiadorInstance.dateCreated}" format="dd/MM/yyyy"/></td>
+
                         
                     </tr>
                 </g:each>
