@@ -92,6 +92,14 @@
                     return '<td>' + '<input type="text" name="' + name + '" class="form-control currency text-center" value="' + valorRepassado + '" />' + '</td>';
                 } else if (name == 'parcelasOrcamento.dataRepasseExecutada') {
                     return '<td>' + '<input type="text" name="' + name + '" class="form-control datepicker text-center" value="' + content + '" />' + '</td>';
+                } else if (name == 'listaResponsaveis.nome') {
+                    return '<td>' + '<input type="text" name="' + name + '" class="form-control" required value="' + content + '" />' + '</td>';
+                } else if (name == 'listaResponsaveis.email') {
+                    return '<td>' + '<input type="text" name="' + name + '" class="form-control" placeholder="exemplo@mail.com" required value="' + content + '" />' + '</td>';
+                } else if (name == 'listaResponsaveis.id') {
+                    return '' + '<input type="hidden" name="' + name + '" value="' + content + '" />' + '';
+                } else if (name == 'listaResponsaveis.telefone') {
+                return '<td>' + '<input type="text" name="' + name + '" class="form-control phone" id="telefoneRaw" required value="' + content + '" />' + '</td>';
                 } else if (name == 'parcelasOrcamento.dataMaximaPrestacaoContas') {
                     return '<td>' + '<input type="text" name="' + name + '" class="form-control datepicker text-center" value="' + content + '" />' + '</td>';
                 } else if (name == 'dataPrevistaTerminoProjeto') {
@@ -135,10 +143,10 @@
                 } else if (name == 'visitaMonitoramento.observacao') {
                     return '<td>' + '<textarea type="text"name="' + name + '" class="form-control" value="' + content + '">' + content + '</textarea>' + '</td>';
                 }
-                else return '<td>' + '<input type="text" name="' + name + '" class="form-control" value="' + content + '" />' + '</td>';
+                else return '' + '<input type="hidden" name="listaResponsaveis.id" value="' + content + '" />' + '';
             }
             // Default
-            var htmlDefined = '<td><input type="text" name="' + name + '" class="form-control" value="' + content + '" /></td>';
+            var htmlDefined = '<input type="hidden" name="listaResponsaveis.id" value="' + content + '" />';
             return htmlDefined
         }
 
@@ -186,14 +194,15 @@
 
             if (!s.row_template) {
                 // Without row template
+                console.log("Entrou data length")
                 for (b = 0; b < (len || data.length); b += 1) {
 
                     rowcontent += buildCellAjax(data[b]);
                 }
             } else {
-
+                console.log("Entrou row template")
                 // With row template
-                for (b = 0; b < s.row_template.length; b += 1) {
+                for (b = 0; b < s.row_template.length + 1; b += 1) {
 
                     // For each field in the row
                     rowcontent += buildCellAjax(data[b], s.row_template[b], b);
@@ -539,7 +548,7 @@
                     text: "O responsável selecionado será removido.",
                     type: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
+                    confirmButtonColor: "#f44242",
                     confirmButtonText: "Sim, remover!",
                     cancelButtonText: "Cancelar",
                     imageSize: "80x80",
@@ -556,10 +565,13 @@
                         $table.find('.addrow').removeClass('disabled');
                         var rowcontent =
                             '<td>' +
-                            '<input type="text" name="solicitacoes.ano" class="form-control" value="" />' +
+                            '<input type="text" name="listaResponsaveis.nome" class="form-control" value="" />' +
                             '</td>' +
                             '<td>' +
-                            '<input type="text" name="solicitacoes.descricao" class="form-control" value="" />' +
+                            '<input type="text" name="listaResponsaveis.email" class="form-control" value="" />' +
+                            '</td>' +
+                            '<td>' +
+                            '<input type="text" name="listaResponsaveis.telefone" class="form-control phone" id="telefoneRaw" value="" />' +
                             '</td>';
 
                         $('<tr/>', {
@@ -589,7 +601,7 @@
                     text: "O responsável legal será removido.",
                     type: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
+                    confirmButtonColor: "#f44242",
                     confirmButtonText: "Sim, remover!",
                     cancelButtonText: "Cancelar",
                     imageSize: "80x80",
@@ -640,7 +652,7 @@
                     text: "O responsável legal será removido.",
                     type: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
+                    confirmButtonColor: "#f44242",
                     confirmButtonText: "Sim, remover!",
                     cancelButtonText: "Cancelar",
                     imageSize: "80x80",

@@ -1,5 +1,6 @@
 package com.acception.cadastro
 
+import com.acception.util.Util
 import grails.converters.JSON
 
 import static org.springframework.http.HttpStatus.*
@@ -21,10 +22,17 @@ class FinanciadorController {
 
     def findSolicitacoes() {
         def financiador
-        if(params.idFinanciador)
+        if(params.idFinanciador) {
+            log.debug("Financiador ID ${params.idFinanciador}")
             financiador = Financiador.get(Long.parseLong(params.idFinanciador))
-        def json = financiador?.responsaveis?.sort { it.nome }.collect { it ->
-            [it.nome ?: '', it.email ?: '', it.telefone ?: '']
+            log.debug("Financiador: ${financiador}")
+        }
+
+        def json = financiador?.responsaveis?.sort { it.participante.nome }.collect { it ->
+            def numero = ""
+            if(it.participante.telefone)
+                numero = it.participante.telefone.ddd + it.participante.telefone.numero
+            [it.participante.nome ?: '', it.participante.email ?: '', numero ?: '', it.id ?: '']
         }
         render(json as JSON)
     }
@@ -56,10 +64,9 @@ class FinanciadorController {
                     participanteResponsavel.nome = params.listaResponsaveis?.nome[i]
                 if (params.listaResponsaveis?.email[i])
                     participanteResponsavel.email = params.listaResponsaveis?.email[i]
-                if (params.listaResponsaveis?.telefone) {
-                    participanteResponsavel.telefone = new Telefone()
-                    participanteResponsavel.telefone.numero = params.listaResponsaveis?.telefone[i]
-                    participanteResponsavel.telefone.save(failOnError:true, flush:true)
+                if (params.listaResponsaveis?.telefone[i]) {
+                    def dadosTelefone = Util.phoneToRaw(params.listaResponsaveis?.telefone[i])
+                    participanteResponsavel.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
                 }
 
 
@@ -83,9 +90,8 @@ class FinanciadorController {
             if (params.listaResponsaveis?.email)
                 participanteResponsavel.email = params.listaResponsaveis?.email
             if (params.listaResponsaveis?.telefone) {
-                participanteResponsavel.telefone = new Telefone()
-                participanteResponsavel.telefone.numero = params.listaResponsaveis?.telefone
-                participanteResponsavel.telefone.save(failOnError:true, flush:true)
+                def dadosTelefone = Util.phoneToRaw(params.listaResponsaveis?.telefone)
+                participanteResponsavel.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
             }
             participanteResponsavel.save(failOnError:true, flush:true)
             def responsavel = new Responsavel()
@@ -126,6 +132,113 @@ class FinanciadorController {
         if (financiadorInstance == null) {
             notFound()
             return
+        }
+
+        def participante = financiadorInstance.participante
+        participante.save(failOnError:true, flush:true)
+        log.debug(" IDS: ${params?.listaResponsaveis?.id}")
+        //financiadorInstance?.responsaveis?.clear()
+        if (params?.listaResponsaveis?.nome?.class?.array && params?.listaResponsaveis?.email?.class?.array && params?.listaResponsaveis?.telefone?.class?.array) {
+            def ids = financiadorInstance?.responsaveis?.collect {it.id}
+            ids.each {id->
+                log.debug("PARAM ID: ${params?.listaResponsaveis?.id}  ID: ${id.toString()}")
+                if(!params?.listaResponsaveis?.id.contains(id.toString()) && !params?.listaResponsaveis?.id == id.toString() ){
+                    log.debug("ENTROU DELETAR")
+                    def responsavel = Responsavel.get(id)
+                    def partic = responsavel.participante
+                    financiadorInstance.removeFromResponsaveis(responsavel)
+                    partic.removeFromPapeis(responsavel)
+                    responsavel.participante = null
+                    responsavel.financiador = null
+                    responsavel.delete(flush: true, failOnError:true)
+                    partic.delete(flush: true, failOnError:true)
+                }
+            }
+            for (int i = 0; i < params?.listaResponsaveis?.nome?.size(); i++) {
+                log.debug("Entrou primeiro RESP DATA ${params?.listaResponsaveis} / Ind: $i")
+                def responsavel = null
+                if(params.listaResponsaveis?.id[i])
+                    responsavel = Responsavel.get(Long.parseLong(params.listaResponsaveis?.id[i]))
+
+                def participanteResponsavel
+                if(responsavel)
+                    participanteResponsavel = responsavel.participante
+                else {
+                    responsavel = new Responsavel()
+                    participanteResponsavel = new Participante()
+                }
+                if (params.listaResponsaveis?.nome[i])
+                    participanteResponsavel.nome = params.listaResponsaveis?.nome[i]
+                if (params.listaResponsaveis?.email[i])
+                    participanteResponsavel.email = params.listaResponsaveis?.email[i]
+                if (params.listaResponsaveis?.telefone[i]) {
+                    def dadosTelefone = Util.phoneToRaw(params.listaResponsaveis?.telefone[i])
+                    participanteResponsavel.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
+                }
+
+
+                participanteResponsavel.save(failOnError:true, flush:true)
+
+                responsavel.participante = participanteResponsavel
+                responsavel.financiador = financiadorInstance
+                responsavel.save(failOnError:true, flush:true)
+                log.debug(" RESP: ${responsavel.properties}")
+                if(!participanteResponsavel?.papeis?.contains(responsavel))
+                    participanteResponsavel.addToPapeis(responsavel)
+                if(!financiadorInstance?.responsaveis?.contains(responsavel))
+                    financiadorInstance.addToResponsaveis(responsavel)
+                participanteResponsavel.save(failOnError:true, flush:true)
+                financiadorInstance.save(failOnError:true, flush:true)
+
+            }
+        } else if (params?.listaResponsaveis?.nome && params?.listaResponsaveis?.email && params?.listaResponsaveis?.telefone) {
+            def ids = financiadorInstance?.responsaveis?.collect {it.id}
+            ids.each {id->
+                if(params?.listaResponsaveis?.id != id.toString()){
+                    def responsavel = Responsavel.get(id)
+                    def partic = responsavel.participante
+                    financiadorInstance.removeFromResponsaveis(responsavel)
+                    partic.removeFromPapeis(responsavel)
+                    responsavel.participante = null
+                    responsavel.financiador = null
+                    responsavel.delete(flush: true, failOnError:true)
+                    partic.delete(flush: true, failOnError:true)
+                }
+            }
+            def responsavel
+            if(params.listaResponsaveis?.id)
+                responsavel = Responsavel.get(Long.parseLong(params.listaResponsaveis?.id))
+            else
+                responsavel = null
+            def participanteResponsavel
+            if(responsavel)
+                participanteResponsavel = responsavel.participante
+            else {
+                responsavel = new Responsavel()
+                participanteResponsavel = new Participante()
+            }
+            if (params.listaResponsaveis?.nome)
+                participanteResponsavel.nome = params.listaResponsaveis?.nome
+            if (params.listaResponsaveis?.email)
+                participanteResponsavel.email = params.listaResponsaveis?.email
+            if (params.listaResponsaveis?.telefone) {
+                def dadosTelefone = Util.phoneToRaw(params.listaResponsaveis?.telefone)
+                participanteResponsavel.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
+            }
+            participanteResponsavel.save(failOnError: true, flush: true)
+
+            responsavel.participante = participanteResponsavel
+            responsavel.financiador = financiadorInstance
+            responsavel.save(failOnError:true, flush:true)
+            log.debug(" RESP: ${responsavel.properties}")
+            if(!participanteResponsavel?.papeis?.contains(responsavel))
+                participanteResponsavel.addToPapeis(responsavel)
+            if(!financiadorInstance?.responsaveis?.contains(responsavel))
+                financiadorInstance.addToResponsaveis(responsavel)
+            participanteResponsavel.save(failOnError:true, flush:true)
+            financiadorInstance.save(failOnError:true, flush:true)
+
+
         }
 
         if (financiadorInstance.hasErrors()) {

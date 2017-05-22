@@ -1,9 +1,9 @@
 <%@ page import="com.acception.cadastro.Financiador" %>
 <div class="row">
     <div class="col-lg-12">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading control-label">
-                Dados Básicos
+                Informações  Básicas
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
@@ -79,7 +79,7 @@
             <g:message code="financiador.participante.cnpj.label" default="Cnpj"/>
 
         </label>
-        <g:textField class="form-control"  name="participante.cnpj" maxlength="14" value="${financiadorInstance?.participante?.cnpj}"/>
+        <g:textField class="form-control cnpj"  name="participante.cnpj" maxlength="14" value="${financiadorInstance?.participante?.cnpj}"/>
 
     </div>
 </div>
@@ -89,7 +89,7 @@
         <g:message code="financiador.setor.label" default="Setor"/>
         
     </label>
-    <g:select name="setor" from="${com.acception.cadastro.enums.Setor?.values()}" class="form-control" keys="${com.acception.cadastro.enums.Setor.values()*.name()}" value="${financiadorInstance?.setor?.name()}"  noSelection="['': '']"/>
+    <g:select name="setor" from="${com.acception.cadastro.enums.Setor?.values()}" class="form-control" keys="${com.acception.cadastro.enums.Setor.values()*.name()}" value="${financiadorInstance?.setor?.name()}"  noSelection="['': 'Selecione...']"/>
 
 </div>
         </div>
@@ -103,7 +103,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading control-label">
                 Responsáveis
             </div>
@@ -120,7 +120,7 @@
     var table = $("#edittableResponsaveis").editTable({
         field_templates: {
             'nome': {
-                html: '<input type="text" class="form-control" name="listaResponsaveis.nome"/>',
+                html: '<input type="text" class="form-control" name="listaResponsaveis.nome" required/>',
                 getValue: function (input) {
                     return $(input).val();
                 },
@@ -128,7 +128,7 @@
                     return $(input).text(value);
                 }
             }, 'email': {
-                html: '<input type="text" class="form-control"   name="listaResponsaveis.email" />',
+                html: '<input type="text" class="form-control"   name="listaResponsaveis.email" placeholder="exemplo@mail.com" required/>',
                 getValue: function (input) {
                     return $(input).val();
                 },
@@ -136,7 +136,7 @@
                     return $(input).text(value);
                 }
             }, 'telefone': {
-                html: '<input type="text" class="form-control"   name="listaResponsaveis.telefone" />',
+                html: '<input type="text" class="form-control phone"  id="telefoneRaw" name="listaResponsaveis.telefone" required/>',
                 getValue: function (input) {
                     return $(input).val();
                 },
