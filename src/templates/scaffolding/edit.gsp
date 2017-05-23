@@ -34,7 +34,7 @@
                 <div class="col-lg-12">
                     <div id="edit-${domainClass.propertyName}" class="content scaffold-edit" role="main">
                         <g:if test="\${flash.message}">
-                            <div class="message" role="status">\${flash.message}</div>
+                            <div class="alert alert-danger" role="status">\${flash.message}</div>
                         </g:if>
                         <g:hasErrors bean="\${${propertyName}}">
                             <div class="alert alert-danger">
@@ -58,6 +58,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </body>
 </html>

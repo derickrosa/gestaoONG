@@ -7,6 +7,8 @@ import org.springframework.security.access.annotation.Secured
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+@Transactional(readOnly = false)
+@Secured('permitAll')
 class UserController {
     def springSecurityService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -30,11 +32,10 @@ class UserController {
             }
         }
         */
-        redirect(url: '/home/dashboard')
+        redirect(controller: 'home', action: 'painelInicial')
     }
 
     def index(Integer max) {
-        log.debug('teste')
         params.max = Math.min(max ?: 10, 100)
         def userList
         def userCount
@@ -42,10 +43,8 @@ class UserController {
         def criteria = {
 
         }
-        log.debug(userList)
         userList = User.createCriteria().list(params, criteria)
         userCount = User.createCriteria().count(criteria)
-        log.debug(userList)
         [userInstanceList: userList, userInstanceCount: userCount]
     }
 
@@ -54,7 +53,6 @@ class UserController {
     }
 
     def changePassword(Long id, String password, String confirmPassword, String changePassword) {
-        log.debug("Params: ${params}")
         def user = User.get(id)
         if (!password) {
             response.status = 500
@@ -81,7 +79,6 @@ class UserController {
             }
 
             def r = [success: true, message: 'Senha alterada com sucesso']
-            log.debug "${user}: senha alterada com sucesso : ${user.password}"
             render r as JSON
         } else {
             response.status = 404
@@ -93,10 +90,8 @@ class UserController {
     def create() {
         def roleList = []
         User currentUser = springSecurityService.currentUser
-        if (currentUser.containsAuthorities('ROLE_MASTER') || currentUser.containsAuthorities('ROLE_SUPORTE')) {
+        if (currentUser.containsAuthorities('ROLE_ADMINISTRADOR_SISTEMA') || currentUser.containsAuthorities('ROLE_SUPORTE')) {
             roleList = Role.list()
-        } else {
-            roleList.addAll Role.findAllByAuthorityInList(['ROLE_CA', 'ROLE_ADMINISTRADORA'])
         }
         [userInstance: new User(params), authorityList: roleList, edit: false]
     }
@@ -119,7 +114,7 @@ class UserController {
         }
 
 
-        userInstance.initialPassword = params.password
+        userInstance.password = params.initialPassword
         userInstance.save flush: true
 
         for (role in Role.list()) {
@@ -176,7 +171,7 @@ class UserController {
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'User.label', default: 'User'), userInstance.id])
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])
                 redirect userInstance
             }
             '*' { respond userInstance, [status: OK] }
@@ -202,7 +197,7 @@ class UserController {
         }
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'User.label', default: 'User'), userInstance.id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])
                 redirect action: "index", method: "GET"
             }
             '*' { render status: NO_CONTENT }

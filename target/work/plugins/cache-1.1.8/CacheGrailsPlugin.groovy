@@ -181,7 +181,7 @@ class CacheGrailsPlugin {
 		}
 
 		if (application.isControllerClass(source) || application.isServiceClass(source)) {
-			event.ctx.cacheOperationSource.reset()
+				event.ctx.cacheOperationSource.reset()
 			log.debug 'Reset GrailsAnnotationCacheOperationSource cache'
 		}
 		else if (application.isCacheConfigClass(source)) {

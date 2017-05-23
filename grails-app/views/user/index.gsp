@@ -27,29 +27,27 @@
 
         <div id="list-user" class="body" role="main">
             <g:if test="${flash.message}">
-                <div class="message" role="status">${flash.message}</div>
+                <div class="alert alert-info" role="status">${flash.message}</div>
             </g:if>
             <table class="table table-bordered table-striped">
                 <thead>
                 <tr>
                     
+                    <g:sortableColumn property="nome"
+                                      title="${message(code: 'user.nome.label', default: 'Nome')}"/>
+
                     <g:sortableColumn property="username"
-                                      title="${message(code: 'user.username.label', default: 'Username')}"/>
-                    
-                    <g:sortableColumn property="password"
-                                      title="${message(code: 'user.password.label', default: 'Password')}"/>
-                    
+                                      title="${message(code: 'user.username.label', default: 'Login')}"/>
+
                     <g:sortableColumn property="email"
-                                      title="${message(code: 'user.email.label', default: 'Email')}"/>
-                    
-                    <g:sortableColumn property="accountExpired"
-                                      title="${message(code: 'user.accountExpired.label', default: 'Account Expired')}"/>
-                    
-                    <g:sortableColumn property="accountLocked"
-                                      title="${message(code: 'user.accountLocked.label', default: 'Account Locked')}"/>
-                    
-                    <g:sortableColumn property="enabled"
-                                      title="${message(code: 'user.enabled.label', default: 'Enabled')}"/>
+                                      title="${message(code: 'user.email.label', default: 'E-mail')}"/>
+
+                    <g:sortableColumn property="email"
+                                      title="${message(code: 'user.email.label', default: 'Permissões')}"/>
+
+                    <sec:ifAnyGranted roles='ROLE_SUPORTE, ROLE_MASTER'>
+                        <th></th>
+                    </sec:ifAnyGranted>
                     
                 </tr>
                 </thead>
@@ -58,17 +56,24 @@
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         
                         <td><g:link action="show"
+                                    id="${userInstance.id}">${fieldValue(bean: userInstance, field: "nome")}</g:link></td>
+
+                        <td><g:link action="show"
                                     id="${userInstance.id}">${fieldValue(bean: userInstance, field: "username")}</g:link></td>
-                        
-                        <td>${fieldValue(bean: userInstance, field: "password")}</td>
+
                         
                         <td>${fieldValue(bean: userInstance, field: "email")}</td>
-                        
-                        <td><g:formatBoolean boolean="${userInstance.accountExpired}"/></td>
-                        
-                        <td><g:formatBoolean boolean="${userInstance.accountLocked}"/></td>
-                        
-                        <td><g:formatBoolean boolean="${userInstance.enabled}"/></td>
+
+                        <td>${userInstance?.authorities?userInstance?.authorities?.nome?.join(', '):'Nenhuma permissão definida para este usuário.'}</td>
+
+                        <sec:ifAnyGranted roles='ROLE_SUPORTE, ROLE_ADMINISTRADOR_SISTEMA'>
+                            <td>
+                                <form action='${request.contextPath}/j_spring_security_switch_user' method='POST'>
+                                    <input class="btn btn-primary" type='submit' value='Logar'/>
+                                    <input type='hidden' name='j_username' value="${userInstance.username}"/> <br/>
+                                </form>
+                            </td>
+                        </sec:ifAnyGranted>
                         
                     </tr>
                 </g:each>

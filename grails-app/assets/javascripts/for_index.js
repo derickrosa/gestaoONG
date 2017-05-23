@@ -146,8 +146,6 @@ $(function () {
 
 //TOOLTIP AND HOVERS
 
-$(function () { dashboard(); });
-
 // tooltip demo
 $('.tooltip-demo').tooltip({
     selector: "[data-toggle=tooltip]",

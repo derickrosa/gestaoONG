@@ -26,92 +26,47 @@
 
 		<div id="show-user" class="content scaffold-show" role="main">
 			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
+			<div class="alert alert-info" role="status">${flash.message}</div>
 			</g:if>
 
 			<table class="table table-bordered user">
-				
+
+				<g:if test="${userInstance?.nome}">
+					<tr>
+						<th id="nome-label" class="property-label"><g:message code="user.nome.label" default="Nome" /></th>
+
+						<td  aria-labelledby="nome-label"><g:fieldValue bean="${userInstance}" field="nome"/></td>
+
+					</tr>
+				</g:if>
+
+
 				<g:if test="${userInstance?.username}">
 					<tr>
-						<th id="username-label" class="property-label"><g:message code="user.username.label" default="Username" /></th>
+						<th id="username-label" class="property-label"><g:message code="user.username.label" default="Login" /></th>
 						
 						<td  aria-labelledby="username-label"><g:fieldValue bean="${userInstance}" field="username"/></td>
 						
 					</tr>
 				</g:if>
 				
-				<g:if test="${userInstance?.password}">
-					<tr>
-						<th id="password-label" class="property-label"><g:message code="user.password.label" default="Password" /></th>
-						
-						<td  aria-labelledby="password-label"><g:fieldValue bean="${userInstance}" field="password"/></td>
-						
-					</tr>
-				</g:if>
-				
 				<g:if test="${userInstance?.email}">
 					<tr>
-						<th id="email-label" class="property-label"><g:message code="user.email.label" default="Email" /></th>
+						<th id="email-label" class="property-label"><g:message code="user.email.label" default="E-mail" /></th>
 						
 						<td  aria-labelledby="email-label"><g:fieldValue bean="${userInstance}" field="email"/></td>
 						
 					</tr>
 				</g:if>
 				
-				<g:if test="${userInstance?.accountExpired}">
+
 					<tr>
-						<th id="accountExpired-label" class="property-label"><g:message code="user.accountExpired.label" default="Account Expired" /></th>
+						<th id="passwordExpired-label" class="property-label"><g:message code="user.passwordExpired.label" default="Papéis" /></th>
 						
-						<td  aria-labelledby="accountExpired-label"><g:formatBoolean boolean="${userInstance?.accountExpired}" /></td>
+						<td  aria-labelledby="passwordExpired-label">${userInstance?.authorities?.nome?.join(', ')}</td>
 						
 					</tr>
-				</g:if>
-				
-				<g:if test="${userInstance?.accountLocked}">
-					<tr>
-						<th id="accountLocked-label" class="property-label"><g:message code="user.accountLocked.label" default="Account Locked" /></th>
-						
-						<td  aria-labelledby="accountLocked-label"><g:formatBoolean boolean="${userInstance?.accountLocked}" /></td>
-						
-					</tr>
-				</g:if>
-				
-				<g:if test="${userInstance?.enabled}">
-					<tr>
-						<th id="enabled-label" class="property-label"><g:message code="user.enabled.label" default="Enabled" /></th>
-						
-						<td  aria-labelledby="enabled-label"><g:formatBoolean boolean="${userInstance?.enabled}" /></td>
-						
-					</tr>
-				</g:if>
-				
-				<g:if test="${userInstance?.initialPassword}">
-					<tr>
-						<th id="initialPassword-label" class="property-label"><g:message code="user.initialPassword.label" default="Initial Password" /></th>
-						
-						<td  aria-labelledby="initialPassword-label"><g:fieldValue bean="${userInstance}" field="initialPassword"/></td>
-						
-					</tr>
-				</g:if>
-				
-				<g:if test="${userInstance?.nome}">
-					<tr>
-						<th id="nome-label" class="property-label"><g:message code="user.nome.label" default="Nome" /></th>
-						
-						<td  aria-labelledby="nome-label"><g:fieldValue bean="${userInstance}" field="nome"/></td>
-						
-					</tr>
-				</g:if>
-				
-				<g:if test="${userInstance?.passwordExpired}">
-					<tr>
-						<th id="passwordExpired-label" class="property-label"><g:message code="user.passwordExpired.label" default="Password Expired" /></th>
-						
-						<td  aria-labelledby="passwordExpired-label"><g:formatBoolean boolean="${userInstance?.passwordExpired}" /></td>
-						
-					</tr>
-				</g:if>
-				
+
 			</table>
 
 			<g:form url="[resource:userInstance, action:'delete']" method="DELETE">

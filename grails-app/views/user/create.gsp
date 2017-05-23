@@ -4,6 +4,9 @@
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'user.label', default: 'User')}"/>
     <title><g:message code="default.create.label" args="[entityName]"/></title>
+    <asset:stylesheet src="normalize.css"/>
+    <asset:stylesheet src="wizardMain.css"/>
+    <asset:stylesheet src="jquery.steps.css"/>
 </head>
 
 <body>
@@ -30,7 +33,7 @@
                 <div class="col-lg-12">
                     <div id="create-user" class="content scaffold-create" role="main">
                         <g:if test="${flash.message}">
-                            <div class="message" role="status">${flash.message}</div>
+                            <div class="alert alert-danger" role="status">${flash.message}</div>
                         </g:if>
                         <g:hasErrors bean="${userInstance}">
                             <div class="alert alert-danger">
@@ -42,15 +45,20 @@
                                 </ul>
                             </div>
                         </g:hasErrors>
-                        <g:form url="[resource:userInstance, action:'save']" >
-                        <g:render template="form"/>
-                            <g:submitButton name="create" class="btn btn-default"
-                                            value="${message(code: 'default.button.create.label', default: 'Create')}"/>
+                        <g:form url="[resource: userInstance, action: 'save']" id="form">
+                            <g:render template="form"/>
                         </g:form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script src="${assetPath(src: 'jquery.cookie-1.3.1.js')}"></script>
+<script src="${assetPath(src: 'jquery.steps.js')}"></script>
+<script src="${assetPath(src: 'WizardInit.js')}"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
 </body>
 </html>

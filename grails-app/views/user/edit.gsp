@@ -5,6 +5,10 @@
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'user.label', default: 'User')}"/>
     <title><g:message code="default.edit.label" args="[entityName]"/></title>
+
+    <asset:stylesheet src="normalize.css"/>
+    <asset:stylesheet src="wizardMain.css"/>
+    <asset:stylesheet src="jquery.steps.css"/>
 </head>
 
 <body>
@@ -18,8 +22,6 @@
         </div>
         <hr/>
         <!--BLOCK SECTION -->
-        <a href="#edit-user" class="skip" tabindex="-1"><g:message code="default.link.skip.label"
-                                                                                          default="Skip to content&hellip;"/></a>
 
         <div class="nav" role="navigation">
             <p>
@@ -36,7 +38,7 @@
                 <div class="col-lg-12">
                     <div id="edit-user" class="content scaffold-edit" role="main">
                         <g:if test="${flash.message}">
-                            <div class="message" role="status">${flash.message}</div>
+                            <div class="alert alert-danger" role="status">${flash.message}</div>
                         </g:if>
                         <g:hasErrors bean="${userInstance}">
                             <div class="alert alert-danger">
@@ -48,18 +50,22 @@
                                 </ul>
                             </div>
                         </g:hasErrors>
-                        <g:form url="[resource:userInstance, action:'update']" method="PUT" >
-
-                        <g:hiddenField name="version" value="${userInstance?.version}"/>
-                        <g:render template="form"/>
-                        <button type="submit" class="btn btn-default">
-                            <span class="glyphicon glyphicon-edit"></span>
-                            <g:message code="default.button.update.label" default="Update"/></button>
+                        <g:form url="[resource: userInstance, action: 'update']" method="PUT" id="form">
+                            <g:hiddenField name="version" value="${userInstance?.version}"/>
+                            <g:render template="form"/>
                         </g:form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- PAGE LEVEL SCRIPTS -->
+<script src="${assetPath(src: 'jquery.cookie-1.3.1.js')}"></script>
+<script src="${assetPath(src: 'jquery.steps.js')}"></script>
+<script src="${assetPath(src: 'WizardInit.js')}"></script>
+
+<!-- END PAGE LEVEL SCRIPTS -->
 </body>
 </html>
