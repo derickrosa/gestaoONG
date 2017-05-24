@@ -367,7 +367,7 @@
                     <li class=""><a href="more_notifications.html">Lançamento</a></li>
                     <li class=""><g:link controller="funcionario" action="index">Funcionário</g:link></a></li>
                     <li class=""><g:link controller="financiador" action="index">Financiador</g:link></li>
-                    <li class=""><g:link controller="responsavel" action="index">Responsável</g:link></li>
+                    %{--<li class=""><g:link controller="responsavel" action="index">Responsável</g:link></li>--}%
                 </ul>
             </li>
 

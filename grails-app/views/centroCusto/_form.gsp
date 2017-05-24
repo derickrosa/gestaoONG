@@ -167,7 +167,6 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
            value="${centroCustoInstance.planoDeTrabalho ? 1 : 0}">
     <input type="file" id="planoDeTrabalho" name="planoDeTrabalho">
 </div>
-%{--
 
 
 <div class="row">
@@ -221,7 +220,6 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
         </div>
     </div>
 </div>
---}%
 
 <script>
     var table;
