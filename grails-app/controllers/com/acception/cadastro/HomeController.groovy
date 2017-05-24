@@ -18,7 +18,7 @@ class HomeController {
         User user = springSecurityService.currentUser
         def mustChange = false
         if (!user.containsAuthorities('ROLE_SUPORTE')) {
-           if(!user.initialPassword){
+           if(user.initialPassword){
             if (springSecurityService.passwordEncoder.isPasswordValid(user.password, user.initialPassword, null)) {
                 mustChange = true
             }
