@@ -22,7 +22,7 @@
     <div class="col-md-10">
 <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'nome', 'error')} ">
     <label for="nome">
-        <g:message code="financiador.participante.nome.label" default="Nome"/>
+        <g:message code="financiador.participante.nome.label" default="Nome Fantasia"/>
 
     </label>
     <g:textField class="form-control"  name="participante.nome" maxlength="100" value="${financiadorInstance?.participante?.nome}"/>
@@ -33,12 +33,12 @@
 
 <div class="row">
 <div class="col-md-10">
-<div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'nomeFantasia', 'error')} ">
+<div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'razaoSocial', 'error')} ">
     <label for="nomeFantasia">
-        <g:message code="financiador.nomeFantasia.label" default="Nome Fantasia"/>
+        <g:message code="financiador.nomeFantasia.label" default="Razão Social"/>
         
     </label>
-    <g:textField class="form-control"  name="nomeFantasia" maxlength="100" value="${financiadorInstance?.nomeFantasia}"/>
+    <g:textField class="form-control"  name="nomeFantasia" maxlength="100" value="${financiadorInstance?.participante?.razaoSocial}"/>
 
 </div>
 </div>

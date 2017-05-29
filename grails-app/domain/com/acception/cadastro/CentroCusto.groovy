@@ -26,4 +26,8 @@ class CentroCusto {
         dataFinal nullable: true
         planoDeTrabalho nullable: true
     }
+
+    String toString() {
+        "${nome + '/' + ano}"
+    }
 }

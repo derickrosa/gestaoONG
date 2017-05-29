@@ -3,7 +3,6 @@ package com.acception.cadastro
 import com.acception.cadastro.enums.Setor
 
 class Financiador extends Papel {
-    String nomeFantasia
     String sigla
     Setor setor
 
@@ -17,7 +16,7 @@ class Financiador extends Papel {
     }
 
     String toString() {
-        def nome = nomeFantasia
+        def nome = participante.nome
 
         if (sigla) {
             nome += " (${sigla})"
