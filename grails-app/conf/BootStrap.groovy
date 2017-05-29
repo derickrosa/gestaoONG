@@ -8,6 +8,7 @@ class BootStrap {
     def init = { servletContext ->
         systemInicialLog()
         loadFixtures()
+        loadPerfisAcesso()
     }
     def destroy = {
     }
@@ -25,6 +26,30 @@ class BootStrap {
     def loadFixtures() {
         if (Role.count() == 0)
             fixtureLoader.load("users")
+    }
+
+    def loadPerfisAcesso() {
+      if(!Role.findByAuthority('ROLE_SUPORTE')){
+          def role = new Role(nome: 'Suporte Acception',authority: 'ROLE_SUPORTE')
+          role.save(flush:true,failOnError:true)
+      }
+          if(!Role.findByAuthority('ROLE_FINANCIADOR')){
+          def role = new Role(nome: 'Financiador',authority: 'ROLE_FINANCIADOR')
+          role.save(flush:true,failOnError:true)
+      }
+          if(!Role.findByAuthority('ROLE_RESPONSAVEL')){
+          def role = new Role(nome: 'Responsável',authority: 'ROLE_RESPONSAVEL')
+          role.save(flush:true,failOnError:true)
+      }
+          if(!Role.findByAuthority('ROLE_FUNCIONARIO')){
+          def role = new Role(nome: 'Funcionário',authority: 'ROLE_FUNCIONARIO')
+          role.save(flush:true,failOnError:true)
+      }
+
+        if(!Role.findByAuthority('ROLE_ADMINISTRADOR_SISTEMA')){
+          def role = new Role(nome: 'Administrador do Sistema',authority: 'ROLE_ADMINISTRADOR_SISTEMA')
+          role.save(flush:true,failOnError:true)
+      }
     }
 
 }

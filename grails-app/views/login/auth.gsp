@@ -41,7 +41,7 @@
     <g:if test='${flash.message}'>
         <p class="text-muted text-center ">${flash.message}</div>
     </g:if>
-      %{--  <div id="forgot" class="tab-pane">
+   %{--     <div id="forgot" class="tab-pane">
             <form action="${postUrl}" class="form-signin">
                 <p class="text-muted text-center btn-block btn btn-primary btn-rect">Entre com um e-mail válido</p>
                 <input type="email" required="required" placeholder="Your E-mail" class="form-control"/>
@@ -54,7 +54,7 @@
     <div class="text-center">
         <ul class="list-inline">
             <li><a class="text-muted" href="#login" data-toggle="tab">Login</a></li>
-            <li><a class="text-muted" href="#forgot" data-toggle="tab">Esqueci a senha</a></li>
+            <li><a class="text-muted" href="${createLink(controller: 'recuperarSenha',action:'esqueci')}" data-toggle="tab">Esqueci a senha</a></li>
         </ul>
     </div>
 

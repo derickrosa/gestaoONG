@@ -1,85 +1,52 @@
 <%@ page import="com.acception.security.User" %>
 
+    <div class="panel-body">
+        <div id="wizard" >
+            <h2> Dados Básicos </h2>
+            <section>
+
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <g:textField class="form-control"  name="nome" value="${userInstance?.nome}" required="required"/>
+                        <p class="help-block">Nome do usuário (primeiro e último nome).</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Login</label>
+                        <g:textField class="form-control"  name="username" value="${userInstance?.username}"/>
+                        <p class="help-block">Nome de usuário utilizado para acessar o sistema (sem espaços).</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Senha Inicial</label>
+                        <g:textField class="form-control"  name="initialPassword" value="${userInstance?.initialPassword}"/>
+                        <p class="help-block">A senha inicial do usuário que deverá ser alterada no primeiro acesso..</p>
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <g:textField class="form-control"  name="email" value="${userInstance?.email}"/>
+                        <p class="help-block">E-mail para recuperação de senha.</p>
+                    </div>
 
 
-<div class="form-group fieldcontain ${hasErrors(bean: userInstance, field: 'username', 'error')} ">
-    <label for="username">
-        <g:message code="user.username.label" default="Username"/>
-        
-    </label>
-    <g:textField class="form-control"  name="username" value="${userInstance?.username}"/>
 
-</div>
+            </section>
 
-<div class="form-group fieldcontain ${hasErrors(bean: userInstance, field: 'password', 'error')} ">
-    <label for="password">
-        <g:message code="user.password.label" default="Password"/>
-        
-    </label>
-    <g:textField class="form-control"  name="password" value="${userInstance?.password}"/>
+            <h2> Permissões </h2>
+            <section>
+                <div class="form-group">
+                        <g:each var="auth" in="${authorityList}">
+                            <div>
+                                <g:checkBox name="${auth?.authority}"
+                                            value="${edit == false ? false : userInstance?.authorities?.contains(auth)}"/>
+                               ${auth?.nome}
+                            </div>
+                        </g:each>
+                    <p class="help-block">Selecionar permissões do usuário.</p>
+                    </div>
 
-</div>
+            </section>
+        </div>
 
-<div class="form-group fieldcontain ${hasErrors(bean: userInstance, field: 'email', 'error')} ">
-    <label for="email">
-        <g:message code="user.email.label" default="Email"/>
-        
-    </label>
-    <g:textField class="form-control"  name="email" value="${userInstance?.email}"/>
+    </div>
 
-</div>
-
-<div class="form-group fieldcontain ${hasErrors(bean: userInstance, field: 'accountExpired', 'error')} ">
-    <label for="accountExpired">
-        <g:message code="user.accountExpired.label" default="Account Expired"/>
-        
-    </label>
-    <g:checkBox name="accountExpired" value="${userInstance?.accountExpired}" />
-
-</div>
-
-<div class="form-group fieldcontain ${hasErrors(bean: userInstance, field: 'accountLocked', 'error')} ">
-    <label for="accountLocked">
-        <g:message code="user.accountLocked.label" default="Account Locked"/>
-        
-    </label>
-    <g:checkBox name="accountLocked" value="${userInstance?.accountLocked}" />
-
-</div>
-
-<div class="form-group fieldcontain ${hasErrors(bean: userInstance, field: 'enabled', 'error')} ">
-    <label for="enabled">
-        <g:message code="user.enabled.label" default="Enabled"/>
-        
-    </label>
-    <g:checkBox name="enabled" value="${userInstance?.enabled}" />
-
-</div>
-
-<div class="form-group fieldcontain ${hasErrors(bean: userInstance, field: 'initialPassword', 'error')} ">
-    <label for="initialPassword">
-        <g:message code="user.initialPassword.label" default="Initial Password"/>
-        
-    </label>
-    <g:textField class="form-control"  name="initialPassword" value="${userInstance?.initialPassword}"/>
-
-</div>
-
-<div class="form-group fieldcontain ${hasErrors(bean: userInstance, field: 'nome', 'error')} ">
-    <label for="nome">
-        <g:message code="user.nome.label" default="Nome"/>
-        
-    </label>
-    <g:textField class="form-control"  name="nome" value="${userInstance?.nome}"/>
-
-</div>
-
-<div class="form-group fieldcontain ${hasErrors(bean: userInstance, field: 'passwordExpired', 'error')} ">
-    <label for="passwordExpired">
-        <g:message code="user.passwordExpired.label" default="Password Expired"/>
-        
-    </label>
-    <g:checkBox name="passwordExpired" value="${userInstance?.passwordExpired}" />
-
-</div>
 

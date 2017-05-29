@@ -46,12 +46,11 @@
                 <i class="icon-align-justify"></i>
             </a>
             <!-- LOGO SECTION -->
-            <header class="navbar-header">
+            <header class="navbar-header" style="position: absolute;top: 30%;">
+            <sec:ifLoggedIn>
 
-                %{--   <a href="index.html" class="navbar-brand">
-                       <img src="${assetPath(src: 'logo-fase.png')}" alt=""/>
-
-                   </a>--}%
+                <p>Olá,    <sec:username/>.</p>
+            </sec:ifLoggedIn>
             </header>
             <!-- END LOGO SECTION -->
             <ul class="nav navbar-top-links navbar-right">
@@ -292,9 +291,7 @@
                     </a>
 
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="icon-user"></i> User Profile</a>
-                        </li>
-                        <li><a href="#"><i class="icon-gear"></i> Settings</a>
+                        <li><a href="${createLink(action: 'meuUsuario',controller: 'user')}"><i class="icon-user"></i> Perfil do Usuário</a>
                         </li>
                         <li class="divider"></li>
                         <li><g:link controller="logout" class="usuario-logado"><i
@@ -401,7 +398,7 @@
                     <li>
                         <g:link controller="user" class="submenu-logado" action="meuUsuario">Meu Usuário</g:link>
                     </li>
-                    <sec:ifAnyGranted roles="ROLE_MASTER, ROLE_SUPORTE">
+                    <sec:ifAnyGranted roles="ROLE_SUPORTE,ROLE_ADMINISTRADOR_SISTEMA">
                         <li>
                             <g:link controller="user" action="index" class="submenu-logado"
                                     >Cadastro de Usuários</g:link>
@@ -439,10 +436,19 @@
 </div>
 
 <!--END MAIN WRAPPER -->
+<sec:ifSwitched>
+    <div style="position: fixed; bottom: 1em; right: 1em">
+        <a style="border-radius: 0" class="btn btn-danger btn-lg"
+           href='${request.contextPath}/j_spring_security_exit_user'>
+            <i class="fa fa-arrow-left fa-fw"></i>
+            Voltar para <sec:switchedUserOriginalUsername/>
+        </a>
+    </div>
+</sec:ifSwitched>
 
 <!-- FOOTER -->
 <div id="footer">
-    <p>&copy;  binarytheme &nbsp;2014 &nbsp;</p>
+    <p>&copy;  Acception Tecnologia &nbsp;2017 &nbsp;</p>
 </div>
 <!--END FOOTER -->
 </body>

@@ -610,5 +610,31 @@
 
 <!-- END PAGE LEVEL SCRIPTS -->
 
+<script>
+
+    $(document).ready(function () {
+        $.ajax({
+            type: 'POST',
+            url: '${resource(dir:'home',file:'passwordChangeAjax')}',
+            dataType: 'json',
+            success: function (data) {
+                if (data.mustChange == true) {
+                    swal({
+                                title: "Atenção!",
+                                text: "É necessário alterar sua senha!",
+                                type: "warning"
+                            },
+                            function () {
+                                window.location.href = "${createLink(controller: 'user', action: 'meuUsuario')}?changePassword=true"
+                            });
+                }
+            },
+            error: function (data) {
+                alert("Um problema aconteceu ao verificar o seu usuário. Comunique o suporte.");
+            }
+        });
+    });
+</script>
+
 </body>
 </html>

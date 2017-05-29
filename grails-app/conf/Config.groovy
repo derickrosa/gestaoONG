@@ -95,7 +95,7 @@ grails.spring.bean.packages = []
 grails.web.disable.multipart=false
 
 // request parameters to mask when logging exceptions
-grails.exceptionresolver.params.exclude = ['password']
+grails.exceptionresolver.params.exclude = ['password','initialPassword']
 
 // configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
 grails.hibernate.cache.queries = false
@@ -116,36 +116,38 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
 
 // log4j configuration
 log4j.main = {
-    // Example of changing the log pattern for the default console appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
-
-    error 'org.codehaus.groovy.grails.web.servlet',        // controllers
-            'org.codehaus.groovy.grails.web.pages',          // GSP
-            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
+    error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
+            'org.codehaus.groovy.grails.web.pages', //  GSP
+            'org.codehaus.groovy.grails.web.sitemesh', //  layouts
             'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-            'org.codehaus.groovy.grails.web.mapping',        // URL mapping
-            'org.codehaus.groovy.grails.commons',            // core / classloading
-            'org.codehaus.groovy.grails.plugins',            // plugins
-            'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
+            'org.codehaus.groovy.grails.web.mapping', // URL mapping
+            'org.codehaus.groovy.grails.commons', // core / classloading
+            'org.codehaus.groovy.grails.plugins', // plugins
+            'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
             'org.springframework',
             'org.hibernate',
-            'net.sf.ehcache.hibernate'
+            'net.sf.ehcache.hibernate',
+            'grails.app.services.org.grails.plugin.resource',
+            'grails.app.taglib.org.grails.plugin.resource',
+            'grails.app.resourceMappers.org.grails.plugin.resource'
+
+    debug  	'grails.app',
+            'org.apache.camel.support',
+            'org.apache.camel.file',
+            'org.apache.commons.net',
+            'com.acception'
+            'gerencia.fase'
 
     info 'org.springframework.security'
 
-    debug 'grails.app'
 
     appenders {
-        console name: "stdout", layout: pattern(conversionPattern: '[PRD][%d{yyyy-MM-dd hh:mm:ss.SSS}][%t][%X{username}@%X{ip}] %p %c{1} - %m%n')
+        console name: "stdout", layout: pattern(conversionPattern: '[%d{yyyy-MM-dd hh:mm:ss.SSS}][%t][%X{username}@%X{ip}] %p %c{1} - %m%n')
     }
 }
 
@@ -161,25 +163,28 @@ grails.plugin.springsecurity.authority.className = 'com.acception.security.Role'
 grails.plugin.springsecurity.successHandler.alwaysUseDefault = true
 grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/home/painelInicial'
 
-def allRoles = ['ROLE_SUPORTE']
+def allRoles = ['ROLE_SUPORTE','ROLE_FINANCIADOR','ROLE_RESPONSAVEL','ROLE_FUNCIONARIO','ROLE_ADMINISTRADOR_SISTEMA']
 
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+        '/j_spring_security_switch_user'                             : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA', 'isFullyAuthenticated()'],
+        '/j_spring_security_exit_user'                               : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA', 'isFullyAuthenticated()'],
 	'/':                ['permitAll'],
 	'/index':           allRoles,
 	'/home/**':           allRoles,
 	'/centroCusto/**':           allRoles,
 	'/anexo/**':           allRoles,
-	'/user/**':           ['ROLE_SUPORTE'],
-    '/financiador/**':    ['ROLE_SUPORTE'],
-    '/financiador/findSolicitacoes': ['ROLE_SUPORTE'],
-    '/responsavel/**':    ['ROLE_SUPORTE'],
-    '/funcionario/**':    ['ROLE_SUPORTE'],
+	'/user/**':           ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
+    '/financiador/**':    allRoles,
+    '/financiador/findSolicitacoes': allRoles,
+    '/responsavel/**':    allRoles,
+    '/funcionario/**':    allRoles,
 	'/console/**':           ['ROLE_SUPORTE'],
 	'/plugins/console*/**':           ['ROLE_SUPORTE'],
-	'/role/**':           ['ROLE_SUPORTE'],
+	'/role/**':           ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
 	'/layouts':           allRoles,
 	'/index.gsp':       allRoles,
 	'/assets/**':       ['permitAll'],
+	'/recuperarSenha/**':       ['permitAll'],
 	'/**/js/**':        ['permitAll'],
 	'/**/css/**':       ['permitAll'],
 	'/**/images/**':    ['permitAll'],
