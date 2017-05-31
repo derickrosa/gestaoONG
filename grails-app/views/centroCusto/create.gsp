@@ -1,9 +1,13 @@
+<%@ page import="com.acception.cadastro.enums.TipoCusto" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'centroCusto.label', default: 'Centro de Custo')}"/>
     <title><g:message code="default.create.label" args="[entityName]"/></title>
+    <asset:stylesheet src="normalize.css"/>
+    <asset:stylesheet src="wizardMain.css"/>
+    <asset:stylesheet src="jquery.steps.css"/>
 </head>
 
 <body>
@@ -42,15 +46,16 @@
                                 </ul>
                             </div>
                         </g:hasErrors>
-                        <g:form url="[resource:centroCustoInstance, action:'save']" enctype="multipart/form-data">
-                        <g:render template="form"/>
-                            <g:submitButton name="create" class="btn btn-default"
-                                            value="${message(code: 'default.button.create.label', default: 'Create')}"/>
+                        <g:form url="[resource: centroCustoInstance, action: 'save']" enctype="multipart/form-data" id="form">
+                            <g:render template="form"/>
                         </g:form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
 </body>
+
 </html>

@@ -9,14 +9,13 @@ class Financiador extends Papel {
     static hasMany=[centrosCusto:CentroCusto, responsaveis:Responsavel]
 
     static constraints = {
-        nomeFantasia maxSize:100
         centrosCusto nullable:true
         responsaveis nullable:true
         sigla maxSize:10, nullable:true
     }
 
     String toString() {
-        def nome = participante.nome
+        def nome = participante?.nome
 
         if (sigla) {
             nome += " (${sigla})"

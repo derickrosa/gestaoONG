@@ -28,6 +28,7 @@
                 names: false,
                 deleteParcelaViaAjax: false,
                 planejamentoOrcamentoarioId: false,
+                itemOrcamentario: false,
                 field_templates: false,
                 validate_field: function (col_id, value, col_type, $element) {
                     return true;
@@ -145,11 +146,11 @@
                 } else if (type == 'codigo') {
                     return '<td>' + '<input type="text" name="itensOrcamento.codigo" class="form-control text-center" value="' + content + '" />' + '</td>';
                 } else if (type == 'select_tipo_custo') {
-                    return '<td>' + '<select name="itensOrcamento.tipoCusto" class="form-control" value="' + content + '" />' + '</td>';
+                    return '<td>' + '<select name="itensOrcamento.tipoCusto" class="form-control" data-tipo="' + content + '" />' + '</td>';
                 } else if (type == 'nome') {
                     return '<td>' + '<input type="text" name="itensOrcamento.nome" class="form-control text-center" value="' + content + '" />' + '</td>';
                 } else if (type == 'currency') {
-                    return '<td>' + '<input type="text" name="itensOrcamento.valor" class="form-control text-center" value="' + content + '" />' + '</td>';
+                    return '<td>' + '<input type="text" name="itensOrcamento.valor" class="form-control text-center currency" value="' + content + '" />' + '</td>';
                 }
                 else return '' + '<input type="hidden" name="listaResponsaveis.id" value="' + content + '" />' + '';
             }
@@ -471,81 +472,51 @@
         // Delete row
         $table.on('click', '.delrow', function () {
             var click = $(this);
-            if (s.parcelas == true) {
-                swal({
-                    title: "Você tem certeza?",
-                    text: "Os relatórios e resultados cadastrados para essa parcela também serão removidos.",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Sim, remover!",
-                    cancelButtonText: "Cancelar",
-                    imageSize: "80x80",
-                    closeOnConfirm: false
-                }, function () {
-                    var parcela = click.closest('tr').find("input[name*='numeroParcela']")[0].value;
 
-                    //Se o ID do Planejamento Orçamentário é diferente de vazio isso significa que ele já está cadastrado no sistema,
-                    //logo, podemos tentar remover a parcela pois o objetivo Planejamento Orçamentário existe.
+            if (s.itemOrcamentario) {
 
-                    if (s.planejamentoOrcamentoarioId) {
-                        $.ajax({
-                            url: s.deleteParcelaViaAjax,
-                            data: {
-                                format: "json",
-                                planejamentoOrcamentarioId: s.planejamentoOrcamentoarioId,
-                                numeroParcela: parcela
-                            },
-                            dataType: 'json',
-                            type: 'POST',
-                            success: function (data) {
-                                console.log(data[0].success);
-                            },
-                            error: function (request, status, error) {
-                                console.log(error);
-                            }
-                        });
-                    }
-
-                    rownumber -= 1;
-
+                rownumber -= 1;
+                if (rownumber < 0)
+                    rownumber = 1;
+                if (rownumber == 0) {
                     checkButtons();
 
                     click.closest('tr').remove();
 
                     $table.find('.addrow').removeClass('disabled');
+                    var rowcontent =
+                        '<td>' +
+                        '<input type="text" name="itensOrcamento.codigo" class="form-control text-center" value="">' +
+                        '</td>' +
+                        '<td>' +
+                        '<input type="text" name="itensOrcamento.nome" class="form-control text-center" value="">' +
+                        '</td>' +
+                        '<td>' +
+                        '<input type="text" name="itensOrcamento.valor" class="form-control text-center currency" value="">' +
+                        '</td>' +
+                        '<td>' +
+                        '<select name="itensOrcamento.tipoCusto" class="form-control" data-tipo="PESSOAL"><option value="PESSOAL">Pessoal</option><option value="ATIVIDADE">Atividade</option><option value="INVESTIMENTO">Investimento</option><option value="EQUIPAMENTO">Equipamento</option><option value="IMPREVISTO">Imprevisto</option></select>' +
+                        '</td>';
 
-                    swal("Removido!", "A parcela foi removida.", "success");
 
-                    if (rownumber == 0) {
-                        var rowcontent =
-                                '<td>' +
-                                '<input type="text" style="text-align:center;" name="parcelasOrcamento.numeroParcela" class="form-control" value="" />' +
-                                '</td>' +
-                                '<td>' +
-                                '<input type="text" name="parcelasOrcamento.valorRepassado" class="form-control currency text-center" value="" />' +
-                                '</td>' +
-                                '<td>' +
-                                '<input type="text" name="parcelasOrcamento.dataRepasseExecutada" class="form-control text-center" value="" />' +
-                                '</td>' +
-                                '<td>' +
-                                '<input type="text" name="parcelasOrcamento.dataMaximaPrestacaoContas" class="form-control text-center" value="" />' +
-                                '</td>'
-                            ;
-                        $('<tr/>', {
-                            html: rowcontent + '<td class="text-center" style="font-size: large;text-align: center;">' +
-                            '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
-                            '<i class="fa fa-plus-square fa-5" aria-hidden="true"></i>' +
-                            '</a> ' +
-                            '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
-                            '<i class="fa fa-trash" aria-hidden="true"></i>' +
-                            '</a>' +
-                            '</td>'
-                        }).appendTo($table.find('tbody'));
-                    }
-                    return false;
+                    $('<tr/>', {
+                        html: rowcontent +
+                        '<td style="font-size: large;text-align: center;">' +
+                        '<a class="addrow glyphicon glyphicon-plus" href="#" style=" color: green; ">' +
+                        '</a> ' +
+                        '<a class="delrow glyphicon glyphicon-trash fa-5" href="#">' +
+                        '</a>' +
+                        '</td>'
+                    }).appendTo($table.find('tbody'));
+                    rownumber = 1
+                } else if (rownumber > 0) {
+                    checkButtons();
 
-                });
+                    click.closest('tr').remove();
+
+                    $table.find('.addrow').removeClass('disabled');
+                }
+                return false;
             } else if (s.financiador) {
                 swal({
                     title: "Você tem certeza?",

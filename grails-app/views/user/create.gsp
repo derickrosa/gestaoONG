@@ -58,7 +58,8 @@
 <!-- PAGE LEVEL SCRIPTS -->
 <script src="${assetPath(src: 'jquery.cookie-1.3.1.js')}"></script>
 <script src="${assetPath(src: 'jquery.steps.js')}"></script>
-<script src="${assetPath(src: 'WizardInit.js')}"></script>
+<script src="${assetPath(src: 'WizardInitCentroCusto.js')}"></script>
+
 <!-- END PAGE LEVEL SCRIPTS -->
 </body>
 </html>
