@@ -1,9 +1,10 @@
 package com.acception.cadastro
 
-class Funcionario extends PessoaFisica {
+class Funcionario extends Papel {
 
     String cargo
     String funcao
+    Double salario
 
     static constraints = {
     }

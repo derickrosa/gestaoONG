@@ -1,10 +1,9 @@
 package com.acception.cadastro
 
+import com.acception.cadastro.enums.Moeda
 import com.acception.cadastro.enums.TipoCusto
+import com.acception.util.Util
 import grails.converters.JSON
-
-import java.text.DecimalFormat
-import java.text.NumberFormat
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -29,6 +28,8 @@ class CentroCustoController {
 
     @Transactional
     def save(CentroCusto centroCustoInstance) {
+        log.debug(params)
+
         if (centroCustoInstance == null) {
             notFound()
             return
@@ -39,13 +40,7 @@ class CentroCustoController {
             return
         }
 
-        if (params.planoDeTrabalho.isEmpty()) {
-            centroCustoInstance.planoDeTrabalho = null
-        } else {
-            centroCustoInstance.planoDeTrabalho.save flush: true
-        }
-
-        centroCustoInstance.save flush: true
+        _updateCentroCusto(centroCustoInstance, params)
 
         request.withFormat {
             form multipartForm {
@@ -62,6 +57,8 @@ class CentroCustoController {
 
     @Transactional
     def update(CentroCusto centroCustoInstance) {
+        log.debug(params)
+
         if (centroCustoInstance == null) {
             notFound()
             return
@@ -72,35 +69,7 @@ class CentroCustoController {
             return
         }
 
-        if (params.numFilesUploaded.toInteger() == 0) {
-            centroCustoInstance.planoDeTrabalho = null
-        } else {
-            if (params.planoDeTrabalho.isEmpty()) {
-                centroCustoInstance.planoDeTrabalho = Anexo.get(params.previousPlanoDeTrabalho)
-            }
-
-            centroCustoInstance.planoDeTrabalho.save flush: true
-        }
-
-        /*centroCustoInstance.orcamento.valorTotal = parse(params.orcamento.valorTotal)
-
-        def itensOrcamentarios = centroCustoInstance.orcamento?.itensOrcamentarios
-
-        centroCustoInstance.orcamento?.itensOrcamentarios?.clear()
-
-        if (params.itensOrcamento?.codigo?.class?.array) {
-            0.upto(params.itensOrcamento.codigo.size() - 1) { i ->
-                createUpdateItemOrcamentario(itensOrcamentarios, params.itensOrcamento.codigo[i],
-                        params.itensOrcamento.nome[i], params.itensOrcamento.valor[i], params.itensOrcamento.tipoCusto[i],
-                        centroCustoInstance)
-            }
-        } else {
-            createUpdateItemOrcamentario(itensOrcamentarios, params.itensOrcamento.codigo,
-                    params.itensOrcamento.nome, params.itensOrcamento.valor, params.itensOrcamento.tipoCusto,
-                    centroCustoInstance)
-        }*/
-
-        centroCustoInstance.save flush: true
+        _updateCentroCusto(centroCustoInstance, params)
 
         request.withFormat {
             form multipartForm {
@@ -108,6 +77,89 @@ class CentroCustoController {
                 redirect centroCustoInstance
             }
             '*' { respond centroCustoInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def _updateCentroCusto(CentroCusto centroCustoInstance, params) {
+        atualizarPlanoDeTrabalho(centroCustoInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
+
+        if (centroCustoInstance.orcamento) {
+            centroCustoInstance.orcamento.valorTotal = Util.parse(params.valorTotalOrcamento)
+            log.debug(centroCustoInstance.orcamento.valorTotal)
+
+            centroCustoInstance.orcamento.moeda = Moeda.valueOf(params.orcamento?.moeda)
+
+            atualizarItensOrcamentarios(centroCustoInstance, params.itensOrcamento)
+        }
+
+        centroCustoInstance.orcamento.save flush: true, failOnError: true
+        centroCustoInstance.save flush: true, failOnError: true
+    }
+
+    @Transactional
+    def delete(CentroCusto centroCustoInstance) {
+
+        if (centroCustoInstance == null) {
+            notFound()
+            return
+        }
+
+        centroCustoInstance.delete flush: true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'CentroCusto.label', default: 'CentroCusto'), centroCustoInstance.id])
+                redirect action: "index", method: "GET"
+            }
+            '*' { render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'centroCusto.label', default: 'CentroCusto'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*' { render status: NOT_FOUND }
+        }
+    }
+
+    @Transactional
+    def atualizarPlanoDeTrabalho(centroCusto, numFilesUploaded, planoDeTrabalhoAtual, planoDeTrabalhoAnterior) {
+        if (numFilesUploaded.toInteger() == 0) {
+            centroCusto.planoDeTrabalho = null
+        } else {
+            if (planoDeTrabalhoAtual.isEmpty()) {
+                centroCusto.planoDeTrabalho = Anexo.get(planoDeTrabalhoAnterior)
+            }
+
+            centroCusto.planoDeTrabalho.save flush: true
+        }
+    }
+
+    def removerItensOrcamentarios(CentroCusto centroCustoInstance) {
+        centroCustoInstance.orcamento?.itensOrcamentarios?.collect()?.each {
+            centroCustoInstance.orcamento.removeFromItensOrcamentarios(it)
+        }
+    }
+
+    def atualizarItensOrcamentarios(centroCustoInstance, itensOrcamento) {
+        def itensOrcamentarios = centroCustoInstance.orcamento?.itensOrcamentarios
+
+        removerItensOrcamentarios(centroCustoInstance)
+
+        assert centroCustoInstance.orcamento?.itensOrcamentarios?.size() == 0
+
+        if (itensOrcamento?.codigo?.class?.array) {
+            itensOrcamento.codigo.eachWithIndex { codigo, i ->
+                createUpdateItemOrcamentario(itensOrcamentarios, codigo, itensOrcamento.nome[i], itensOrcamento.valor[i],
+                        itensOrcamento.tipoCusto[i], centroCustoInstance)
+            }
+        } else {
+            createUpdateItemOrcamentario(itensOrcamentarios, itensOrcamento.codigo, itensOrcamento.nome,
+                    itensOrcamento.valor, itensOrcamento.tipoCusto, centroCustoInstance)
         }
     }
 
@@ -144,7 +196,7 @@ class CentroCustoController {
             }
 
             if (valor) {
-                item.valor = parse(valor)
+                item.valor = Util.parse(valor)
             }
 
             if (tipoCusto) {
@@ -158,41 +210,4 @@ class CentroCustoController {
         }
     }
 
-    @Transactional
-    def delete(CentroCusto centroCustoInstance) {
-
-        if (centroCustoInstance == null) {
-            notFound()
-            return
-        }
-
-        centroCustoInstance.delete flush: true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'CentroCusto.label', default: 'CentroCusto'), centroCustoInstance.id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NO_CONTENT }
-        }
-    }
-
-    def Double parse(String amount) {
-        Locale ptBr = new Locale("pt", "BR");
-        final NumberFormat format = NumberFormat.getNumberInstance(ptBr);
-        if (format instanceof DecimalFormat) {
-            ((DecimalFormat) format).setParseBigDecimal(true);
-        }
-        return format.parse(amount.replaceAll("[^\\d.,]", "")).doubleValue();
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'centroCusto.label', default: 'CentroCusto'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NOT_FOUND }
-        }
-    }
 }

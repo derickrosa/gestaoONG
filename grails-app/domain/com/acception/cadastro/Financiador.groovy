@@ -15,7 +15,7 @@ class Financiador extends Papel {
     }
 
     String toString() {
-        def nome = participante.nome
+        def nome = participante?.nome
 
         if (sigla) {
             nome += " (${sigla})"

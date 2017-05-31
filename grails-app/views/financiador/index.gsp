@@ -38,9 +38,6 @@
 
                     <g:sortableColumn property="participante.nome"
                                       title="${message(code: 'financiador.nome.label', default: 'Nome')}"/>
-                    
-                    <g:sortableColumn property="nomeFantasia"
-                                      title="${message(code: 'financiador.nomeFantasia.label', default: 'Nome Fantasia')}"/>
 
                     <g:sortableColumn property="participante.cnpj"
                                       title="${message(code: 'financiador.cnpj.label', default: 'CNPJ')}"/>
@@ -66,7 +63,6 @@
 
                         <td>${fieldValue(bean: financiadorInstance, field: "participante.nome")}</td>
 
-                        <td>${fieldValue(bean: financiadorInstance, field: "nomeFantasia")}</td>
 
                         <td>${fieldValue(bean: financiadorInstance, field: "participante.cnpj")}</td>
                         

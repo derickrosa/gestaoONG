@@ -56,15 +56,6 @@
 
 					</tr>
 				</g:if>
-				
-				<g:if test="${financiadorInstance?.nomeFantasia}">
-					<tr>
-						<th id="nomeFantasia-label" class="property-label"><g:message code="financiador.nomeFantasia.label" default="Nome Fantasia" /></th>
-						
-						<td  aria-labelledby="nomeFantasia-label"><g:fieldValue bean="${financiadorInstance}" field="nomeFantasia"/></td>
-						
-					</tr>
-				</g:if>
 
 				<g:if test="${financiadorInstance?.participante.cnpj}">
 					<tr>
