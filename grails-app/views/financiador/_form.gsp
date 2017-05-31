@@ -34,11 +34,11 @@
 <div class="row">
 <div class="col-md-10">
 <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'razaoSocial', 'error')} ">
-    <label for="nomeFantasia">
-        <g:message code="financiador.nomeFantasia.label" default="Razão Social"/>
+    <label for="razaoSocial">
+        <g:message code="financiador.razaoSocial.label" default="Razão Social"/>
         
     </label>
-    <g:textField class="form-control"  name="nomeFantasia" maxlength="100" value="${financiadorInstance?.participante?.razaoSocial}"/>
+    <g:textField class="form-control"  name="participante.razaoSocial" maxlength="100" value="${financiadorInstance?.participante?.razaoSocial}"/>
 
 </div>
 </div>
