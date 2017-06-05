@@ -25,8 +25,6 @@ class FuncionarioController {
 
     @Transactional
     def save(Funcionario funcionarioInstance) {
-        println params
-
         if (funcionarioInstance == null) {
             notFound()
             return
@@ -35,13 +33,13 @@ class FuncionarioController {
         if (params.telefoneRaw) {
             def dadosTelefone = Util.phoneToRaw(params.telefoneRaw)
 
-            funcionarioInstance.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
+            funcionarioInstance.participante.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
         }
 
         if (params.telefoneAdicionalRaw) {
             def dadosTelefone = Util.phoneToRaw(params.telefoneAdicionalRaw)
 
-            funcionarioInstance.telefoneAdicional = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
+            funcionarioInstance.participante.telefoneAdicional = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
         }
 
         if (funcionarioInstance.hasErrors()) {
@@ -49,6 +47,7 @@ class FuncionarioController {
             return
         }
 
+        funcionarioInstance.participante.save flush: true
         funcionarioInstance.save flush: true
 
         request.withFormat {
@@ -71,11 +70,24 @@ class FuncionarioController {
             return
         }
 
+        if (params.telefoneRaw) {
+            def dadosTelefone = Util.phoneToRaw(params.telefoneRaw)
+
+            funcionarioInstance.participante.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
+        }
+
+        if (params.telefoneAdicionalRaw) {
+            def dadosTelefone = Util.phoneToRaw(params.telefoneAdicionalRaw)
+
+            funcionarioInstance.participante.telefoneAdicional = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
+        }
+
         if (funcionarioInstance.hasErrors()) {
             respond funcionarioInstance.errors, view: 'edit'
             return
         }
 
+        funcionarioInstance.participante.save flush: true
         funcionarioInstance.save flush: true
 
         request.withFormat {

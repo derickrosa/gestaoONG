@@ -4,7 +4,7 @@ import com.acception.cadastro.enums.Moeda
 import com.acception.cadastro.enums.TipoCusto
 import com.acception.util.Util
 import grails.converters.JSON
-
+import java.text.DecimalFormat
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
@@ -86,7 +86,6 @@ class CentroCustoController {
 
         if (centroCustoInstance.orcamento) {
             centroCustoInstance.orcamento.valorTotal = Util.parse(params.valorTotalOrcamento)
-            log.debug(centroCustoInstance.orcamento.valorTotal)
 
             centroCustoInstance.orcamento.moeda = Moeda.valueOf(params.orcamento?.moeda)
 
@@ -155,33 +154,38 @@ class CentroCustoController {
         if (itensOrcamento?.codigo?.class?.array) {
             itensOrcamento.codigo.eachWithIndex { codigo, i ->
                 createUpdateItemOrcamentario(itensOrcamentarios, codigo, itensOrcamento.nome[i], itensOrcamento.valor[i],
-                        itensOrcamento.tipoCusto[i], centroCustoInstance)
+                        itensOrcamento.tipoCusto[i], centroCustoInstance, itensOrcamento.id[i], itensOrcamento)
             }
         } else {
             createUpdateItemOrcamentario(itensOrcamentarios, itensOrcamento.codigo, itensOrcamento.nome,
-                    itensOrcamento.valor, itensOrcamento.tipoCusto, centroCustoInstance)
+                    itensOrcamento.valor, itensOrcamento.tipoCusto, centroCustoInstance, itensOrcamento.id, itensOrcamento)
         }
     }
 
     def getItensOrcamentarios(){
+        def df = new DecimalFormat('###,##0.00')
+
         def orcamento
 
         if (params.idOrcamento) {
             orcamento = Orcamento.get(Long.parseLong(params.idOrcamento))
         }
 
-        def json = orcamento?.itensOrcamentarios?.collect { it ->
-            [it.codigo, it.nome, it.valor, it.tipoCusto.name()]
+        def json = orcamento?.itensOrcamentarios?.collect { ItemOrcamentario it ->
+            [it.codigo, it.nome, it.valor, it.tipoCusto.name(),
+             it.salariosFuncionarios?.collect { it.funcionario.id }?.join(','),
+             it.salariosFuncionarios?.collect { df.format(it.valor) }?.join('-')]
         }
 
         render(json as JSON)
     }
 
-    def createUpdateItemOrcamentario(itensOrcamentarios, codigo, nome, valor, tipoCusto, centroCustoInstance) {
+    def createUpdateItemOrcamentario(itensOrcamentarios, codigo, nome, valor, tipoCusto, centroCustoInstance, id, params) {
         if (codigo) {
-            def item = itensOrcamentarios?.find { it.codigo == codigo}
+            ItemOrcamentario item = itensOrcamentarios?.find { it.codigo == codigo}
 
             println "---------------"
+            println "ID: ${id}"
             println "CÓDIGO: ${codigo}"
             println "NOME: ${nome}"
             println "VALOR: ${valor}"
@@ -203,8 +207,37 @@ class CentroCustoController {
                 item.tipoCusto = TipoCusto.valueOf(tipoCusto)
             }
 
+            def funcionarios = params["listaFuncionarios_${id}"].split(',')
+            def salarioFuncionarios = params["listaFuncionariosSalario_${id}"].split('-')
+
+            println "FUNCIONÁRIOS: ${funcionarios}"
+            println "SALÁRIO FUNCIONÁRIOS: ${salarioFuncionarios}"
+
             item.orcamento = centroCustoInstance.orcamento
             item.save()
+
+            item.salariosFuncionarios?.collect()?.each {
+                item.removeFromSalariosFuncionarios(it)
+            }
+
+            if (item.tipoCusto == TipoCusto.PESSOAL) {
+                if (funcionarios) {
+                    funcionarios.eachWithIndex { funcionarioId, i ->
+                        if (funcionarioId) {
+                            def salarioFuncionario = item.salariosFuncionarios.find { it.funcionario.id == funcionarioId }
+
+                            if (! salarioFuncionario) {
+                                salarioFuncionario = new SalarioFuncionario(itemOrcamentario: item,
+                                        funcionario: Funcionario.get(funcionarioId))
+                            }
+
+                            salarioFuncionario.valor = salarioFuncionarios[i] ? Util.parse(salarioFuncionarios[i]) : 0
+
+                            salarioFuncionario.save()
+                        }
+                    }
+                }
+            }
 
             centroCustoInstance.orcamento.addToItensOrcamentarios(item)
         }

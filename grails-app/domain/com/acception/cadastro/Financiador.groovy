@@ -14,7 +14,7 @@ class Financiador extends Papel {
         sigla maxSize:10, nullable:true
     }
 
-    String toString() {
+    /*String toString() {
         def nome = participante?.nome
 
         if (sigla) {
@@ -22,5 +22,5 @@ class Financiador extends Papel {
         }
 
         nome
-    }
+    }*/
 }

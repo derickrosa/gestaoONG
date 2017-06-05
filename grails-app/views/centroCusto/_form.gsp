@@ -11,21 +11,36 @@
 <asset:javascript src="plugins/jquery/jquery.maskMoney.min.js"/>
 <asset:javascript src="plugins/jquery/jquery.validate.js"/>
 
+<asset:javascript src="jquery.edittable2.js"/>
+
 <style>
+    .addFuncionarios {
+        position: relative;
+        top: 2px;
+    }
+
     #itensOrcamentarios td {
         padding: 5px
     }
 
-    .inputtable.wh td:nth-child(1) {
+    #itensOrcamentarios td:nth-child(1), #itensOrcamentarios td:nth-child(3){
         width: 15%;
     }
 
-    .inputtable.wh td:nth-child(3) {
-        width: 15%;
+    #itensOrcamentarios td:nth-child(4) {
+        width: 20%;
     }
 
-    .inputtable.wh td:nth-child(4) {
-        width: 15%;
+    #itensOrcamentarios td:last-child {
+        width: 10%;
+    }
+
+    #listaFuncionariosTable td:first-child {
+        width: 50%;
+    }
+
+    #listaFuncionariosTable .addFuncionarios {
+        display: none;
     }
 
     /* First body row cells & input on table without columns header */
@@ -49,6 +64,61 @@
 </style>
 
 <div id="wizard">
+    <h2>Orçamento</h2>
+    <section>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading control-label">
+                        Orçamento
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                <label for="orcamento.ano">Ano</label>
+
+                                <input type="number" min="0" id="orcamento.ano" name="orcamento.ano" class="form-control"
+                                       value="${centroCustoInstance.orcamento?.ano}" required>
+                            </div>
+
+                            <div class="col-md-4 form-group">
+                                <label for="valorTotalOrcamento">Valor Total</label>
+
+                                <input type="text" id="valorTotalOrcamento" name="valorTotalOrcamento"
+                                       class="form-control currency"
+                                       required>
+                            </div>
+
+                            <div class="col-md-4 form-group">
+                                <label for="orcamento.moeda">Moeda</label>
+
+                                <g:select class="form-control" name="orcamento.moeda" from="${Moeda.values()}"
+                                          keys="${Moeda.values()*.name()}"
+                                          value="${centroCustoInstance.orcamento?.moeda?.name()}" required="required"/>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading control-label">
+                        Itens Orçamentários
+                    </div>
+
+                    <div class="panel-body">
+                        <div id="itensOrcamentarios"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <h2>Dados Básicos</h2>
     <section>
         <div class="row">
@@ -180,60 +250,29 @@
             <input type="file" id="planoDeTrabalho" name="planoDeTrabalho">
         </div>
     </section>
-    <h2>Orçamento</h2>
-    <section>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading control-label">
-                        Orçamento
-                    </div>
+</div>
 
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-4 form-group">
-                                <label for="orcamento.ano">Ano</label>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Adicionar Funcionários</h4>
+            </div>
+            <div class="modal-body">
+                <div id="listaFuncionariosTable"></div>
 
-                                <input type="number" min="0" id="orcamento.ano" name="orcamento.ano" class="form-control"
-                                       value="${centroCustoInstance.orcamento?.ano}" required>
-                            </div>
+                <input type="hidden" id="id-inputListaFuncionarios">
+                <input type="hidden" id="id-inputListaFuncionariosSalario">
 
-                            <div class="col-md-4 form-group">
-                                <label for="valorTotalOrcamento">Valor Total</label>
-
-                                <input type="text" id="valorTotalOrcamento" name="valorTotalOrcamento"
-                                       class="form-control currency"
-                                       required>
-                            </div>
-
-                            <div class="col-md-4 form-group">
-                                <label for="orcamento.moeda">Moeda</label>
-
-                                <g:select class="form-control" name="orcamento.moeda" from="${Moeda.values()}"
-                                          keys="${Moeda.values()*.name()}"
-                                          value="${centroCustoInstance.orcamento?.moeda?.name()}" required="required"/>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="salvarAlteracoesListaFuncionariosItemOrcamentario()">Salvar Alterações</button>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading control-label">
-                        Itens Orçamentários
-                    </div>
-
-                    <div class="panel-body">
-                        <div id="itensOrcamentarios"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
 </div>
 
 <!-- PAGE LEVEL SCRIPTS -->
@@ -318,45 +357,62 @@
     };
 
     var initializeTableItensOrcamentarios = function () {
+        var id = 0;
+
         var html = `<g:select class='form-control' from='${com.acception.cadastro.enums.TipoCusto.values()}'
                     name='itensOrcamento.tipoCusto' keys="${com.acception.cadastro.enums.TipoCusto.values()*.name()}"/>`
 
         var table = $("#itensOrcamentarios").editTable({
             field_templates: {
-                'codigo': {
-                    html: '<input type="number" class="form-control text-center" name="itensOrcamento.codigo">',
+                'id': {
+                    type: 'hidden',
+                    _class: '',
                     getValue: function (input) {
                         return $(input).val();
                     },
                     setValue: function (input, value) {
-                        return $(input).text(value);
+                        return $('<input type="' +  this.type + '" name="itensOrcamento.id" class="' + this._class + '" ' +
+                                'value="' + id + '">');
+                    }
+                },
+
+                'codigo': {
+                    type: 'text',
+                    name: 'itensOrcamento.codigo',
+                    _class: 'form-control',
+                    getValue: function (input) {
+                        return $(input).val();
+                    },
+                    setValue: function (input, value) {
+                        return $('<input type="' +  this.type + '" name="' + this.name +'" class="' + this._class + ' " value="' + value + '">');
                     }
                 },
 
                 'nome': {
-                    html: '<input type="text" class="form-control text-center" name="itensOrcamento.nome">',
-//                    html: '<textarea class="form-control" rows="2">',
+                    type: 'text',
+                    name: 'itensOrcamento.nome',
+                    _class: 'form-control',
                     getValue: function (input) {
                         return $(input).val();
                     },
                     setValue: function (input, value) {
-                        return $(input).text(value);
+                        return $('<input type="' +  this.type + '" name="' + this.name +'" class="' + this._class + ' " value="' + value + '">');
                     }
                 },
 
                 'currency': {
-                    html: '<input type="text" class="form-control currency text-center" name="itensOrcamento.valor">',
+                    type: 'text',
+                    name: 'itensOrcamento.valor',
+                    _class: 'form-control currency text-center',
                     getValue: function (input) {
                         return $(input).val();
                     },
                     setValue: function (input, value) {
-                        console.log(value);
-
-                        return $(input).text(value);
+                        return $('<input type="' +  this.type + '" name="' + this.name +'" class="' + this._class + ' " value="' + value + '">');
                     }
                 },
 
-                'select_tipo_custo': {
+                'tipoCusto': {
                     html: html,
                     getValue: function (input) {
                         return $(input).val();
@@ -368,19 +424,39 @@
                         }).attr('selected', true);
                         return select;
                     }
-                }
+                },
+
+                'listaFuncionarios': {
+                    type: 'hidden',
+                    name: 'itensOrcamento.listaFuncionarios',
+                    _class: 'itensOrcamento.listaFuncionarios',
+                    getValue: function (input) {
+                        return $(input).val();
+                    },
+                    setValue: function (input, value) {
+                        id += 1;
+
+                        return $('<input type="' +  this.type + '" name="' + this.name + '_' + id +'" class="' + this._class + '" ' +
+                                'value="' + value + '" id="listaFuncionarios_' + id +'">');
+                    }
+                },
+
+                'listaFuncionariosSalario': {
+                    type: 'hidden',
+                    name: 'itensOrcamento.listaFuncionariosSalario',
+                    _class: 'itensOrcamento.listaFuncionariosSalario',
+                    getValue: function (input) {
+                        return $(input).val();
+                    },
+                    setValue: function (input, value) {
+                        return $('<input type="' +  this.type + '" name="' + this.name + '_' + id +'" class="' + this._class + '" ' +
+                                'value="' + value + '" id="listaFuncionariosSalario_' + id +'">');
+                    }
+                },
             },
-
-            row_template: ['codigo', 'nome', 'currency', 'select_tipo_custo'],
-
-            headerCols: [
-                'Código',
-                'Nome',
-                'Valor',
-                'Tipo Custo'
-            ],
-
-            itemOrcamentario: true
+            row_template: ['codigo', 'nome', 'currency', 'tipoCusto', 'listaFuncionarios', 'listaFuncionariosSalario', 'id'],
+            headerCols: ['Código', 'Nome', 'Valor', 'Tipo Custo'],
+            first_row: false,
         });
 
         $("#itensOrcamentarios").on("focusin", "td:nth-child(3) input", function () {
@@ -404,19 +480,6 @@
 
                     atualizarValoresItensOrcamentarios();
                 }
-
-                var select_tipo_custo = $('[name="itensOrcamento.tipoCusto"]');
-
-                <g:applyCodec encodeAs="none">
-                var dados = ${raw(TipoCusto.getDadosJSON())};
-                </g:applyCodec>
-
-                $.each(select_tipo_custo, function(index, element) {
-                    $.each(dados, function (index, value) {
-                        $(element).append($("<option></option>")
-                                .attr("value", value.key).text(value.descricao));
-                    });
-                })
             }
         });
     };
@@ -431,6 +494,127 @@
         });
     };
 
+    var openModalFuncionarios = function (element) {
+        var tableRow = $(element).parent().parent();
+
+        var tipoCusto = tableRow.find("[name='itensOrcamento.tipoCusto']").val();
+
+        if (tipoCusto !== 'PESSOAL') {
+            swal(
+                    'Oops...',
+                    'Para adicionar funcionários, selecione o tipo de custo como "Pessoal" primeiramente.',
+                    'error'
+            );
+            return;
+        }
+
+        var listaFuncionariosInput = tableRow.find("[class='itensOrcamento.listaFuncionarios']");
+        var listaFuncionariosSalarioInput = tableRow.find("[class='itensOrcamento.listaFuncionariosSalario']");
+
+        var listaFuncionarios = listaFuncionariosInput.val().split(',');
+        var listaFuncionariosSalario = listaFuncionariosSalarioInput.val().split('-');
+
+        var tableData = [];
+
+        for (var i = 0; i < listaFuncionarios.length; i++){
+            tableData.push([listaFuncionarios[i], listaFuncionariosSalario[i]])
+        }
+
+        $('#id-inputListaFuncionarios').val(listaFuncionariosInput[0].id);
+        $('#id-inputListaFuncionariosSalario').val(listaFuncionariosSalarioInput[0].id);
+
+        $('#myModal').modal('show');
+
+        tableFuncionarios.loadData(tableData);
+    };
+
+    var salvarAlteracoesListaFuncionariosItemOrcamentario = function() {
+        var funcionarios = $('select[name="funcionario"]');
+        var salarios = $('input[name="valor"]');
+
+        var listaIDsFuncionarios = [];
+
+        for (var i = 0; i < funcionarios.length; i++) {
+            listaIDsFuncionarios.push($(funcionarios[i]).val())
+        }
+
+        var listaSalarios = [];
+
+        for (var i = 0; i < salarios.length; i++) {
+            listaSalarios.push($(salarios[i]).val());
+        }
+
+        var idInputListaFuncionarios = $('#id-inputListaFuncionarios').val();
+        var idInputListaFuncionariosSalario = $('#id-inputListaFuncionariosSalario').val();
+
+        $('#' + idInputListaFuncionarios).val(listaIDsFuncionarios.join(','));
+        $('#' + idInputListaFuncionariosSalario).val(listaSalarios.join('-'));
+    };
+
+    var tableFuncionarios;
+
+    var initializeTableFuncionarios = function () {
+        var html = `<g:select class='form-control' from='${com.acception.cadastro.Funcionario.list()}'
+                    name='funcionario' optionKey="id" noSelection="['': 'Selecione um funcionário...']"/>`
+
+        tableFuncionarios = $("#listaFuncionariosTable").editTable({
+            field_templates: {
+                'currency': {
+                    type: 'text',
+                    name: 'valor',
+                    _class: 'form-control currency text-center',
+                    getValue: function (input) {
+                        return $(input).val();
+                    },
+                    setValue: function (input, value) {
+                        return $('<input type="' +  this.type + '" name="' + this.name +'" class="' + this._class + ' " value="' + value + '">');
+                    }
+                },
+
+                'funcionario': {
+                    html: html,
+                    getValue: function (input) {
+                        return $(input).val();
+                    },
+                    setValue: function (input, value) {
+                        var select = $(input);
+                        select.find('option').filter(function () {
+                            return $(this).val() == value;
+                        }).attr('selected', true);
+                        return select;
+                    }
+                },
+            },
+            row_template: ['funcionario', 'currency'],
+            headerCols: ['Funcionário', 'Valor'],
+            first_row: false,
+        });
+
+        $("#listaFuncionariosTable").on("focusin", "td:nth-child(2) input", function () {
+            $(this).maskMoney({prefix: 'R$ ', allowNegative: true, thousands: '.', decimal: ',', affixesStay: false});
+        });
+
+        $.ajax({
+            url: '${createLink(action: 'getItensOrcamentarios',controller:'centroCusto')}',
+            type: 'POST',
+            data: {
+                idOrcamento: '${centroCustoInstance.orcamento?.id}'
+            },
+            complete: function (result) {
+                if (result.responseText !== '{}') {
+                    if (result.responseText == '[]') {
+                        tableFuncionarios.loadJsonData('[["",""]]');
+                    }
+                    else {
+                        tableFuncionarios.loadJsonData(result.responseText);
+                    }
+
+                    atualizarValoresItensOrcamentarios();
+                }
+            }
+        });
+    };
+
     $(function () {
         initializeMoneyMask();
 
@@ -439,6 +623,8 @@
         initializeFileInput();
 
         initializeTableItensOrcamentarios();
+
+        initializeTableFuncionarios();
 
         atualizarValorTotalOrcamento();
 
@@ -459,10 +645,6 @@
                 }
             })
         });
-
-
-
-
     });
 </script>
 

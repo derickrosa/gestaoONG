@@ -33,90 +33,90 @@
 
 			<table class="table table-bordered funcionario">
 				
-				<g:if test="${funcionarioInstance?.nome}">
+				<g:if test="${funcionarioInstance?.participante?.nome}">
 					<tr>
 						<th id="nome-label" class="property-label"><g:message code="funcionario.nome.label" default="Nome" /></th>
 						
-						<td  aria-labelledby="nome-label"><g:fieldValue bean="${funcionarioInstance}" field="nome"/></td>
+						<td  aria-labelledby="nome-label"><g:fieldValue bean="${funcionarioInstance}" field="participante.nome"/></td>
 						
 					</tr>
 				</g:if>
 				
-				<g:if test="${funcionarioInstance?.email}">
+				<g:if test="${funcionarioInstance?.participante?.email}">
 					<tr>
 						<th id="email-label" class="property-label"><g:message code="funcionario.email.label" default="Email" /></th>
 						
-						<td  aria-labelledby="email-label"><g:fieldValue bean="${funcionarioInstance}" field="email"/></td>
+						<td  aria-labelledby="email-label"><g:fieldValue bean="${funcionarioInstance}" field="participante.email"/></td>
 						
 					</tr>
 				</g:if>
 				
-				<g:if test="${funcionarioInstance?.emailAdicional}">
+				<g:if test="${funcionarioInstance?.participante?.emailAdicional}">
 					<tr>
 						<th id="emailAdicional-label" class="property-label"><g:message code="funcionario.emailAdicional.label" default="Email Adicional" /></th>
 						
-						<td  aria-labelledby="emailAdicional-label"><g:fieldValue bean="${funcionarioInstance}" field="emailAdicional"/></td>
+						<td  aria-labelledby="emailAdicional-label"><g:fieldValue bean="${funcionarioInstance}" field="participante.emailAdicional"/></td>
 						
 					</tr>
 				</g:if>
 
-				<g:if test="${funcionarioInstance?.telefone}">
+				<g:if test="${funcionarioInstance?.participante?.telefone}">
 					<tr>
 						<th id="telefone-label" class="property-label"><g:message code="funcionario.telefone.label" default="Telefone" /></th>
 
-						<td  aria-labelledby="telefone-label"><g:link controller="telefone" action="show" id="${funcionarioInstance?.telefone?.id}">${funcionarioInstance?.telefone?.encodeAsHTML()}</g:link></td>
+						<td  aria-labelledby="telefone-label"><g:link controller="telefone" action="show" id="${funcionarioInstance?.participante?.telefone?.id}">${funcionarioInstance?.participante?.telefone?.encodeAsHTML()}</g:link></td>
 
 					</tr>
 				</g:if>
 
-				<g:if test="${funcionarioInstance?.telefoneAdicional}">
+				<g:if test="${funcionarioInstance?.participante?.telefoneAdicional}">
 					<tr>
 						<th id="telefoneAdicional-label" class="property-label"><g:message code="funcionario.telefoneAdicional.label" default="Telefone Adicional" /></th>
 
-						<td  aria-labelledby="telefoneAdicional-label"><g:link controller="telefone" action="show" id="${funcionarioInstance?.telefoneAdicional?.id}">${funcionarioInstance?.telefoneAdicional?.encodeAsHTML()}</g:link></td>
+						<td  aria-labelledby="telefoneAdicional-label"><g:link controller="telefone" action="show" id="${funcionarioInstance?.participante?.telefoneAdicional?.id}">${funcionarioInstance?.participante?.telefoneAdicional?.encodeAsHTML()}</g:link></td>
 
 					</tr>
 				</g:if>
 				
-				<g:if test="${funcionarioInstance?.user}">
+				<g:if test="${funcionarioInstance?.participante?.user}">
 					<tr>
 						<th id="user-label" class="property-label"><g:message code="funcionario.user.label" default="User" /></th>
 						
-						<td  aria-labelledby="user-label"><g:link controller="user" action="show" id="${funcionarioInstance?.user?.id}">${funcionarioInstance?.user?.encodeAsHTML()}</g:link></td>
+						<td  aria-labelledby="user-label"><g:link controller="user" action="show" id="${funcionarioInstance?.participante?.user?.id}">${funcionarioInstance?.participante?.user?.encodeAsHTML()}</g:link></td>
 						
 					</tr>
 				</g:if>
 				
-				<g:if test="${funcionarioInstance?.papeis}">
+				<g:if test="${funcionarioInstance?.participante?.papeis}">
 					<tr>
 						<th id="papeis-label" class="property-label"><g:message code="funcionario.papeis.label" default="Papeis" /></th>
 						
-						<g:each in="${funcionarioInstance.papeis}" var="p">
+						<g:each in="${funcionarioInstance.participante.papeis}" var="p">
 							<td aria-labelledby="papeis-label"><g:link controller="papel" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></td>
 						</g:each>
 						
 					</tr>
 				</g:if>
 				
-				<g:if test="${funcionarioInstance?.senhaInicial}">
+				<g:if test="${funcionarioInstance?.participante?.senhaInicial}">
 					<tr>
 						<th id="senhaInicial-label" class="property-label"><g:message code="funcionario.senhaInicial.label" default="Senha Inicial" /></th>
 						
-						<td  aria-labelledby="senhaInicial-label"><g:fieldValue bean="${funcionarioInstance}" field="senhaInicial"/></td>
+						<td  aria-labelledby="senhaInicial-label"><g:fieldValue bean="${funcionarioInstance}" field="participante.senhaInicial"/></td>
 						
 					</tr>
 				</g:if>
 				
-				<g:if test="${funcionarioInstance?.cpf}">
+				%{--<g:if test="${funcionarioInstance?.participante?.cpf}">
 					<tr>
 						<th id="cpf-label" class="property-label"><g:message code="funcionario.cpf.label" default="CPF" /></th>
 						
 						<td  aria-labelledby="cpf-label">
-							${com.acception.util.Util.rawToCpf(funcionarioInstance.cpf)}
+							${com.acception.util.Util.rawToCpf(funcionarioInstance.participante.cpf)}
 						</td>
 						
 					</tr>
-				</g:if>
+				</g:if>--}%
 				
 				<g:if test="${funcionarioInstance?.cargo}">
 					<tr>
