@@ -8,4 +8,8 @@ class Funcionario extends Papel {
 
     static constraints = {
     }
+
+    String toString() {
+        "${participante?.nome} (${cargo})"
+    }
 }
