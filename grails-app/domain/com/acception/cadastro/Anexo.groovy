@@ -1,5 +1,6 @@
 package com.acception.cadastro
 
+import com.acception.cadastro.enums.TipoLinkArquivo
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 class Anexo {
@@ -8,6 +9,7 @@ class Anexo {
     String descricao
     String formato
     byte[] filedata
+    TipoLinkArquivo tipo
     Date uploadDate = new Date()
 
     Anexo(CommonsMultipartFile file) {
