@@ -5,6 +5,9 @@
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'centroCusto.label', default: 'Centro de Custo')}"/>
     <title><g:message code="default.edit.label" args="[entityName]"/></title>
+    <asset:stylesheet src="normalize.css"/>
+    <asset:stylesheet src="wizardMain.css"/>
+    <asset:stylesheet src="jquery.steps.css"/>
 </head>
 
 <body>
@@ -52,13 +55,9 @@
                                 </ul>
                             </div>
                         </g:hasErrors>
-                        <g:form url="[resource: centroCustoInstance, action: 'update']" enctype="multipart/form-data">
-
+                        <g:form url="[resource: centroCustoInstance, action: 'update']" enctype="multipart/form-data" id="form">
                             <g:hiddenField name="version" value="${centroCustoInstance?.version}"/>
                             <g:render template="form"/>
-                            <button type="submit" class="btn btn-default">
-                                <span class="glyphicon glyphicon-edit"></span>
-                                <g:message code="default.button.update.label" default="Update"/></button>
                         </g:form>
                     </div>
                 </div>

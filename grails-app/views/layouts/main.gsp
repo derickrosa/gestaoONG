@@ -356,15 +356,16 @@
                 </a>
                 <ul class="collapse" id="component-nav">
 
-                    <li class=""><a href="button.html">Linha de Ação</a></li>
-                    <li class=""><a href="icon.html">Atividade</a></li>
+                    <li class=""><g:link controller="linhaAcao" action="index">Linha de Ação</g:link></li>
+                    <li class=""><g:link controller="atividade" action="index">Atividade</g:link></li>
                     <li class=""><g:link controller="centroCusto" action="index">Centro de Custo</g:link></li>
                     <li class=""><a href="tabs_panels.html">Orçamento</a></li>
                     <li class=""><a href="notifications.html">Item do Orçamento</a></li>
                     <li class=""><a href="more_notifications.html">Lançamento</a></li>
                     <li class=""><g:link controller="funcionario" action="index">Funcionário</g:link></a></li>
+                    <li class=""><g:link controller="fornecedor" action="index">Fornecedor</g:link></a></li>
                     <li class=""><g:link controller="financiador" action="index">Financiador</g:link></li>
-                    <li class=""><g:link controller="responsavel" action="index">Responsável</g:link></li>
+                    %{--<li class=""><g:link controller="responsavel" action="index">Responsável</g:link></li>--}%
                 </ul>
             </li>
 

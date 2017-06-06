@@ -1,5 +1,7 @@
 package com.acception.cadastro.enums
 
+import grails.converters.JSON
+
 /**
  * Created by acception on 17/05/17.
  */
@@ -19,5 +21,15 @@ enum TipoCusto {
 
     def static toList() {
         [PESSOAL, ATIVIDADE, INVESTIMENTO, EQUIPAMENTO, IMPREVISTO]
+    }
+
+    def static getDadosJSON() {
+        def tiposCusto = []
+
+        values().each {
+            tiposCusto << ['descricao': it.descricao, 'key': it.name()]
+        }
+
+        tiposCusto as JSON
     }
 }
