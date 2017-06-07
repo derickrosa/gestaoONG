@@ -17,7 +17,7 @@ class CentroCusto {
     StatusProjeto statusProjeto
     Orcamento orcamento
 
-//    static hasMany = [atividades: Atividade]
+    static hasMany = [atividades: Atividade]
 
     static belongsTo = [financiador: Financiador]
 
@@ -25,6 +25,7 @@ class CentroCusto {
         dataInicio nullable: true
         dataFinal nullable: true
         planoDeTrabalho nullable: true
+        atividades nullable: true
     }
 
     String toString() {

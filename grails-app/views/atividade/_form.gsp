@@ -65,7 +65,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 <label for="linhas">
                     <g:message code="atividade.linhas.label" default="Linhas de Ação"/>
                 </label>
-                <g:select class="form-control" id="municipio" name="municipio.id" from="${com.acception.cadastro.LinhaAcao.list()}" optionKey="id" value="${atividadeInstance?.linhas?.id}" class="form-control" noSelection="['null': 'Selecione a linha de ação...']"/>
+                <g:select class="form-control" id="linhas" name="linhas.id" from="${com.acception.cadastro.LinhaAcao.list()}" optionKey="id" value="${atividadeInstance?.linhas?.id}" class="form-control" noSelection="['null': 'Selecione a linha de ação...']"/>
 
             </div>
         </div>
@@ -186,7 +186,16 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
     </div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'estado', 'error')} ">
+                <label for="estado">
+                    <g:message code="atividade.estado.label" default="Estado"/>
+                </label>
+                <g:select class="form-control" id="estado" name="estado.id" from="${com.acception.cadastro.Estado.list()}" optionKey="id" value="${atividadeInstance?.estado?.id}" noSelection="['null': 'Selecione um estado...']"/>
+
+            </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group ${hasErrors(bean: atividadeInstance, field: 'municipio', 'has-error')} ">
                 <label class="control-label" for="municipio">
                     <g:message code="atividade.municipio.label" default="Município"/>
@@ -194,19 +203,14 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 </label>
 
                 <g:select class="form-control" id="municipio" name="municipio.id"
-                          from="${com.acception.cadastro.Cidade.createCriteria().list() {
-                              or {
-                                  eq('estado', com.acception.cadastro.Estado.findBySigla('PA'))
-                                  eq('estado', com.acception.cadastro.Estado.findBySigla('RJ'))
-                              }
-                          }.sort { it.nome }}"
+                          from=""
                           optionKey="id"
                           value="${atividadeInstance?.municipio?.id}"
                           noSelection="['null': 'Selecione um município...']"/>
 
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'local', 'error')} ">
                 <label for="local">
                     <g:message code="atividade.local.label" default="Local"/>
@@ -402,6 +406,33 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
         //initializeTableItensOrcamentarios();
 
         //atualizarValorTotalOrcamento();
+
+
+        document.getElementById("estado").onchange = function(){
+            var idUf = $('#estado option:selected').val();
+            //console.log("Loggggggg "+idUf);
+            if(idUf=="null"){
+                $("#municipio").empty()
+            }
+            $.ajax({
+                url: '${createLink(action: 'cidadePorEstado',controller:'cidade')}',
+                type: 	'POST',
+                data: 	{
+                    ajax: true,
+                    id: idUf
+                },
+                success: function (result) {
+                    console.log(result);
+                    //console.log($("#municipio"));
+                    $("#municipio").empty()
+                    $("#municipio").append(result);
+
+                }
+            });
+
+        }
+
+
 
         $("#financiador").change(function () {
             var financiadorID_selected = $(this).find("option:selected")[0].value;
