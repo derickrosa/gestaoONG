@@ -25,17 +25,42 @@ class AtividadeController {
 
     @Transactional
     def save(Atividade atividadeInstance) {
+
         if (atividadeInstance == null) {
             notFound()
             return
         }
+
+        atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
+
+        def cc = CentroCusto.get(params.centroCusto.id.toLong())
+
+        cc.addToAtividades(atividadeInstance)
+
+        if (params.list('linhaAcao')) {
+            params.list('linhaAcao').each { id ->
+                id = id.toLong()
+                def la = LinhaAcao.get(id)
+                if (la == null) {
+                    notFound()
+                    return
+                }
+                la.addToAtividades(atividadeInstance)
+                atividadeInstance.addToLinhas(la)
+                la.save(flush:true, failOnError: true)
+
+            }
+
+        }
+
 
         if (atividadeInstance.hasErrors()) {
             respond atividadeInstance.errors, view:'create'
             return
         }
 
-        atividadeInstance.save flush:true
+        cc.save flush:true, failOnError: true
+        atividadeInstance.save flush:true, failOnError: true
 
         request.withFormat {
             form multipartForm {
@@ -47,7 +72,19 @@ class AtividadeController {
     }
 
     def edit(Atividade atividadeInstance) {
-        respond atividadeInstance
+        [atividadeInstance: atividadeInstance]
+    }
+
+    def atualizarAnexo(atividade, numFilesUploaded, planoDeTrabalhoAtual, planoDeTrabalhoAnterior) {
+        if (numFilesUploaded.toInteger() == 0) {
+            atividade.planoDeTrabalho = null
+        } else {
+            if (planoDeTrabalhoAtual.isEmpty()) {
+                atividade.planoDeTrabalho = Anexo.get(planoDeTrabalhoAnterior)
+            }
+
+            atividade.planoDeTrabalho.save flush: true
+        }
     }
 
     @Transactional

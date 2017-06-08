@@ -46,8 +46,24 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 .error {
     font-size: small;
 }
+#searchUl{
+    height: auto !important;
+    width: auto !important;
+}
+.droprev li {
+    display: block !important;
+}
+#dropdownMenu1 {
+    text-align: left !important;
+}
+#caret {
+    float: right !important;
+
+
+}
 </style>
 <section>
+    <g:hiddenField name="centroCusto.id" value="${1}" />
     <div class="row">
         <div class="col-md-8">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'nome', 'error')} ">
@@ -62,13 +78,43 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 
         <div class="col-md-4">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'linhas', 'error')} ">
+            <label for="linhas">
+                <g:message code="atividade.linhas.label" default="Linhas de Ação"/>
+            </label>
+            <div class="field" style="">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle form-control" style="width: 100%" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Selecione a linha de ação...
+                        <span id="caret" class="caret"></span>
+                    </button>
+
+                    <ul class="dropdown-menu droprev " aria-labelledby="dropdownMenu1" id="searchUl">
+                        <g:set var="linhaAcaoIds" value="${atividadeInstance?.linhas?.id}" />
+                        <g:each in="${com.acception.cadastro.LinhaAcao.list(sort: 'codigo')}" var="status" status="i" >
+                            <li>
+                                <a href="#" class="small" data-value="option1" tabIndex="-1">
+                                    <g:checkBox name="linhaAcao" checked="${linhaAcaoIds?.find { it == status.id } }" value="${status.id}"></g:checkBox> ${status} <br/>
+                                </a>
+                            </li>
+                        </g:each>
+                    </ul>
+
+
+                </div>
+            </div>
+                </div>
+        </div>
+        %{--<div class="col-md-4">
+            <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'linhas', 'error')} ">
                 <label for="linhas">
                     <g:message code="atividade.linhas.label" default="Linhas de Ação"/>
                 </label>
                 <g:select class="form-control" id="linhas" name="linhas.id" from="${com.acception.cadastro.LinhaAcao.list()}" optionKey="id" value="${atividadeInstance?.linhas?.id}" class="form-control" noSelection="['null': 'Selecione a linha de ação...']"/>
 
             </div>
-        </div>
+        </div>--}%
+
+
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -106,7 +152,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 
 <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'descricao', 'error')} ">
     <label for="descricao">
-        <g:message code="atividade.descricao.label" default="Descricao"/>
+        <g:message code="atividade.descricao.label" default="Descrição"/>
         
     </label>
     <g:textArea class="form-control"  name="descricao" value="${atividadeInstance?.descricao}"/>
@@ -116,7 +162,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
     <div class="col-md-6">
         <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'objetivo', 'error')} ">
             <label for="objetivo">
-                <g:message code="atividade.objetivo.label" default="Objetivo"/>
+                <g:message code="atividade.objetivo.label" default="Objetivo (s)"/>
 
             </label>
             <g:textArea class="form-control"  name="objetivo" value="${atividadeInstance?.objetivo}"/>
@@ -406,6 +452,32 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
         //initializeTableItensOrcamentarios();
 
         //atualizarValorTotalOrcamento();
+
+        var options = [];
+        console.log("Aqui");
+
+        var options = [];
+
+        $( '.dropdown-menu a' ).on( 'click', function( event ) {
+
+            var $target = $( event.currentTarget ),
+                    val = $target.attr( 'data-value' ),
+                    $inp = $target.find( 'input' ),
+                    idx;
+
+            if ( ( idx = options.indexOf( val ) ) > -1 ) {
+                options.splice( idx, 1 );
+                setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+            } else {
+                options.push( val );
+                setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+            }
+
+            $( event.target ).blur();
+
+            console.log( options );
+            return false;
+        });
 
 
         document.getElementById("estado").onchange = function(){
