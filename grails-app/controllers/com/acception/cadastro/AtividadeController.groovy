@@ -31,7 +31,7 @@ class AtividadeController {
             return
         }
 
-        atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
+        log.debug("Alterou! AQUI PARAM: ${params.centroCusto.id.toLong()}")
 
         def cc = CentroCusto.get(params.centroCusto.id.toLong())
 
@@ -60,7 +60,7 @@ class AtividadeController {
         }
 
         cc.save flush:true, failOnError: true
-        atividadeInstance.save flush:true, failOnError: true
+        atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
 
         request.withFormat {
             form multipartForm {
@@ -76,14 +76,20 @@ class AtividadeController {
     }
 
     def atualizarAnexo(atividade, numFilesUploaded, planoDeTrabalhoAtual, planoDeTrabalhoAnterior) {
+        log.debug("Alterou! mudou de novo AQUI")
         if (numFilesUploaded.toInteger() == 0) {
-            atividade.planoDeTrabalho = null
+            atividade.anexos = null
         } else {
             if (planoDeTrabalhoAtual.isEmpty()) {
-                atividade.planoDeTrabalho = Anexo.get(planoDeTrabalhoAnterior)
+                log.debug("Entrou isempty")
+                def an = Anexo.get(planoDeTrabalhoAnterior)
+                atividade.addToAnexos(an)
+            } else {
+                def an = Anexo.get(planoDeTrabalhoAtual)
+                atividade.addToAnexos(an)
             }
 
-            atividade.planoDeTrabalho.save flush: true
+            atividade.save flush: true, failOnError: true
         }
     }
 
@@ -94,11 +100,48 @@ class AtividadeController {
             return
         }
 
+        def toRemove = new ArrayList(atividadeInstance.linhas)
+        toRemove.each {
+            atividadeInstance.removeFromLinhas(it)
+        }
+        if (params.list('linhaAcao')) {
+            params.list('linhaAcao').each { id ->
+                id = id.toLong()
+                def la = LinhaAcao.get(id)
+                if (la == null) {
+                    notFound()
+                    return
+                }
+                la.addToAtividades(atividadeInstance)
+                atividadeInstance.addToLinhas(la)
+                la.save(flush:true, failOnError: true)
+
+            }
+
+        }
+
+        println "REQUEST"
+
+        request.fileNames.each {obj->
+            println("FILE 1 - ${obj}")
+        }
+
+
+
+       /* request.getMultiFileMap().documentFile.each {
+            println "2 - ${it.originalFilename}"
+        }*/
+
+        request.fileNames.each {
+            File file = request.getFile(it)
+            println "FILE 2 - ${file.name}"
+        }
+
         if (atividadeInstance.hasErrors()) {
             respond atividadeInstance.errors, view:'edit'
             return
         }
-
+        //atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
         atividadeInstance.save flush:true
 
         request.withFormat {

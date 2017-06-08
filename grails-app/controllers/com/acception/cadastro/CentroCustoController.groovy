@@ -149,8 +149,6 @@ class CentroCustoController {
 
         removerItensOrcamentarios(centroCustoInstance)
 
-        assert centroCustoInstance.orcamento?.itensOrcamentarios?.size() == 0
-
         if (itensOrcamento?.codigo?.class?.array) {
             itensOrcamento.codigo.eachWithIndex { codigo, i ->
                 createUpdateItemOrcamentario(itensOrcamentarios, codigo, itensOrcamento.nome[i], itensOrcamento.valor[i],

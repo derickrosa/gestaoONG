@@ -63,7 +63,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 }
 </style>
 <section>
-    <g:hiddenField name="centroCusto.id" value="${1}" />
+    <g:hiddenField name="centroCusto.id" value="${4618}" />
     <div class="row">
         <div class="col-md-8">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'nome', 'error')} ">
@@ -213,7 +213,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 <g:message code="atividade.termino.label" default="Data Término"/>
 
             </label>
-            <input required="required" name="final" format="dd/MM/yyyy"
+            <input required="required" name="termino" format="dd/MM/yyyy"
                    value="${formatDate(format: "dd/MM/yyyy", date: atividadeInstance?.termino)}"
                    class="form-control datepicker"/>
 
@@ -249,7 +249,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 </label>
 
                 <g:select class="form-control" id="municipio" name="municipio.id"
-                          from=""
+                          from="${com.acception.cadastro.Cidade.findAllByEstado(atividadeInstance.estado)}"
                           optionKey="id"
                           value="${atividadeInstance?.municipio?.id}"
                           noSelection="['null': 'Selecione um município...']"/>
@@ -279,11 +279,13 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
         <g:message code="centroCusto.planoDeTrabalho.label" default="Anexar Documentos"/>
     </label>
 
-    <input type="hidden" id="previousPlanoDeTrabalho" name="previousPlanoDeTrabalho"
+    %{--<input type="hidden" id="previousPlanoDeTrabalho" name="previousPlanoDeTrabalho"
            value="${atividadeInstance?.anexos}">
     <input type="hidden" id="numFilesUploaded" name="numFilesUploaded"
-           value="${atividadeInstance?.anexos}">
-    <input type="file" id="planoDeTrabalho" name="planoDeTrabalho">
+           value="${atividadeInstance?.anexos}">--}%
+    <input type="file" id="planoDeTrabalho" name="documentFile" >
+    <input type="file" id="planoDeTrabalho" name="documentFile1" >
+    %{--<input type="file" id="planoDeTrabalho" name="planoDeTrabalho.2" value="">--}%
 </div>
 </section>
 <script src="${assetPath(src: 'jquery.cookie-1.3.1.js')}"></script>
@@ -317,7 +319,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
             maxFileCount: 1,
             overwriteInitial: true,
             previewFileType: 'text',
-            <g:if test="${centroCustoInstance?.planoDeTrabalho}">
+            <g:if test="${atividadeInstance?.anexos}">
             initialPreview: [
                 "${createLink(controller: 'anexo', action: 'download', id: "${centroCustoInstance?.planoDeTrabalho?.id}")}"
             ],

@@ -45,7 +45,7 @@
                                 </ul>
                             </div>
                         </g:hasErrors>
-                        <g:form url="[resource:atividadeInstance, action:'save']" >
+                        <g:form url="[resource:atividadeInstance, action:'save']" enctype="multipart/form-data" >
                         <g:render template="form"/>
                             <g:submitButton name="create" class="btn btn-default"
                                             value="${message(code: 'default.button.create.label', default: 'Create')}"/>
