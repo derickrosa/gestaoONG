@@ -1,6 +1,7 @@
 package com.acception.cadastro
 
 import com.acception.util.Util
+import grails.converters.JSON
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -8,7 +9,8 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class FuncionarioController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE",
+                             getSalariosFuncionarioFromCentroCusto: "POST"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -126,5 +128,21 @@ class FuncionarioController {
             }
             '*' { render status: NOT_FOUND }
         }
+    }
+
+    def getSalariosFuncionarioFromCentroCusto() {
+        def funcionario = Funcionario.get(params.funcionarioId)
+
+        def salariosFuncionario = SalarioFuncionario.findAllByFuncionario(funcionario)
+
+        def dados = [:]
+
+        salariosFuncionario.each {
+            def nomeCentroCusto = it.itemOrcamentario.orcamento.centroCusto.nome
+
+            dados[nomeCentroCusto] = it.valor
+        }
+
+        render(dados as JSON)
     }
 }
