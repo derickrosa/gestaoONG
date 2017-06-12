@@ -44,6 +44,10 @@ class FuncionarioController {
             funcionarioInstance.participante.telefoneAdicional = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
         }
 
+        if (params.valorSalario) {
+            funcionarioInstance.salario = Util.parse(params.valorSalario)
+        }
+
         if (funcionarioInstance.hasErrors()) {
             respond funcionarioInstance.errors, view: 'create'
             return
@@ -82,6 +86,10 @@ class FuncionarioController {
             def dadosTelefone = Util.phoneToRaw(params.telefoneAdicionalRaw)
 
             funcionarioInstance.participante.telefoneAdicional = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
+        }
+
+        if (params.valorSalario) {
+            funcionarioInstance.salario = Util.parse(params.valorSalario)
         }
 
         if (funcionarioInstance.hasErrors()) {
@@ -133,6 +141,8 @@ class FuncionarioController {
     def getSalariosFuncionarioFromCentroCusto() {
         def funcionario = Funcionario.get(params.funcionarioId)
 
+        def salarioAnual = funcionario.salario * 12
+
         def salariosFuncionario = SalarioFuncionario.findAllByFuncionario(funcionario)
 
         def dados = [:]
@@ -141,6 +151,12 @@ class FuncionarioController {
             def nomeCentroCusto = it.itemOrcamentario.orcamento.centroCusto.nome
 
             dados[nomeCentroCusto] = it.valor
+        }
+
+        def salarioAlocadoCentroCusto = dados.values().sum() ?: 0
+
+        if (salarioAlocadoCentroCusto < salarioAnual) {
+            dados['Não Definido'] = salarioAnual - salarioAlocadoCentroCusto
         }
 
         render(dados as JSON)

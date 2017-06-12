@@ -222,7 +222,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
         <div class="col-md-4">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'periodo', 'error')} ">
                 <label for="periodo">
-                    <g:message code="atividade.periodo.label" default="Periodo"/>
+                    <g:message code="atividade.periodo.label" default="Período"/>
 
                 </label>
                 <g:textField class="form-control"  name="periodo" value="${atividadeInstance?.periodo}"/>
