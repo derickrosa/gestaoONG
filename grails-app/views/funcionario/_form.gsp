@@ -100,3 +100,16 @@
 
 </div>
 
+<script>
+    var atualizarValorSalario = function () {
+        var salario = ${funcionarioInstance.salario ?: 0};
+
+        if (salario) {
+            $("[name='valorSalario']").maskMoney('mask', salario)
+        }
+    };
+
+    $(function() {
+        atualizarValorSalario();
+    })
+</script>
