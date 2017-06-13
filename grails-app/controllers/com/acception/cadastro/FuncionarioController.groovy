@@ -148,7 +148,7 @@ class FuncionarioController {
         def dados = [:]
 
         salariosFuncionario.each {
-            def nomeCentroCusto = it.itemOrcamentario.orcamento.centroCusto.nome
+            def nomeCentroCusto = it.itemOrcamentario.orcamento?.centroCusto?.nome ?: ''
 
             dados[nomeCentroCusto] = it.valor
         }
