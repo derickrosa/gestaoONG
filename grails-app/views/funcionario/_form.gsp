@@ -13,6 +13,17 @@
 
 <div class="row">
     <div class="col-md-4">
+        <div class="form-group fieldcontain ${hasErrors(bean: funcionarioInstance, field: 'salario', 'error')} ">
+            <label for="telefone">
+                <g:message code="funcionario.telefone.label" default="Salário"/>
+
+            </label>
+            <g:textField class="form-control money" id="valorSalario" name="valorSalario" value="${funcionarioInstance?.salario}" required="required"/>
+
+        </div>
+    </div>
+
+    <div class="col-md-4">
         <div class="form-group fieldcontain ${hasErrors(bean: funcionarioInstance, field: 'participante.telefone', 'error')} ">
             <label for="telefone">
                 <g:message code="funcionario.telefone.label" default="Telefone"/>
@@ -35,7 +46,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    %{--<div class="col-md-4">
         <div class="form-group fieldcontain ${hasErrors(bean: funcionarioInstance, field: 'participante.cpf', 'error')} ">
             <label for="cpf">
                 <g:message code="funcionario.cpf.label" default="CPF"/>
@@ -44,7 +55,7 @@
             <g:textField class="form-control cpf" required='required' name="participante.cpf" value="${funcionarioInstance?.participante?.cpf}"/>
 
         </div>
-    </div>
+    </div>--}%
 </div>
 
 <div class="row">

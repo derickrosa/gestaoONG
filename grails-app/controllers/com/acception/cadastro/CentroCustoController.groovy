@@ -144,8 +144,8 @@ class CentroCustoController {
         }
     }
 
-    def atualizarItensOrcamentarios(centroCustoInstance, itensOrcamento) {
-        def itensOrcamentarios = centroCustoInstance.orcamento?.itensOrcamentarios
+    def atualizarItensOrcamentarios(CentroCusto centroCustoInstance, itensOrcamento) {
+        def itensOrcamentarios = centroCustoInstance.orcamento?.itensOrcamentarios?.collect()
 
         removerItensOrcamentarios(centroCustoInstance)
 
@@ -157,6 +157,16 @@ class CentroCustoController {
         } else {
             createUpdateItemOrcamentario(itensOrcamentarios, itensOrcamento.codigo, itensOrcamento.nome,
                     itensOrcamento.valor, itensOrcamento.tipoCusto, centroCustoInstance, itensOrcamento.id, itensOrcamento)
+        }
+
+        deletarItensOrcamentariosPassados(centroCustoInstance.orcamento.itensOrcamentarios, itensOrcamentarios)
+    }
+
+    def deletarItensOrcamentariosPassados(itensOrcamentariosAtuais, itensOrcamentariosPassados) {
+        for (pastItemOrcamentario in itensOrcamentariosPassados) {
+            if (! itensOrcamentariosAtuais.contains(pastItemOrcamentario)) {
+                pastItemOrcamentario.delete()
+            }
         }
     }
 
@@ -178,11 +188,53 @@ class CentroCustoController {
         render(json as JSON)
     }
 
+    def atualizarSalariosFuncionarios(listaFuncionarios, listaSalarios, ItemOrcamentario item) {
+        def funcionarios = listaFuncionarios.split(',')
+        def salarioFuncionarios = listaSalarios.split('-')
+
+        println "FUNCIONÁRIOS: ${funcionarios}"
+        println "SALÁRIO FUNCIONÁRIOS: ${salarioFuncionarios}"
+
+        def listaAntigaSalariosFuncionarios = item.salariosFuncionarios?.collect()
+
+        item.salariosFuncionarios?.collect()?.each {
+            item.removeFromSalariosFuncionarios(it)
+        }
+
+        if (item.tipoCusto == TipoCusto.PESSOAL) {
+            if (funcionarios) {
+                funcionarios.eachWithIndex { funcionarioId, i ->
+                    if (funcionarioId) {
+                        def salarioFuncionario = listaAntigaSalariosFuncionarios.find { it.funcionario.id == funcionarioId.toInteger()}
+
+                        if (! salarioFuncionario) {
+                            salarioFuncionario = new SalarioFuncionario(itemOrcamentario: item,
+                                    funcionario: Funcionario.get(funcionarioId))
+                        }
+
+                        salarioFuncionario.valor = salarioFuncionarios[i] ? Util.parse(salarioFuncionarios[i]) : 0
+
+                        item.addToSalariosFuncionarios(salarioFuncionario)
+                        salarioFuncionario.save()
+                    }
+                }
+            }
+        }
+
+        for (salarioFuncionario in listaAntigaSalariosFuncionarios) {
+            if (! item.salariosFuncionarios.contains(salarioFuncionario)) {
+                log.debug("SF ${salarioFuncionario} deletado!")
+                salarioFuncionario.delete()
+            }
+        }
+    }
+
     def createUpdateItemOrcamentario(itensOrcamentarios, codigo, nome, valor, tipoCusto, centroCustoInstance, id, params) {
         if (codigo) {
             ItemOrcamentario item = itensOrcamentarios?.find { it.codigo == codigo}
 
             println "---------------"
+            println "ITEM PASSADO: ${item}"
             println "ID: ${id}"
             println "CÓDIGO: ${codigo}"
             println "NOME: ${nome}"
@@ -193,49 +245,14 @@ class CentroCustoController {
                 item = new ItemOrcamentario(codigo: codigo)
             }
 
-            if (nome) {
-                item.nome = nome
-            }
-
-            if (valor) {
-                item.valor = Util.parse(valor)
-            }
-
-            if (tipoCusto) {
-                item.tipoCusto = TipoCusto.valueOf(tipoCusto)
-            }
-
-            def funcionarios = params["listaFuncionarios_${id}"].split(',')
-            def salarioFuncionarios = params["listaFuncionariosSalario_${id}"].split('-')
-
-            println "FUNCIONÁRIOS: ${funcionarios}"
-            println "SALÁRIO FUNCIONÁRIOS: ${salarioFuncionarios}"
-
+            item.nome = nome ?: ''
+            item.valor = valor ? Util.parse(valor) : 0
+            item.tipoCusto = tipoCusto ? TipoCusto.valueOf(tipoCusto) : null
             item.orcamento = centroCustoInstance.orcamento
             item.save()
 
-            item.salariosFuncionarios?.collect()?.each {
-                item.removeFromSalariosFuncionarios(it)
-            }
-
-            if (item.tipoCusto == TipoCusto.PESSOAL) {
-                if (funcionarios) {
-                    funcionarios.eachWithIndex { funcionarioId, i ->
-                        if (funcionarioId) {
-                            def salarioFuncionario = item.salariosFuncionarios.find { it.funcionario.id == funcionarioId }
-
-                            if (! salarioFuncionario) {
-                                salarioFuncionario = new SalarioFuncionario(itemOrcamentario: item,
-                                        funcionario: Funcionario.get(funcionarioId))
-                            }
-
-                            salarioFuncionario.valor = salarioFuncionarios[i] ? Util.parse(salarioFuncionarios[i]) : 0
-
-                            salarioFuncionario.save()
-                        }
-                    }
-                }
-            }
+            atualizarSalariosFuncionarios(params["listaFuncionarios_${id}"],
+                    params["listaFuncionariosSalario_${id}"], item)
 
             centroCustoInstance.orcamento.addToItensOrcamentarios(item)
         }
