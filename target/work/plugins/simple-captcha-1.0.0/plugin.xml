@@ -1,0 +1,29 @@
+<plugin name='simple-captcha' version='1.0.0' grailsVersion='1.0 &gt; *'>
+  <author>Donal Murtagh</author>
+  <authorEmail>domurtag@yahoo.co.uk</authorEmail>
+  <title>Simple Captcha Plugin</title>
+  <description>Creates simple image CAPTCHAs that protect against automated completion and submission of HTML forms
+</description>
+  <documentation>http://grails.org/plugin/simple-captcha</documentation>
+  <type>SimpleCaptchaGrailsPlugin</type>
+  <resources>
+    <resource>grails.plugin.simplecaptcha.SimpleCaptchaController</resource>
+    <resource>grails.plugin.simplecaptcha.SimpleCaptchaService</resource>
+  </resources>
+  <repositories>
+    <repository name='grailsCentral' url='http://grails.org/plugins' />
+    <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />
+    <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
+  </repositories>
+  <dependencies />
+  <plugins>
+    <runtime>
+      <plugin group='org.grails.plugins' name='cache-headers' version='1.1.7' />
+    </runtime>
+    <build>
+      <plugin group='org.grails.plugins' name='tomcat' version='2.1.5' />
+    </build>
+  </plugins>
+  <runtimePluginRequirements />
+  <behavior />
+</plugin>
