@@ -60,7 +60,16 @@ class AtividadeController {
         }
 
         cc.save flush:true, failOnError: true
-        atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
+
+        def f = request.getPart('documentFile')
+        //println "Arquivo: ${f.properties} - CLASSE: ${f.class}"
+        if (f) {
+            def anexo = new Anexo(f)
+            atividadeInstance.addToAnexos(anexo)
+        } else{
+            println "Nulo: $f"
+        }
+        //atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
 
         request.withFormat {
             form multipartForm {
@@ -120,27 +129,41 @@ class AtividadeController {
 
         }
 
-        println "REQUEST"
 
-        request.fileNames.each {obj->
+        /*request.fileNames.each {obj->
             println("FILE 1 - ${obj}")
         }
 
-
-
-       /* request.getMultiFileMap().documentFile.each {
+        request.getMultiFileMap().documentFile.each {
             println "2 - ${it.originalFilename}"
-        }*/
+        }
 
         request.fileNames.each {
             File file = request.getFile(it)
             println "FILE 2 - ${file.name}"
-        }
+        }*/
 
         if (atividadeInstance.hasErrors()) {
             respond atividadeInstance.errors, view:'edit'
             return
         }
+
+        /*def files = []*/
+        def f = request.getPart('documentFile')
+        //println "Arquivo: ${f.properties} - CLASSE: ${f.class}"
+        if (f) {
+            def anexo = new Anexo(f)
+            atividadeInstance.addToAnexos(anexo)
+        } else{
+            println "Nulo: $f"
+        }
+
+        /*def files = []
+
+        params.documentFile.each {
+            files.add(it.value)
+            println "Arquivo: ${it.properties}"
+        }*/
         //atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
         atividadeInstance.save flush:true
 

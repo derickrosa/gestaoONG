@@ -283,8 +283,8 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
            value="${atividadeInstance?.anexos}">
     <input type="hidden" id="numFilesUploaded" name="numFilesUploaded"
            value="${atividadeInstance?.anexos}">--}%
-    <input type="file" id="planoDeTrabalho" name="documentFile" >
-    <input type="file" id="planoDeTrabalho" name="documentFile1" >
+    <input type="file" name="documentFile" >
+    %{--<input type="file" class="planoDeTrabalho" name="documentFile.2">--}%
     %{--<input type="file" id="planoDeTrabalho" name="planoDeTrabalho.2" value="">--}%
 </div>
 </section>
@@ -313,7 +313,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
     };
 
     var initializeFileInput = function () {
-        $('#planoDeTrabalho').fileinput({
+        $('.planoDeTrabalho').fileinput({
             language: 'pt-BR',
             showUpload: false,
             maxFileCount: 1,
