@@ -300,8 +300,8 @@ class FinanciadorController {
             financiador = Financiador.get(Long.parseLong(params.idFinanciador))
         }
 
-        def json = financiador?.responsaveis?.sort { it.nome }.collect { it ->
-            ['nome': it.participante?.nome, 'id': it.id]
+        def json = financiador?.responsaveis?.participante?.sort { it.nome }.collect { it ->
+            ['nome': it?.nome, 'id': Papel.findByParticipante(it)?.id]
         }
 
         render(json as JSON)

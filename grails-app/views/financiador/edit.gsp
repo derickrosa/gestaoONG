@@ -46,7 +46,7 @@
                                 </ul>
                             </div>
                         </g:hasErrors>
-                        <g:form url="[resource:financiadorInstance, action:'update']" method="PUT" >
+                        <g:form url="[resource:financiadorInstance, action:'update']" method="PUT" enctype="multipart/form-data">
 
                         <g:hiddenField name="version" value="${financiadorInstance?.version}"/>
                         <g:render template="form"/>

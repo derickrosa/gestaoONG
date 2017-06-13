@@ -45,8 +45,6 @@
                         <g:sortableColumn property="email"
                                           title="${message(code: 'funcionario.email.label', default: 'Email')}"/>
 
-                        <th>CPF</th>
-
                         <th>Cargo</th>
                     </tr>
                     </thead>
@@ -55,13 +53,12 @@
                         <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
                             <td><g:link action="show"
-                                        id="${funcionarioInstance.id}">${fieldValue(bean: funcionarioInstance, field: "nome")}</g:link></td>
+                                        id="${funcionarioInstance.id}">${fieldValue(bean: funcionarioInstance, field: "participante.nome")}</g:link></td>
 
-                            <td>${fieldValue(bean: funcionarioInstance, field: "telefone")}</td>
+                            <td>${fieldValue(bean: funcionarioInstance, field: "participante.telefone")}</td>
 
-                            <td>${fieldValue(bean: funcionarioInstance, field: "email")}</td>
+                            <td>${fieldValue(bean: funcionarioInstance, field: "participante.email")}</td>
 
-                            <td>${com.acception.util.Util.rawToCpf(funcionarioInstance.cpf)}</td>
 
                             <td>${fieldValue(bean: funcionarioInstance, field: "cargo")}</td>
 
