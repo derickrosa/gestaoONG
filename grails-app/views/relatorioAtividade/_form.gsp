@@ -1,6 +1,6 @@
 <%@ page import="com.acception.cadastro.RelatorioAtividade" %>
-
-<g:javascript src="bootstrap-filestyle.min.js"/>
+%{--
+<g:javascript src="bootstrap-filestyle.min.js"/>--}%
 
 <div class="row">
     <div class="col-lg-12">
@@ -23,7 +23,7 @@
                         <g:message code="relatorioAtividade.atividade.label" default="Atividade"/>
 
                     </label>
-                    <g:select class="form-control" id="atividade" name="atividade.id" from="${com.acception.cadastro.Atividade.list()}" optionKey="id" value="${relatorioAtividadeInstance?.atividade?.id}" noSelection="['null': '']"/>
+                    <g:select class="form-control" id="atividade" name="atividade.id" from="${com.acception.cadastro.Atividade.list()}" optionKey="id" value="${relatorioAtividadeInstance?.atividade?.id}" noSelection="['null': 'Selecione uma atividade...']"/>
 
                 </div>
 
@@ -297,9 +297,14 @@
                             <g:message code="atividade.centroCusto.label" default="Centro Custo"/>
 
                         </label>
-                        <g:textField class="form-control" name="centroCusto" value="${relatorioAtividadeInstance?.centroCusto}"/>
+                        <g:select class="form-control" id="centroCusto" name="centroCusto.id"
+                                  from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id"
+                                  value="${atividadeInstance?.id}" noSelection="['': 'Selecione Centro de Custo...']"/>
 
                     </div>
+
+
+
                 </div>
 
                 <div class="form-group ${hasErrors(bean: relatorioAtividadeInstance, field: 'origemRecursoProjeto', 'has-error')} ">
@@ -323,7 +328,7 @@
                         </label>
                         <g:textField class="form-control currency" id="valorServicoesTerceirosPessoaFisica"
                                      name="valorServicoesTerceirosPessoaFisica"
-                                     value="${formatNumber(number: relatorioAtividadeInstance.valorServicoesTerceirosPessoaFisica, format: '#,##0.00')}"/>
+                                     value="${formatNumber(number: relatorioAtividadeInstance.valorServicoesTerceirosPessoaFisica, format: '#,##0.00')}" onkeyup="sum();"/>
 
                     </div>
 
@@ -333,7 +338,7 @@
 
                         </label>
                         <g:textField class="form-control currency" id="valorHospedagem" name="valorHospedagem"
-                                     value="${formatNumber(number: relatorioAtividadeInstance.valorHospedagem, format: '#,##0.00')}"/>
+                                     value="${formatNumber(number: relatorioAtividadeInstance.valorHospedagem, format: '#,##0.00')}" onkeyup="sum();"/>
 
                     </div>
 
@@ -345,7 +350,7 @@
                         </label>
                         <g:textField class="form-control currency" id="valorlocacaoAuditorioSalas"
                                      name="valorlocacaoAuditorioSalas"
-                                     value="${formatNumber(number: relatorioAtividadeInstance.valorlocacaoAuditorioSalas, format: '#,##0.00')}"/>
+                                     value="${formatNumber(number: relatorioAtividadeInstance.valorlocacaoAuditorioSalas, format: '#,##0.00')}" onkeyup="sum();"/>
 
                     </div>
                 </div>
@@ -357,7 +362,7 @@
 
                         </label>
                         <g:textField class="form-control currency" id="valorlocacaoVeiculos" name="valorlocacaoVeiculos"
-                                     value="${formatNumber(number: relatorioAtividadeInstance.valorlocacaoVeiculos, format: '#,##0.00')}"/>
+                                     value="${formatNumber(number: relatorioAtividadeInstance.valorlocacaoVeiculos, format: '#,##0.00')}" onkeyup="sum();"/>
 
                     </div>
 
@@ -367,7 +372,7 @@
 
                         </label>
                         <g:textField class="form-control currency" id="valorcombustivel" name="valorcombustivel"
-                                     value="${formatNumber(number: relatorioAtividadeInstance.valorcombustivel, format: '#,##0.00')}"/>
+                                     value="${formatNumber(number: relatorioAtividadeInstance.valorcombustivel, format: '#,##0.00')}" onkeyup="sum();"/>
 
                     </div>
 
@@ -377,7 +382,7 @@
 
                         </label>
                         <g:textField class="form-control currency" id="valorAlimentacao" name="valorAlimentacao"
-                                     value="${formatNumber(number: relatorioAtividadeInstance.valorAlimentacao, format: '#,##0.00')}"/>
+                                     value="${formatNumber(number: relatorioAtividadeInstance.valorAlimentacao, format: '#,##0.00')}" onkeyup="sum();"/>
 
                     </div>
                 </div>
@@ -389,7 +394,7 @@
 
                         </label>
                         <g:textField class="form-control currency" id="valorPassagensAreas" name="valorPassagensAreas"
-                                     value="${formatNumber(number: relatorioAtividadeInstance.valorPassagensAreas, format: '#,##0.00')}"/>
+                                     value="${formatNumber(number: relatorioAtividadeInstance.valorPassagensAreas, format: '#,##0.00')}" onkeyup="sum();"/>
 
                     </div>
 
@@ -399,7 +404,7 @@
 
                         </label>
                         <g:textField class="form-control currency" id="valorcopiasBanner" name="valorcopiasBanner"
-                                     value="${formatNumber(number: relatorioAtividadeInstance.valorcopiasBanner, format: '#,##0.00')}"/>
+                                     value="${formatNumber(number: relatorioAtividadeInstance.valorcopiasBanner, format: '#,##0.00')}" onkeyup="sum();"/>
 
                     </div>
 
@@ -411,7 +416,7 @@
                         </label>
                         <g:textField class="form-control currency" id="valorMaterialDidaticoCosumo"
                                      name="valorMaterialDidaticoCosumo"
-                                     value="${formatNumber(number: relatorioAtividadeInstance.valorMaterialDidaticoCosumo, format: '#,##0.00')}"/>
+                                     value="${formatNumber(number: relatorioAtividadeInstance.valorMaterialDidaticoCosumo, format: '#,##0.00')}" onkeyup="sum();"/>
 
                     </div>
                 </div>
@@ -422,7 +427,7 @@
 
                     </label>
                     <g:textField class="form-control currency" id="valorReembolsoDiario" name="valorReembolsoDiario"
-                                 value="${formatNumber(number: relatorioAtividadeInstance.valorReembolsoDiario, format: '#,##0.00')}"/>
+                                 value="${formatNumber(number: relatorioAtividadeInstance.valorReembolsoDiario, format: '#,##0.00')}" onkeyup="sum();"/>
 
                 </div>
 
@@ -432,7 +437,8 @@
 
                     </label>
                     <g:textField class="form-control currency" id="valorTotalAtividade" name="valorTotalAtividade"
-                                 value="${formatNumber(number: relatorioAtividadeInstance.valorTotalAtividade, format: '#,##0.00')}"/>
+                                 value="${formatNumber(number: relatorioAtividadeInstance.valorTotalAtividade, format: '#,##0.00')}" onkeyup="sum();"/>
+                    <small class="text-muted">O valor total da atividade é calculado automaticamente com base nas entradas das outras despesas.</small>
 
                 </div>
 
@@ -446,7 +452,7 @@
     $(document).ready(function () {
         $("#select-comunidades-envolvidas").chosen();
         $("#select-municipios-envolvidas").chosen();
-        $("#municipio").chosen();
+        $("#atividade").chosen();
 
         var numeroArquivos = "${relatorioAtividadeInstance?.arquivos?.size()}";
 
@@ -454,5 +460,44 @@
             $("#tabelaArquivos").addClass("hidden");
         }
     });
+
+    function sum() {
+        var valorServicoesTerceirosPessoaFisica = document.getElementById('valorServicoesTerceirosPessoaFisica').value;
+        var valorHospedagem = document.getElementById('valorHospedagem').value;
+        var valorlocacaoAuditorioSalas = document.getElementById('valorlocacaoAuditorioSalas').value;
+        var valorlocacaoVeiculos = document.getElementById('valorlocacaoVeiculos').value;
+        var valorcombustivel = document.getElementById('valorcombustivel').value;
+        var valorAlimentacao = document.getElementById('valorAlimentacao').value;
+        var valorPassagensAreas = document.getElementById('valorPassagensAreas').value;
+        var valorcopiasBanner = document.getElementById('valorcopiasBanner').value;
+        var valorMaterialDidaticoCosumo = document.getElementById('valorMaterialDidaticoCosumo').value;
+        var valorReembolsoDiario = document.getElementById('valorReembolsoDiario').value;
+
+        var result = trataNumero(valorServicoesTerceirosPessoaFisica) + trataNumero(valorHospedagem) +
+                trataNumero(valorlocacaoAuditorioSalas) + trataNumero(valorlocacaoVeiculos) +
+                trataNumero(valorcombustivel) + trataNumero(valorAlimentacao) +
+                trataNumero(valorPassagensAreas) + trataNumero(valorcopiasBanner) +
+                trataNumero(valorMaterialDidaticoCosumo) + trataNumero(valorReembolsoDiario);
+
+        var result = result.toFixed(2);
+
+        if (!isNaN(result)) {
+            document.getElementById('valorTotalAtividade').value = numberWithCommas(result);
+        }
+    }
+
+    function numberWithCommas(x) {
+        var parts = x.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return parts.join(",");
+    }
+
+    function trataNumero(numero){
+        if(numero) {
+            return parseFloat(numero.replace(/[^\d,-]/g, '', '').replace(',', '.'));
+        } else {
+            return 0.0;
+        }
+    }
 </script>
 

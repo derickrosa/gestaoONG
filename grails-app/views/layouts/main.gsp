@@ -49,7 +49,7 @@
             <header class="navbar-header" style="position: absolute;top: 30%;">
             <sec:ifLoggedIn>
 
-                <p>Olá,    <sec:username/>.</p>
+                <p>&nbsp;&nbsp;&nbsp;Olá,    <sec:username/>.</p>
             </sec:ifLoggedIn>
             </header>
             <!-- END LOGO SECTION -->
@@ -358,13 +358,14 @@
 
                     <li class=""><g:link controller="linhaAcao" action="index">Linha de Ação</g:link></li>
                     <li class=""><g:link controller="atividade" action="index">Atividade</g:link></li>
+                    <li class=""><g:link controller="relatorioAtividade" action="index">Relatório de Atividade</g:link></li>
+                    <li class=""><g:link controller="financiador" action="index">Financiador</g:link></li>
                     <li class=""><g:link controller="centroCusto" action="index">Centro de Custo</g:link></li>
                     <li class=""><a href="tabs_panels.html">Orçamento</a></li>
                     <li class=""><a href="notifications.html">Item do Orçamento</a></li>
                     <li class=""><a href="more_notifications.html">Lançamento</a></li>
                     <li class=""><g:link controller="funcionario" action="index">Funcionário</g:link></a></li>
                     <li class=""><g:link controller="fornecedor" action="index">Fornecedor</g:link></a></li>
-                    <li class=""><g:link controller="financiador" action="index">Financiador</g:link></li>
                     %{--<li class=""><g:link controller="responsavel" action="index">Responsável</g:link></li>--}%
                 </ul>
             </li>
@@ -452,6 +453,27 @@
     <p>&copy;  Acception Tecnologia &nbsp;2017 &nbsp;</p>
 </div>
 <!--END FOOTER -->
+
+<script>
+    $(function () {
+        $(".datepicker").datepicker({
+            format: 'dd/mm/yyyy',
+            language: 'pt-BR',
+            autoclose: true
+        }).on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
+        $(".currency").maskMoney({
+            prefix: 'R$ ',
+            allowNegative: true,
+            thousands: '.',
+            decimal: ',',
+            affixesStay: false
+        });
+        $('.percent').mask('##0,00%', {reverse: true});
+    });
+</script>
+
 </body>
 
 <!-- END BODY -->

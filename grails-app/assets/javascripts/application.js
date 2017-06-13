@@ -10,9 +10,12 @@
 //= require /plugins/modernizr-2.6.2-respond-1.1.0.min.js
 //= require jquery.edittable.js
 //= require /plugins/bootstrap/bootstrap-datepicker.min.js
+//= require input.masks.js
 //= require /plugins/jquery/jquery.mask.min.js
 //= require /plugins/jquery/jquery.maskMoney.min.js
-//= require input.masks.js
+//= require jquery.searchabledropdown-1.0.8.min.js
+//= require chosen.jquery.min.js
+//= require chosen.proto.js
 
 
 if (typeof jQuery !== 'undefined') {

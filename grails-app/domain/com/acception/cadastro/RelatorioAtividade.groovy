@@ -1,6 +1,9 @@
 package com.acception.cadastro
 
 class RelatorioAtividade {
+    Date dateCreated
+    Date lastUpdated
+
     String comunidadesEnvolvidas
     String totalComunidadesEnvolvidas
     String municipiosAtendidos
@@ -30,7 +33,7 @@ class RelatorioAtividade {
     Long autoDeterminacaoCorOutras
 
     Financiador financiador
-    String centroCusto
+    CentroCusto centroCusto
     String origemRecursoProjeto
 
     Double valorServicoesTerceirosPessoaFisica
@@ -51,6 +54,8 @@ class RelatorioAtividade {
     static belongsTo = [atividade: Atividade]
 
     static constraints = {
+        dateCreated nullable: true
+        lastUpdated nullable: true
         atividade nullable: true
         arquivos nullable: true
         comunidadesEnvolvidas nullable: true

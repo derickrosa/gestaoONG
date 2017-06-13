@@ -21,10 +21,6 @@ class Atividade {
     Cidade municipio
     String local
 
-
-    /*Relatorio de Atividades*/
-    /*Relatorio de Atividades*/
-
     static hasMany=[anexos:Anexo, linhas:LinhaAcao, despesas:Despesa, relatorios:RelatorioAtividade]
     static belongsTo = [LinhaAcao, CentroCusto]
     static constraints = {

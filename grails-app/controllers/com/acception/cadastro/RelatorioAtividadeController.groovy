@@ -11,7 +11,34 @@ class RelatorioAtividadeController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond RelatorioAtividade.list(params), model: [relatorioAtividadeInstanceCount: RelatorioAtividade.count()]
+        def criteria = getCriteria(params)
+
+        def relatorioAtividadeInstanceList = RelatorioAtividade.createCriteria().list(params,criteria)
+        def relatorioAtividadeInstanceCount = RelatorioAtividade.createCriteria().count(criteria)
+
+        def model = [relatorioAtividadeInstanceCount: relatorioAtividadeInstanceCount,relatorioAtividadeInstanceList:relatorioAtividadeInstanceList]
+
+        model
+    }
+
+    def getCriteria(pars) {
+        def criteria = {
+            if (pars.searchAtividade)
+                atividade {
+                    eq('id', pars.searchAtividade.toLong())
+                }
+
+            if (pars.searchFinanciador)
+                financiador {
+                    eq('id', pars.searchFinanciador.toLong())
+                }
+
+            if (pars.searchCentroCusto)
+                centroCusto {
+                    eq('id', pars.searchCentroCusto.toLong())
+                }
+        }
+        return criteria
     }
 
     def show(RelatorioAtividade relatorioAtividadeInstance) {
@@ -34,6 +61,8 @@ class RelatorioAtividadeController {
             return
         }
 
+        relatorioAtividadeInstance.dateCreated = new Date()
+        relatorioAtividadeInstance.lastUpdated = new Date()
         relatorioAtividadeInstance.save flush: true
 
         request.withFormat {
@@ -60,6 +89,7 @@ class RelatorioAtividadeController {
             respond relatorioAtividadeInstance.errors, view: 'edit'
             return
         }
+        relatorioAtividadeInstance.lastUpdated = new Date()
 
         relatorioAtividadeInstance.save flush: true
 
