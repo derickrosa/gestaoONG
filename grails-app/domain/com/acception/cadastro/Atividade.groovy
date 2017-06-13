@@ -21,7 +21,11 @@ class Atividade {
     Cidade municipio
     String local
 
-    static hasMany=[anexos:Anexo, linhas:LinhaAcao, despesas:Despesa]
+
+    /*Relatorio de Atividades*/
+    /*Relatorio de Atividades*/
+
+    static hasMany=[anexos:Anexo, linhas:LinhaAcao, despesas:Despesa, relatorios:RelatorioAtividade]
     static belongsTo = [LinhaAcao, CentroCusto]
     static constraints = {
         nome maxSize:100
@@ -40,6 +44,7 @@ class Atividade {
         anexos nullable: true
         linhas nullable: true
         despesas nullable: true
+        relatorios nullable: true
     }
 
     static mapping = {
