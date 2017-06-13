@@ -36,6 +36,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 .wizard .content {
     min-height: 100px;
 }
+
 .wizard .content > .body {
     width: 100%;
     height: auto;
@@ -46,76 +47,90 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 .error {
     font-size: small;
 }
-#searchUl{
+
+#searchUl {
     height: auto !important;
     width: auto !important;
 }
+
 .droprev li {
     display: block !important;
 }
+
 #dropdownMenu1 {
     text-align: left !important;
 }
+
 #caret {
     float: right !important;
-
 
 }
 </style>
 <section>
-    <g:hiddenField name="centroCusto.id" value="${4618}" />
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'nome', 'error')} ">
                 <label for="nome">
                     <g:message code="atividade.nome.label" default="Nome"/>
 
                 </label>
-                <g:textField class="form-control"  name="nome" maxlength="100" value="${atividadeInstance?.nome}"/>
+                <g:textField class="form-control" name="nome" maxlength="100" value="${atividadeInstance?.nome}"/>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group ${hasErrors(bean: atividadeInstance, field: 'centroCusto', 'error')} ">
+                <label class="control-label" for="atividade">
+                    <g:message code="atividade.centroCusto.label" default="Centro Custo"/>
+
+                </label>
+                <g:select class="form-control" id="centroCusto" name="centroCusto.id"
+                          from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id"
+                          value="${atividadeInstance?.id}" noSelection="['': 'Selecione Centro de Custo...']"/>
 
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'linhas', 'error')} ">
-            <label for="linhas">
-                <g:message code="atividade.linhas.label" default="Linhas de Ação"/>
-            </label>
-            <div class="field" style="">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle form-control" style="width: 100%" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Selecione a linha de ação...
-                        <span id="caret" class="caret"></span>
-                    </button>
 
-                    <ul class="dropdown-menu droprev " aria-labelledby="dropdownMenu1" id="searchUl">
-                        <g:set var="linhaAcaoIds" value="${atividadeInstance?.linhas?.id}" />
-                        <g:each in="${com.acception.cadastro.LinhaAcao.list(sort: 'codigo')}" var="status" status="i" >
-                            <li>
-                                <a href="#" class="small" data-value="option1" tabIndex="-1">
-                                    <g:checkBox name="linhaAcao" checked="${linhaAcaoIds?.find { it == status.id } }" value="${status.id}"></g:checkBox> ${status} <br/>
-                                </a>
-                            </li>
-                        </g:each>
-                    </ul>
-
-
-                </div>
-            </div>
-                </div>
-        </div>
-        %{--<div class="col-md-4">
+        <div class="col-md-6">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'linhas', 'error')} ">
                 <label for="linhas">
                     <g:message code="atividade.linhas.label" default="Linhas de Ação"/>
                 </label>
-                <g:select class="form-control" id="linhas" name="linhas.id" from="${com.acception.cadastro.LinhaAcao.list()}" optionKey="id" value="${atividadeInstance?.linhas?.id}" class="form-control" noSelection="['null': 'Selecione a linha de ação...']"/>
 
+                <div class="field" style="">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle form-control" style="width: 100%"
+                                type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="true">
+                            Selecione a linha de ação...
+                            <span id="caret" class="caret"></span>
+                        </button>
+
+                        <ul class="dropdown-menu droprev " aria-labelledby="dropdownMenu1" id="searchUl">
+                            <g:set var="linhaAcaoIds" value="${atividadeInstance?.linhas?.id}"/>
+                            <g:each in="${com.acception.cadastro.LinhaAcao.list(sort: 'codigo')}" var="status"
+                                    status="i">
+                                <li>
+                                    <a href="#" class="small" data-value="option1" tabIndex="-1">
+                                        <g:checkBox name="linhaAcao"
+                                                    checked="${linhaAcaoIds?.find { it == status.id }}"
+                                                    value="${status.id}"></g:checkBox> ${status} <br/>
+                                    </a>
+                                </li>
+                            </g:each>
+                        </ul>
+
+                    </div>
+                </div>
             </div>
-        </div>--}%
-
+        </div>
 
     </div>
+
     <div class="row">
         <div class="col-md-6">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'tipo', 'error')} ">
@@ -123,79 +138,87 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                     <g:message code="atividade.tipo.label" default="Tipo"/>
 
                 </label>
-                <g:select name="tipo" from="${com.acception.cadastro.enums.TipoAtividade?.values()}" class="form-control" keys="${com.acception.cadastro.enums.TipoAtividade.values()*.name()}" value="${atividadeInstance?.tipo?.name()}"  noSelection="['null': 'Selecione o tipo de atividade...']"/>
+                <g:select name="tipo" from="${com.acception.cadastro.enums.TipoAtividade?.values()}"
+                          class="form-control" keys="${com.acception.cadastro.enums.TipoAtividade.values()*.name()}"
+                          value="${atividadeInstance?.tipo?.name()}"
+                          noSelection="['null': 'Selecione o tipo de atividade...']"/>
 
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'status', 'error')} ">
                 <label for="status">
                     <g:message code="atividade.status.label" default="Status"/>
 
                 </label>
-                <g:select name="status" from="${com.acception.cadastro.enums.StatusAtividade?.values()}" class="form-control" keys="${com.acception.cadastro.enums.StatusAtividade.values()*.name()}" value="${atividadeInstance?.status?.name()}"  noSelection="['': '']"/>
+                <g:select name="status" from="${com.acception.cadastro.enums.StatusAtividade?.values()}"
+                          class="form-control"
+                          keys="${com.acception.cadastro.enums.StatusAtividade.values()*.name()}"
+                          value="${atividadeInstance?.status?.name()}" noSelection="['': '']"/>
 
             </div>
         </div>
     </div>
 
-%{--<div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'anexos', 'error')} ">
-    <label for="anexos">
-        <g:message code="atividade.anexos.label" default="Anexos"/>
-        
-    </label>
-    <g:select name="anexos" from="${com.acception.cadastro.Anexo.list()}" multiple="multiple" optionKey="id" size="5" value="${atividadeInstance?.anexos*.id}" class="form-control"/>
+    %{--<div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'anexos', 'error')} ">
+        <label for="anexos">
+            <g:message code="atividade.anexos.label" default="Anexos"/>
 
-</div>--}%
+        </label>
+        <g:select name="anexos" from="${com.acception.cadastro.Anexo.list()}" multiple="multiple" optionKey="id" size="5" value="${atividadeInstance?.anexos*.id}" class="form-control"/>
+
+    </div>--}%
     <div class="row">
         <div class="col-md-6">
 
-<div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'descricao', 'error')} ">
-    <label for="descricao">
-        <g:message code="atividade.descricao.label" default="Descrição"/>
-        
-    </label>
-    <g:textArea class="form-control"  name="descricao" value="${atividadeInstance?.descricao}"/>
+            <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'descricao', 'error')} ">
+                <label for="descricao">
+                    <g:message code="atividade.descricao.label" default="Descrição"/>
 
-</div>
-</div>
-    <div class="col-md-6">
-        <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'objetivo', 'error')} ">
-            <label for="objetivo">
-                <g:message code="atividade.objetivo.label" default="Objetivo (s)"/>
+                </label>
+                <g:textArea class="form-control" name="descricao" value="${atividadeInstance?.descricao}" rows="4"/>
 
-            </label>
-            <g:textArea class="form-control"  name="objetivo" value="${atividadeInstance?.objetivo}"/>
-
+            </div>
         </div>
+
+        <div class="col-md-6">
+            <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'objetivo', 'error')} ">
+                <label for="objetivo">
+                    <g:message code="atividade.objetivo.label" default="Objetivo (s)"/>
+
+                </label>
+                <g:textArea class="form-control" name="objetivo" value="${atividadeInstance?.objetivo}" rows="4"/>
+
+            </div>
         </div>
     </div>
-%{--<div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'despesas', 'error')} ">
-    <label for="despesas">
-        <g:message code="atividade.despesas.label" default="Despesas"/>
-        
-    </label>
-    <g:select name="despesas" from="${com.acception.cadastro.Despesa.list()}" multiple="multiple" optionKey="id" size="5" value="${atividadeInstance?.despesas*.id}" class="form-control"/>
+    %{--<div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'despesas', 'error')} ">
+        <label for="despesas">
+            <g:message code="atividade.despesas.label" default="Despesas"/>
 
-</div>--}%
+        </label>
+        <g:select name="despesas" from="${com.acception.cadastro.Despesa.list()}" multiple="multiple" optionKey="id" size="5" value="${atividadeInstance?.despesas*.id}" class="form-control"/>
 
-%{--<div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'atividade', 'error')} ">
-    <label for="atividade">
-        <g:message code="atividade.atividade.label" default="Atividade"/>
-        
-    </label>
-    <g:select class="form-control" id="atividade" name="atividade.id" from="${com.acception.cadastro.Atividade.list()}" optionKey="id" value="${atividadeInstance?.atividade?.id}" class="form-control" noSelection="['null': '']"/>
+    </div>--}%
 
-</div>--}%
+    %{--<div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'atividade', 'error')} ">
+        <label for="atividade">
+            <g:message code="atividade.atividade.label" default="Atividade"/>
 
-%{--<div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'centroCusto', 'error')} ">
-    <label for="centroCusto">
-        <g:message code="atividade.centroCusto.label" default="Centro Custo"/>
-        
-    </label>
-    <g:select class="form-control" id="centroCusto" name="centroCusto.id" from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id" value="${atividadeInstance?.centroCusto?.id}" class="form-control" noSelection="['null': '']"/>
+        </label>
+        <g:select class="form-control" id="atividade" name="atividade.id" from="${com.acception.cadastro.Atividade.list()}" optionKey="id" value="${atividadeInstance?.atividade?.id}" class="form-control" noSelection="['null': '']"/>
 
-</div>--}%
+    </div>--}%
+
+    %{--<div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'centroCusto', 'error')} ">
+        <label for="centroCusto">
+            <g:message code="atividade.centroCusto.label" default="Centro Custo"/>
+
+        </label>
+        <g:select class="form-control" id="centroCusto" name="centroCusto.id" from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id" value="${atividadeInstance?.centroCusto?.id}" class="form-control" noSelection="['null': '']"/>
+
+    </div>--}%
 
     <div class="row">
         <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'inicio', 'error')} col-md-4">
@@ -225,7 +248,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                     <g:message code="atividade.periodo.label" default="Período"/>
 
                 </label>
-                <g:textField class="form-control"  name="periodo" value="${atividadeInstance?.periodo}"/>
+                <g:textField class="form-control" name="periodo" value="${atividadeInstance?.periodo}"/>
 
             </div>
         </div>
@@ -237,10 +260,14 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 <label for="estado">
                     <g:message code="atividade.estado.label" default="Estado"/>
                 </label>
-                <g:select class="form-control" id="estado" name="estado.id" from="${com.acception.cadastro.Estado.list()}" optionKey="id" value="${atividadeInstance?.estado?.id}" noSelection="['null': 'Selecione um estado...']"/>
+                <g:select class="form-control" id="estado" name="estado.id"
+                          from="${com.acception.cadastro.Estado.createCriteria().list{order('nome','asc')}}" optionKey="id"
+                          value="${atividadeInstance?.estado?.id}"
+                          noSelection="['null': 'Selecione um estado...']"/>
 
             </div>
         </div>
+
         <div class="col-md-4">
             <div class="form-group ${hasErrors(bean: atividadeInstance, field: 'municipio', 'has-error')} ">
                 <label class="control-label" for="municipio">
@@ -249,44 +276,40 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 </label>
 
                 <g:select class="form-control" id="municipio" name="municipio.id"
-                          from="${com.acception.cadastro.Cidade.findAllByEstado(atividadeInstance.estado)}"
+                          from="${com.acception.cadastro.Cidade.createCriteria().list{eq('estado',atividadeInstance.estado) order('nome','asc')}}"
                           optionKey="id"
                           value="${atividadeInstance?.municipio?.id}"
                           noSelection="['null': 'Selecione um município...']"/>
 
             </div>
         </div>
+
         <div class="col-md-4">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'local', 'error')} ">
                 <label for="local">
                     <g:message code="atividade.local.label" default="Local"/>
 
                 </label>
-                <g:textField class="form-control"  name="local" value="${atividadeInstance?.local}"/>
+                <g:textField class="form-control" name="local" value="${atividadeInstance?.local}"/>
 
             </div>
         </div>
     </div>
 
 
+    <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'anexos', 'error')} ">
+        <label for="planoDeTrabalho">
+            <g:message code="centroCusto.planoDeTrabalho.label" default="Anexar Documentos"/>
+        </label>
 
-
-
-
-
-<div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'anexos', 'error')} ">
-    <label for="planoDeTrabalho">
-        <g:message code="centroCusto.planoDeTrabalho.label" default="Anexar Documentos"/>
-    </label>
-
-    %{--<input type="hidden" id="previousPlanoDeTrabalho" name="previousPlanoDeTrabalho"
-           value="${atividadeInstance?.anexos}">
-    <input type="hidden" id="numFilesUploaded" name="numFilesUploaded"
-           value="${atividadeInstance?.anexos}">--}%
-    <input type="file" class="planoDeTrabalho"  name="documentFile" >
-    %{--<input type="file" class="planoDeTrabalho" name="documentFile.2">--}%
-    %{--<input type="file" id="planoDeTrabalho" name="planoDeTrabalho.2" value="">--}%
-</div>
+        %{--<input type="hidden" id="previousPlanoDeTrabalho" name="previousPlanoDeTrabalho"
+               value="${atividadeInstance?.anexos}">
+        <input type="hidden" id="numFilesUploaded" name="numFilesUploaded"
+               value="${atividadeInstance?.anexos}">--}%
+        <input type="file" id="planoDeTrabalho" name="documentFile">
+        <input type="file" id="planoDeTrabalho" name="documentFile1">
+        %{--<input type="file" id="planoDeTrabalho" name="planoDeTrabalho.2" value="">--}%
+    </div>
 </section>
 <script src="${assetPath(src: 'jquery.cookie-1.3.1.js')}"></script>
 <script src="${assetPath(src: 'jquery.steps.js')}"></script>
@@ -313,7 +336,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
     };
 
     var initializeFileInput = function () {
-        $('.planoDeTrabalho').fileinput({
+        $('#planoDeTrabalho').fileinput({
             language: 'pt-BR',
             showUpload: false,
             maxFileCount: 1,
@@ -347,8 +370,8 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
         });
     };
 
-    var atualizarValoresItensOrcamentarios = function() {
-        $.each($('#itensOrcamentarios .currency'), function(index, element){
+    var atualizarValoresItensOrcamentarios = function () {
+        $.each($('#itensOrcamentarios .currency'), function (index, element) {
             $(element).maskMoney({
                 prefix: 'R$ ',
                 allowNegative: true,
@@ -460,38 +483,42 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 
         var options = [];
 
-        $( '.dropdown-menu a' ).on( 'click', function( event ) {
+        $('.dropdown-menu a').on('click', function (event) {
 
-            var $target = $( event.currentTarget ),
-                    val = $target.attr( 'data-value' ),
-                    $inp = $target.find( 'input' ),
+            var $target = $(event.currentTarget),
+                    val = $target.attr('data-value'),
+                    $inp = $target.find('input'),
                     idx;
 
-            if ( ( idx = options.indexOf( val ) ) > -1 ) {
-                options.splice( idx, 1 );
-                setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+            if (( idx = options.indexOf(val) ) > -1) {
+                options.splice(idx, 1);
+                setTimeout(function () {
+                    $inp.prop('checked', false)
+                }, 0);
             } else {
-                options.push( val );
-                setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+                options.push(val);
+                setTimeout(function () {
+                    $inp.prop('checked', true)
+                }, 0);
             }
 
-            $( event.target ).blur();
+            $(event.target).blur();
 
-            console.log( options );
+            console.log(options);
             return false;
         });
 
 
-        document.getElementById("estado").onchange = function(){
+        document.getElementById("estado").onchange = function () {
             var idUf = $('#estado option:selected').val();
             //console.log("Loggggggg "+idUf);
-            if(idUf=="null"){
+            if (idUf == "null") {
                 $("#municipio").empty()
             }
             $.ajax({
                 url: '${createLink(action: 'cidadePorEstado',controller:'cidade')}',
-                type: 	'POST',
-                data: 	{
+                type: 'POST',
+                data: {
                     ajax: true,
                     id: idUf
                 },
@@ -505,7 +532,6 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
             });
 
         }
-
 
 
         $("#financiador").change(function () {
@@ -525,8 +551,6 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 }
             })
         });
-
-
 
 
     });

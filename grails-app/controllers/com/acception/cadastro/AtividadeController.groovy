@@ -1,7 +1,6 @@
 package com.acception.cadastro
 
 
-
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
@@ -12,7 +11,7 @@ class AtividadeController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Atividade.list(params), model:[atividadeInstanceCount: Atividade.count()]
+        respond Atividade.list(params), model: [atividadeInstanceCount: Atividade.count()]
     }
 
     def show(Atividade atividadeInstance) {
@@ -31,11 +30,11 @@ class AtividadeController {
             return
         }
 
-        log.debug("Alterou! AQUI PARAM: ${params.centroCusto.id.toLong()}")
-
-        def cc = CentroCusto.get(params.centroCusto.id.toLong())
-
-        cc.addToAtividades(atividadeInstance)
+        if (params.centroCusto.id) {
+            def cc = CentroCusto.get(params.centroCusto.id as Long)
+            cc.addToAtividades(atividadeInstance)
+            cc.save flush: true, failOnError: true
+        }
 
         if (params.list('linhaAcao')) {
             params.list('linhaAcao').each { id ->
@@ -47,7 +46,7 @@ class AtividadeController {
                 }
                 la.addToAtividades(atividadeInstance)
                 atividadeInstance.addToLinhas(la)
-                la.save(flush:true, failOnError: true)
+                la.save(flush: true, failOnError: true)
 
             }
 
@@ -55,21 +54,13 @@ class AtividadeController {
 
 
         if (atividadeInstance.hasErrors()) {
-            respond atividadeInstance.errors, view:'create'
+            respond atividadeInstance.errors, view: 'create'
             return
         }
 
-        cc.save flush:true, failOnError: true
+        atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
 
-        def f = request.getPart('documentFile')
-        //println "Arquivo: ${f.properties} - CLASSE: ${f.class}"
-        if (f) {
-            def anexo = new Anexo(f)
-            atividadeInstance.addToAnexos(anexo)
-        } else{
-            println "Nulo: $f"
-        }
-        //atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
+        atividadeInstance.save flush: true, failOnError: true
 
         request.withFormat {
             form multipartForm {
@@ -85,20 +76,19 @@ class AtividadeController {
     }
 
     def atualizarAnexo(atividade, numFilesUploaded, planoDeTrabalhoAtual, planoDeTrabalhoAnterior) {
-        log.debug("Alterou! mudou de novo AQUI")
-        if (numFilesUploaded.toInteger() == 0) {
-            atividade.anexos = null
-        } else {
-            if (planoDeTrabalhoAtual.isEmpty()) {
-                log.debug("Entrou isempty")
-                def an = Anexo.get(planoDeTrabalhoAnterior)
-                atividade.addToAnexos(an)
+        if(numFilesUploaded) {
+            if (numFilesUploaded.toInteger() == 0) {
+                atividade.anexos = null
             } else {
-                def an = Anexo.get(planoDeTrabalhoAtual)
-                atividade.addToAnexos(an)
+                if (planoDeTrabalhoAtual.isEmpty()) {
+                    log.debug("Entrou isempty")
+                    def an = Anexo.get(planoDeTrabalhoAnterior)
+                    atividade.addToAnexos(an)
+                } else {
+                    def an = Anexo.get(planoDeTrabalhoAtual)
+                    atividade.addToAnexos(an)
+                }
             }
-
-            atividade.save flush: true, failOnError: true
         }
     }
 
@@ -123,56 +113,40 @@ class AtividadeController {
                 }
                 la.addToAtividades(atividadeInstance)
                 atividadeInstance.addToLinhas(la)
-                la.save(flush:true, failOnError: true)
+                la.save(flush: true, failOnError: true)
 
             }
 
         }
 
+        println "REQUEST"
 
-        /*request.fileNames.each {obj->
+        request.fileNames.each { obj ->
             println("FILE 1 - ${obj}")
         }
 
-        request.getMultiFileMap().documentFile.each {
-            println "2 - ${it.originalFilename}"
-        }
+        /* request.getMultiFileMap().documentFile.each {
+             println "2 - ${it.originalFilename}"
+         }*/
 
         request.fileNames.each {
             File file = request.getFile(it)
             println "FILE 2 - ${file.name}"
-        }*/
+        }
 
         if (atividadeInstance.hasErrors()) {
-            respond atividadeInstance.errors, view:'edit'
+            respond atividadeInstance.errors, view: 'edit'
             return
         }
-
-        /*def files = []*/
-        def f = request.getPart('documentFile')
-        //println "Arquivo: ${f.properties} - CLASSE: ${f.class}"
-        if (f) {
-            def anexo = new Anexo(f)
-            atividadeInstance.addToAnexos(anexo)
-        } else{
-            println "Nulo: $f"
-        }
-
-        /*def files = []
-
-        params.documentFile.each {
-            files.add(it.value)
-            println "Arquivo: ${it.properties}"
-        }*/
         //atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
-        atividadeInstance.save flush:true
+        atividadeInstance.save flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'Atividade.label', default: 'Atividade'), atividadeInstance.id])
                 redirect atividadeInstance
             }
-            '*'{ respond atividadeInstance, [status: OK] }
+            '*' { respond atividadeInstance, [status: OK] }
         }
     }
 
@@ -184,14 +158,14 @@ class AtividadeController {
             return
         }
 
-        atividadeInstance.delete flush:true
+        atividadeInstance.delete flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'Atividade.label', default: 'Atividade'), atividadeInstance.id])
-                redirect action:"index", method:"GET"
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+            '*' { render status: NO_CONTENT }
         }
     }
 
@@ -201,7 +175,7 @@ class AtividadeController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'atividade.label', default: 'Atividade'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 }
