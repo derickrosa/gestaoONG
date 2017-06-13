@@ -316,7 +316,7 @@
             <a  href="#">
             <g:link controller="home" action="painelInicial" class="user-link">
                 <img class="media-object img-thumbnail user-img" alt="User Picture"
-                     src="${assetPath(src: 'logo-fase.png')}/"/>
+                    style="width: 180px; height: 100%; margin-right: 50px" src="${assetPath(src: 'logo-fundodema.png')}/"/>
             </g:link>
             <br/>
 

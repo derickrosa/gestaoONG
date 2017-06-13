@@ -193,7 +193,9 @@
 		</div>
 	</div>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+	<asset:javascript src="Chart.min.js"/>
+
+	%{--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>--}%
 
 	<script>
 		/**
@@ -215,7 +217,9 @@
 			var tabela = $('#tabelaSalario tbody');
 
 			var keys = Object.keys(dados);
-			var values = Object.values(dados);
+			var values = Object.keys(dados).map(function(key) {
+				return dados[key];
+			});
 
 			var totalValues = values.reduce(function (a, b) {
 				return a + b;
@@ -248,6 +252,8 @@
 					'funcionarioId': "${funcionarioInstance.id}"
 				},
 				success: function(response) {
+					console.log(response)
+
 					var ctx = document.getElementById('myChart').getContext('2d');
 					var chart = new Chart(ctx, {
 						// The type of chart we want to create
@@ -259,7 +265,9 @@
 							datasets: [{
 								label: "My First dataset",
 								backgroundColor: ['rgb(255, 250, 132)', 'rgb(155, 250, 132)'],
-								data: Object.values(response),
+								data: Object.keys(response).map(function(key) {
+									return response[key];
+								})
 							}]
 						},
 
