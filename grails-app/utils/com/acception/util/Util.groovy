@@ -1,9 +1,13 @@
 package com.acception.util
 
 import java.text.DecimalFormat
+import java.text.Normalizer
 import java.text.NumberFormat
 
 class Util {
+    static normalizar(String string) {
+        return Normalizer.normalize(string, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toUpperCase();
+    }
 
     static parse(String amount) {
         Locale ptBr = new Locale("pt", "BR");

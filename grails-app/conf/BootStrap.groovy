@@ -14,7 +14,7 @@ class BootStrap {
         systemInicialLog()
         loadFixtures()
         loadPerfisAcesso()
-        loadMaps()
+        //loadMaps()
     }
     def destroy = {
     }
@@ -36,7 +36,7 @@ class BootStrap {
             fixtureLoader.load("cidades_ab")
             fixtureLoader.load("cidades_cde")
             fixtureLoader.load("cidades_gm")
-
+            fixtureLoader.load("cidades_p")
             fixtureLoader.load("cidades_r")
             fixtureLoader.load("cidades_st")
         }
