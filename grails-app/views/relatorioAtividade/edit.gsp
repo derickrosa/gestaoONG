@@ -47,7 +47,6 @@
                             </div>
                         </g:hasErrors>
                         <g:form url="[resource:relatorioAtividadeInstance, action:'update']" method="PUT" >
-
                         <g:hiddenField name="version" value="${relatorioAtividadeInstance?.version}"/>
                         <g:render template="form"/>
                         <button type="submit" class="btn btn-default">

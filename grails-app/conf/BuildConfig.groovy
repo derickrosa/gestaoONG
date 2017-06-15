@@ -70,7 +70,6 @@ grails.project.dependency.resolution = {
         compile "org.grails.plugins:spring-security-ui:1.0-RC3"
         // plugins for the build system only
         build ":tomcat:7.0.55.2" // or ":tomcat:8.0.20"
-
         // plugins needed at runtime but not for compilation
         //runtime ":hibernate4:4.3.8.1" // or ":hibernate:3.6.10.18"
 

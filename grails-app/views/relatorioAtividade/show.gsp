@@ -5,6 +5,9 @@
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'relatorioAtividade.label', default: 'RelatorioAtividade')}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <asset:stylesheet src="uploadfile.css"/>
+    <asset:javascript src="jquery.uploadfile.min.js"/>
 </head>
 
 <body>
@@ -61,7 +64,8 @@
                     <th id="nome-label" class="property-label"><g:message code="atividade.nome.label"
                                                                           default="Data de Criação do Relatório"/></th>
 
-                    <td aria-labelledby="nome-label"><g:formatDate value="${relatorioAtividadeInstance.dateCreated}" format="dd/MM/yyyy"/></td>
+                    <td aria-labelledby="nome-label"><g:formatDate value="${relatorioAtividadeInstance.dateCreated}"
+                                                                   format="dd/MM/yyyy"/></td>
 
                 </tr>
 
@@ -513,48 +517,22 @@
                     <!-- /.panel -->
                 </div>
             </div>
-%{--
 
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
 
                         <div class="panel-heading">
-                            <g:message code="projeto.informacoesGerais.label" default="ARQUIVOS"/>
+                            <g:message code="projeto.informacoesGerais.label" default="Arquivos"/>
                         </div>
 
                         <div class="panel-body">
-
-                            <g:if test="${relatorioAtividadeInstance?.arquivos?.size() > 0}">
-                                <table class="table table-striped table-bordered table-hover text-center">
-                                    <thead>
-                                    <th class="text-center">Arquivo</th>
-                                    <th class="text-center">Data de Envio</th>
-                                    </thead>
-                                    <tbody>
-                                    <g:each in="${relatorioAtividadeInstance.arquivos}" var="arq">
-                                        <tr>
-                                            <td><a href="${createLink(controller: 'atividade', action: 'downloadArquivo', id: "${arq.id}")}">${arq.filename}</a>
-                                            </td>
-                                            <td><g:formatDate format="dd/MM/yyyy"
-                                                              date="${arq.uploadDate}"/></td>
-                                        </tr>
-                                    </g:each>
-                                    </tbody>
-                                </table>
-                            </g:if>
-                            <g:else>
-                                <div class="well text-center" id="mensagemArquivosEmpty">
-                                    A atividade não possui arquivos cadastrados.
-                                </div>
-                            </g:else>
-
+                            <div id="fileuploader">Upload</div>
                         </div>
 
                     </div>
                 </div>
             </div>
---}%
 
 
             <g:form url="[resource: relatorioAtividadeInstance, action: 'delete']" method="DELETE">
@@ -574,5 +552,50 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function()
+    {
+        $("#fileuploader").uploadFile({
+            url:"${createLink(action: 'carregarArquivo', controller: 'relatorioAtividade',id: "${relatorioAtividadeInstance.id}")}",
+            fileName:"file",
+            showDelete: true,
+            showDownload:true,
+            showPreview:true,
+            previewHeight: "200px",
+            previewWidth: "200px",
+            statusBarWidth:'auto',
+            onLoad:function(obj)
+            {
+                $.ajax({
+                    cache: false,
+                    url: "${createLink(action:'getFiles',id: "${relatorioAtividadeInstance.id}")}",
+                    dataType: "json",
+                    success: function(data)
+                    {
+                        for(var i=0;i<data.length;i++)
+                        {
+                            obj.createProgress(data[i].name,data[i].path,data[i].size,data[i].id);
+                        }
+                    }
+                });
+            },
+            downloadCallback:function(id,pd)
+            {
+                location.href = "${createLink(action: 'baixarArquivo', controller: 'relatorioAtividade')}?idArquivo=" + id
+            },
+            deleteCallback: function (id, pd) {
+                $.ajax({
+                    url: "${createLink(action:'deletarArquivo',id: "${relatorioAtividadeInstance.id}")}",
+                    dataType: "json",
+                    data: {idArquivo:id},
+                    success: function(data)
+                    {
+                        console.log('Documento removido...')
+                    }
+                });
+            },
+        });
+    });
+</script>
 </body>
 </html>

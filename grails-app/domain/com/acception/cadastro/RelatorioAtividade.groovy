@@ -49,7 +49,7 @@ class RelatorioAtividade {
     Double valorTotalAtividade
 
 
-    static hasMany = [arquivos: ArquivoRelatorioAtividade]
+    static hasMany = [arquivos: Arquivo]
 
     static belongsTo = [atividade: Atividade]
 
