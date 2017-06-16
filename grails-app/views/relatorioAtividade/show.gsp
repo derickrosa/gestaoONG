@@ -563,7 +563,7 @@
             showPreview:true,
             previewHeight: "200px",
             previewWidth: "200px",
-            statusBarWidth:'auto',
+            statusBarWidth:'250px',
             onLoad:function(obj)
             {
                 $.ajax({

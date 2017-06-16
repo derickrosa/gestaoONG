@@ -93,7 +93,7 @@ class RelatorioAtividadeController {
     def getFiles(Long id) {
         def relatorio = RelatorioAtividade.get(params.id as Long)
         def arquivos = []
-        relatorio?.arquivos?.each { arquivoInstance ->
+        relatorio?.arquivos?.sort{-it?.fileName?.size()}.each { arquivoInstance ->
             if (okcontents.contains(arquivoInstance.contentType)) {
                 arquivos.add([name: arquivoInstance.fileName, path: createLink(action: 'imagem', id: arquivoInstance.id), size: arquivoInstance.size, id: arquivoInstance.id])
             } else {

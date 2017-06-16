@@ -12,6 +12,7 @@ padding: 4px 4px 4px 4px;
 
 .ajax-file-upload-filename {
 width: 100%;
+  word-wrap: break-word;
 height: auto;
 margin: 0 5px 5px 0px;
 
