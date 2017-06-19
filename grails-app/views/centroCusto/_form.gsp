@@ -64,61 +64,6 @@
 </style>
 
 <div id="wizard">
-    <h2>Orçamento</h2>
-    <section>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading control-label">
-                        Orçamento
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-4 form-group">
-                                <label for="orcamento.ano">Ano</label>
-
-                                <input type="number" min="0" id="orcamento.ano" name="orcamento.ano" class="form-control"
-                                       value="${centroCustoInstance.orcamento?.ano}" required>
-                            </div>
-
-                            <div class="col-md-4 form-group">
-                                <label for="valorTotalOrcamento">Valor Total</label>
-
-                                <input type="text" id="valorTotalOrcamento" name="valorTotalOrcamento"
-                                       class="form-control currency"
-                                       required>
-                            </div>
-
-                            <div class="col-md-4 form-group">
-                                <label for="orcamento.moeda">Moeda</label>
-
-                                <g:select class="form-control" name="orcamento.moeda" from="${Moeda.values()}"
-                                          keys="${Moeda.values()*.name()}"
-                                          value="${centroCustoInstance.orcamento?.moeda?.name()}" required="required"/>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading control-label">
-                        Itens Orçamentários
-                    </div>
-
-                    <div class="panel-body">
-                        <div id="itensOrcamentarios"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <h2>Dados Básicos</h2>
     <section>
         <div class="row">
@@ -128,7 +73,7 @@
                         <g:message code="centroCusto.codigo.label" default="Código"/>
 
                     </label>
-                    <g:textField class="form-control required" required="required" name="codigo" value="${centroCustoInstance?.codigo}"/>
+                    <g:field type="number" class="form-control required" maxlength="4" required="required" name="codigo" value="${centroCustoInstance?.codigo}"/>
 
                 </div>
             </div>
@@ -196,7 +141,7 @@
                         <g:message code="centroCusto.ano.label" default="Ano"/>
 
                     </label>
-                    <g:field class="form-control" id="ano" equired="required" name="ano" type="number" min="0"
+                    <g:field class="form-control" id="ano" required="required" name="ano" type="number" min="0"
                              value="${centroCustoInstance.ano}"/>
                 </div>
             </div>
@@ -250,6 +195,69 @@
             <input type="file" id="planoDeTrabalho" name="planoDeTrabalho">
         </div>
     </section>
+
+    <h2>Orçamento</h2>
+    <section>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading control-label">
+                        Orçamento
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3 form-group">
+                                <label for="orcamento.ano">Ano</label>
+
+                                <input type="number" min="0" id="orcamento.ano" name="orcamento.ano" class="form-control"
+                                       value="${centroCustoInstance.orcamento?.ano}" required>
+                            </div>
+
+                            <div class="col-md-3 form-group">
+                                <label for="valorTotalOrcamento">Valor Total</label>
+
+                                <input type="text" id="valorTotalOrcamento" name="valorTotalOrcamento"
+                                       class="form-control currency"
+                                       required>
+                            </div>
+
+                            <div class="col-md-3 form-group">
+                                <label for="orcamento.moeda">Moeda</label>
+
+                                <g:select class="form-control" name="orcamento.moeda" from="${Moeda.values()}"
+                                          keys="${Moeda.values()*.name()}"
+                                          value="${centroCustoInstance.orcamento?.moeda?.name()}" required="required"/>
+
+                            </div>
+
+                            <div class="col-md-3 form-group">
+                                <label for="valorCambialOrcamento">Valor Cambial</label>
+
+                                <input type="text" id="valorCambialOrcamento" name="valorCambialOrcamento"
+                                       class="form-control currency"
+                                       required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading control-label">
+                        Itens Orçamentários
+                    </div>
+
+                    <div class="panel-body">
+                        <div id="itensOrcamentarios"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
 <!-- Modal -->
@@ -274,6 +282,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    var form = $("#form");
+    form.validate({
+        errorPlacement: function errorPlacement(error, element) { element.before(error); },
+        rules: {
+            codigo: {
+                minlength: 4
+            }
+        }
+    });
+</script>
 
 <!-- PAGE LEVEL SCRIPTS -->
 <script src="${assetPath(src: 'jquery.cookie-1.3.1.js')}"></script>
@@ -526,6 +546,8 @@
         $('#myModal').modal('show');
 
         tableFuncionarios.loadData(tableData);
+
+        $('[name=funcionario]').chosen();
     };
 
     var salvarAlteracoesListaFuncionariosItemOrcamentario = function() {
@@ -555,9 +577,11 @@
 
     var initializeTableFuncionarios = function () {
         var html = `<g:select class='form-control' from='${com.acception.cadastro.Funcionario.list()}'
-                    name='funcionario' optionKey="id" noSelection="['': 'Selecione um funcionário...']"/>`
+                    name='funcionario' optionKey="id" data-placeholder='Selecione um funcionário...' noSelection="['': '']"/>`
 
-        tableFuncionarios = $("#listaFuncionariosTable").editTable({
+        var tableElement = $("#listaFuncionariosTable");
+
+        tableFuncionarios = tableElement.editTable({
             field_templates: {
                 'currency': {
                     type: 'text',
@@ -590,7 +614,7 @@
             first_row: false,
         });
 
-        $("#listaFuncionariosTable").on("focusin", "td:nth-child(2) input", function () {
+        tableElement.on("focusin", "td:nth-child(2) input", function () {
             $(this).maskMoney({prefix: 'R$ ', allowNegative: true, thousands: '.', decimal: ',', affixesStay: false});
         });
 

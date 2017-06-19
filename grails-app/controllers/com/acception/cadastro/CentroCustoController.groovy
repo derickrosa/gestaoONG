@@ -86,8 +86,8 @@ class CentroCustoController {
 
         if (centroCustoInstance.orcamento) {
             centroCustoInstance.orcamento.valorTotal = Util.parse(params.valorTotalOrcamento)
-
             centroCustoInstance.orcamento.moeda = Moeda.valueOf(params.orcamento?.moeda)
+            centroCustoInstance.orcamento.valorCambial = Util.parse(params.valorCambialOrcamento)
 
             atualizarItensOrcamentarios(centroCustoInstance, params.itensOrcamento)
         }
