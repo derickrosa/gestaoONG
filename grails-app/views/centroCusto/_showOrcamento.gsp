@@ -29,6 +29,14 @@
             </tr>
         </g:if>
 
+        <g:if test="${centroCustoInstance?.orcamento?.valorCambial}">
+            <tr>
+                <th id="orcamento.valorCambial-label" class="property-label">Valor Cambial</th>
+
+                <td aria-labelledby="orcamento.valorCambial-label">R$ ${df.format(centroCustoInstance.orcamento.valorCambial)}</td>
+            </tr>
+        </g:if>
+
         <tr></tr>
     </table>
 

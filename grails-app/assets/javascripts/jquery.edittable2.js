@@ -245,7 +245,6 @@
 
         // Add row
         $table.on('click', '.addrow', function () {
-
             if ($(this).hasClass('disabled')) {
                 return false;
             }
@@ -257,6 +256,8 @@
             $table.find('.delrow').removeClass('disabled');
 
             checkButtons();
+
+            $('[name=funcionario]').chosen();
 
             return false;
         });

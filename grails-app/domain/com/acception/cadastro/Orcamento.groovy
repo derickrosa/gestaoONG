@@ -7,6 +7,7 @@ class Orcamento {
     Integer ano
     Double valorTotal
     Moeda moeda
+    Double valorCambial
 
     static hasMany = [itensOrcamentarios: ItemOrcamentario]
 
