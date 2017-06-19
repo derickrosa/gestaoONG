@@ -58,7 +58,7 @@ class AtividadeController {
             return
         }
 
-        atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
+        ///atualizarAnexo(atividadeInstance, params.numFilesUploaded, params.planoDeTrabalho, params.previousPlanoDeTrabalho)
 
         atividadeInstance.save flush: true, failOnError: true
 
