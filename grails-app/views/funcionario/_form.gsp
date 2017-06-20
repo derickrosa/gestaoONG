@@ -1,4 +1,4 @@
-<%@ page import="com.acception.cadastro.Funcionario" %>
+<%@ page import="com.acception.cadastro.enums.RamoFuncionario; com.acception.cadastro.Funcionario" %>
 
 
 
@@ -15,7 +15,7 @@
     <div class="col-md-4">
         <div class="form-group fieldcontain ${hasErrors(bean: funcionarioInstance, field: 'salario', 'error')} ">
             <label for="telefone">
-                <g:message code="funcionario.telefone.label" default="Salário"/>
+                <g:message code="funcionario.telefone.label" default="Salário Anual"/>
 
             </label>
             <g:textField class="form-control money" id="valorSalario" name="valorSalario" value="${funcionarioInstance?.salario}" required="required"/>
@@ -81,15 +81,26 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-md-6 form-group fieldcontain ${hasErrors(bean: funcionarioInstance, field: 'cargo', 'error')} ">
+        <label for="cargo">
+            <g:message code="funcionario.cargo.label" default="Cargo"/>
 
-<div class="form-group fieldcontain ${hasErrors(bean: funcionarioInstance, field: 'cargo', 'error')} ">
-    <label for="cargo">
-        <g:message code="funcionario.cargo.label" default="Cargo"/>
-        
-    </label>
-    <g:textField class="form-control" required="required" name="cargo" value="${funcionarioInstance?.cargo}"/>
+        </label>
+        <g:textField class="form-control" required="required" name="cargo" value="${funcionarioInstance?.cargo}"/>
 
+    </div>
+
+    <div class="col-md-6 form-group">
+        <label>Setor</label>
+        <g:select class="form-control" name="setor" from="${RamoFuncionario.values()}"
+                  keys="${RamoFuncionario.values()*.name()}" value="${funcionarioInstance.setor?.name()}"
+                  noSelection="['': '']" required="required"/>
+    </div>
 </div>
+
+
+
 
 <div class="form-group fieldcontain ${hasErrors(bean: funcionarioInstance, field: 'funcao', 'error')} ">
     <label for="funcao">

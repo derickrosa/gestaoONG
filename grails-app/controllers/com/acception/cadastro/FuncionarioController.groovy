@@ -141,7 +141,7 @@ class FuncionarioController {
     def getSalariosFuncionarioFromCentroCusto() {
         def funcionario = Funcionario.get(params.funcionarioId)
 
-        def salarioAnual = funcionario.salario * 12
+        def salarioAnual = funcionario.salario
 
         def salariosFuncionario = SalarioFuncionario.findAllByFuncionario(funcionario)
 

@@ -4,6 +4,9 @@ import com.acception.cadastro.enums.StatusAtividade
 import com.acception.cadastro.enums.TipoAtividade
 
 class Atividade {
+    static auditable = true
+
+    String codigo
     String nome
     String descricao
     StatusAtividade status = StatusAtividade.NAO_INICIADA
@@ -50,6 +53,16 @@ class Atividade {
 
     List<Atividade> getSubAtividades() {
         Atividade.findAllByAtividade(this)
+    }
+
+    def beforeInsert() {
+        if (!inicio) {
+            inicio = new Date()
+        }
+
+        if (!codigo) {
+            codigo = inicio[Calendar.YEAR] + sprintf('%06d', Atividade.count())
+        }
     }
 
     String toString() {
