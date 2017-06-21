@@ -301,11 +301,9 @@
 <script src="${assetPath(src: 'WizardInitCentroCusto.js')}"></script>
 
 <script>
-    var atualizarValorTotalOrcamento = function () {
-        var valorTotalOrcamento = ${centroCustoInstance.orcamento?.valorTotal ?: 0};
-
-        if (valorTotalOrcamento) {
-            $("[name='valorTotalOrcamento']").maskMoney('mask', valorTotalOrcamento)
+    var atualizarMoneyInputComValor = function (valor, name) {
+        if (valor) {
+            $("[name='" + name + "']").maskMoney('mask', valor)
         }
     };
 
@@ -650,7 +648,9 @@
 
         initializeTableFuncionarios();
 
-        atualizarValorTotalOrcamento();
+        atualizarMoneyInputComValor(${centroCustoInstance.orcamento?.valorTotal ?: 0}, 'valorTotalOrcamento');
+
+        atualizarMoneyInputComValor(${centroCustoInstance.orcamento?.valorCambial ?: 0}, 'valorCambialOrcamento');
 
         $("#financiador").change(function () {
             var financiadorID_selected = $(this).find("option:selected")[0].value;

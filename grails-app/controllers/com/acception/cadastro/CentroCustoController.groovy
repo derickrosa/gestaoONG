@@ -204,7 +204,7 @@ class CentroCustoController {
         if (item.tipoCusto == TipoCusto.PESSOAL) {
             if (funcionarios) {
                 funcionarios.eachWithIndex { funcionarioId, i ->
-                    if (funcionarioId) {
+                    if (funcionarioId && salarioFuncionarios[i]) {
                         def salarioFuncionario = listaAntigaSalariosFuncionarios.find { it.funcionario.id == funcionarioId.toInteger()}
 
                         if (! salarioFuncionario) {
