@@ -10,7 +10,7 @@ import grails.transaction.Transactional
 class FuncionarioController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE",
-                             getSalariosFuncionarioFromCentroCusto: "POST"]
+                             getSalariosFuncionarioFromCentroCusto: "POST", criarFuncionario: "POST"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -32,21 +32,7 @@ class FuncionarioController {
             return
         }
 
-        if (params.telefoneRaw) {
-            def dadosTelefone = Util.phoneToRaw(params.telefoneRaw)
-
-            funcionarioInstance.participante.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
-        }
-
-        if (params.telefoneAdicionalRaw) {
-            def dadosTelefone = Util.phoneToRaw(params.telefoneAdicionalRaw)
-
-            funcionarioInstance.participante.telefoneAdicional = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
-        }
-
-        if (params.valorSalario) {
-            funcionarioInstance.salario = Util.parse(params.valorSalario)
-        }
+        _updateDadosFuncionario(funcionarioInstance, params)
 
         if (funcionarioInstance.hasErrors()) {
             respond funcionarioInstance.errors, view: 'create'
@@ -76,21 +62,7 @@ class FuncionarioController {
             return
         }
 
-        if (params.telefoneRaw) {
-            def dadosTelefone = Util.phoneToRaw(params.telefoneRaw)
-
-            funcionarioInstance.participante.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
-        }
-
-        if (params.telefoneAdicionalRaw) {
-            def dadosTelefone = Util.phoneToRaw(params.telefoneAdicionalRaw)
-
-            funcionarioInstance.participante.telefoneAdicional = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
-        }
-
-        if (params.valorSalario) {
-            funcionarioInstance.salario = Util.parse(params.valorSalario)
-        }
+        _updateDadosFuncionario(funcionarioInstance, params)
 
         if (funcionarioInstance.hasErrors()) {
             respond funcionarioInstance.errors, view: 'edit'
@@ -106,6 +78,24 @@ class FuncionarioController {
                 redirect funcionarioInstance
             }
             '*' { respond funcionarioInstance, [status: OK] }
+        }
+    }
+
+    def _updateDadosFuncionario(Funcionario funcionarioInstance, params) {
+        if (params.telefoneRaw) {
+            def dadosTelefone = Util.phoneToRaw(params.telefoneRaw)
+
+            funcionarioInstance.participante.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
+        }
+
+        if (params.telefoneAdicionalRaw) {
+            def dadosTelefone = Util.phoneToRaw(params.telefoneAdicionalRaw)
+
+            funcionarioInstance.participante.telefoneAdicional = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
+        }
+
+        if (params.valorSalario) {
+            funcionarioInstance.salario = Util.parse(params.valorSalario)
         }
     }
 
@@ -126,6 +116,34 @@ class FuncionarioController {
             }
             '*' { render status: NO_CONTENT }
         }
+    }
+
+    @Transactional
+    def criarFuncionario() {
+        def funcionario = new Funcionario(params)
+
+        _updateDadosFuncionario(funcionario, params)
+
+        def itemOrcamentario = ItemOrcamentario.get(params.itemOrcamentario?.toInteger())
+        def salarioCentroCusto
+
+        if (itemOrcamentario) {
+            def salario = Util.parse(params.salarioFuncionarioItemOrcamentario)
+
+            if (salario) {
+                salarioCentroCusto = new SalarioFuncionario(funcionario: funcionario, valor: salario,
+                        itemOrcamentario: itemOrcamentario)
+
+                funcionario.participante.save(flush: true, failOnError: true)
+                funcionario.save(flush: true)
+                salarioCentroCusto.save(flush: true)
+            }
+        }
+
+        render(['success': true, 'funcionario': ['nome': funcionario.toString(),
+                                                 'setor': funcionario.setor.descricao,
+                                                 'salarioTotal': Util.moneyMask(funcionario.salario),
+                                                 'salarioCentroCusto': Util.moneyMask(salarioCentroCusto?.valor)]] as JSON)
     }
 
     protected void notFound() {

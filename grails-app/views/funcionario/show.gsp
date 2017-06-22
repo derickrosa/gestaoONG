@@ -132,6 +132,15 @@
 							</tr>
 						</g:if>
 
+						<g:if test="${funcionarioInstance?.setor}">
+							<tr>
+								<th id="setor-label" class="property-label"><g:message code="funcionario.funcao.label" default="Setor" /></th>
+
+								<td  aria-labelledby="setor-label"><g:fieldValue bean="${funcionarioInstance}" field="setor"/></td>
+
+							</tr>
+						</g:if>
+
 						<g:if test="${funcionarioInstance?.salario}">
 							<tr>
 								<th id="funcao-label" class="property-label"><g:message code="funcionario.funcao.label" default="Salário Anual" /></th>
