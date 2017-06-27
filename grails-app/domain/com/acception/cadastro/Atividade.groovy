@@ -24,11 +24,11 @@ class Atividade {
     Cidade municipio
     String local
 
-    static hasMany=[anexos:Anexo, linhas:LinhaAcao, despesas:Despesa, relatorios:RelatorioAtividade]
+    static hasMany=[arquivos:Arquivo, linhas:LinhaAcao, despesas:Despesa, relatorios:RelatorioAtividade]
     static belongsTo = [LinhaAcao, CentroCusto]
     static constraints = {
         nome maxSize:100
-        anexos nullable: true
+        arquivos nullable: true
         descricao nullable: true
         despesas nullable: true
         status nullable: true
@@ -40,7 +40,6 @@ class Atividade {
         atividade nullable: true
         estado nullable: true
         municipio nullable: true
-        anexos nullable: true
         linhas nullable: true
         despesas nullable: true
         relatorios nullable: true
@@ -66,6 +65,6 @@ class Atividade {
     }
 
     String toString() {
-        "${nome + '[' + status+']'}"
+        "${nome + ' [' + status+']'}"
     }
 }

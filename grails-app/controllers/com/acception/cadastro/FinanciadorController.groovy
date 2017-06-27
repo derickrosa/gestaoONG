@@ -49,6 +49,9 @@ class FinanciadorController {
             return
         }
 
+        if(params.participante.cnpj){
+            params.participante.cnpj = Util.cnpjToRaw(params.participante.cnpj)
+        }
         def participante = new PessoaJuridica(params.participante)
         participante.addToPapeis(financiadorInstance)
         participante.save(failOnError:true, flush:true)
@@ -132,6 +135,10 @@ class FinanciadorController {
         if (financiadorInstance == null) {
             notFound()
             return
+        }
+
+        if(params.participante.cnpj){
+            params.participante.cnpj = Util.cnpjToRaw(params.participante.cnpj)
         }
 
         def participante = financiadorInstance.participante

@@ -5,6 +5,9 @@
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'centroCusto.label', default: 'Centro de Custo')}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <asset:stylesheet src="uploadfile.css"/>
+    <asset:javascript src="jquery.uploadfile.min.js"/>
 </head>
 
 <body>
@@ -62,6 +65,23 @@
 
             <br>
 
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            <g:message code="projeto.informacoesGerais.label" default="Arquivos"/>
+                        </div>
+
+                        <div class="panel-body">
+                            <div id="fileuploader">Upload</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
             <g:form url="[resource: centroCustoInstance, action: 'delete']" method="DELETE">
                 <fieldset class="buttons">
                     <g:link class="btn btn-default" action="edit" resource="${centroCustoInstance}">
@@ -78,5 +98,50 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function()
+    {
+        $("#fileuploader").uploadFile({
+            url:"${createLink(action: 'carregarArquivo', controller: 'centroCusto',id: "${centroCustoInstance.id}")}",
+            fileName:"file",
+            showDelete: true,
+            showDownload:true,
+            showPreview:true,
+            previewHeight: "200px",
+            previewWidth: "200px",
+            statusBarWidth:'250px',
+            onLoad:function(obj)
+            {
+                $.ajax({
+                    cache: false,
+                    url: "${createLink(action:'getFiles',id: "${centroCustoInstance.id}")}",
+                    dataType: "json",
+                    success: function(data)
+                    {
+                        for(var i=0;i<data.length;i++)
+                        {
+                            obj.createProgress(data[i].name,data[i].path,data[i].size,data[i].id);
+                        }
+                    }
+                });
+            },
+            downloadCallback:function(id,pd)
+            {
+                location.href = "${createLink(action: 'baixarArquivo', controller: 'centroCusto')}?idArquivo=" + id
+            },
+            deleteCallback: function (id, pd) {
+                $.ajax({
+                    url: "${createLink(action:'deletarArquivo',id: "${centroCustoInstance.id}")}",
+                    dataType: "json",
+                    data: {idArquivo:id},
+                    success: function(data)
+                    {
+                        console.log('Documento removido...')
+                    }
+                });
+            },
+        });
+    });
+</script>
 </body>
 </html>

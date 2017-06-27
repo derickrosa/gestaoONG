@@ -79,7 +79,7 @@
             <g:message code="financiador.participante.cnpj.label" default="Cnpj"/>
 
         </label>
-        <g:textField class="form-control cnpj"  name="participante.cnpj" maxlength="14" value="${financiadorInstance?.participante?.cnpj}"/>
+        <g:textField class="form-control cnpj"  name="participante.cnpj" maxlength="18" value="${financiadorInstance?.participante?.cnpj}"/>
 
     </div>
 </div>
