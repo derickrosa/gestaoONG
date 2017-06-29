@@ -1,4 +1,4 @@
-<%@ page import="com.acception.cadastro.enums.TipoCusto; com.acception.cadastro.enums.Moeda; com.acception.cadastro.Responsavel; com.acception.cadastro.Financiador; com.acception.cadastro.enums.StatusProjeto; com.acception.cadastro.CentroCusto" %>
+<%@ page import="com.acception.cadastro.enums.TipoContaBancaria; com.acception.cadastro.enums.TipoCusto; com.acception.cadastro.enums.Moeda; com.acception.cadastro.Responsavel; com.acception.cadastro.Financiador; com.acception.cadastro.enums.StatusProjeto; com.acception.cadastro.CentroCusto" %>
 
 <asset:stylesheet src="bootstrap-datepicker.css"/>
 <asset:javascript src="plugins/bootstrap/bootstrap-datepicker.min.js"/>
@@ -211,7 +211,7 @@
                                 <label for="orcamento.ano">Ano</label>
 
                                 <input type="number" min="0" id="orcamento.ano" name="orcamento.ano" class="form-control"
-                                       value="${centroCustoInstance.orcamento?.ano}" required>
+                                       value="${centroCustoInstance.orcamentoAtual?.ano}" required>
                             </div>
 
                             <div class="col-md-3 form-group">
@@ -227,7 +227,7 @@
 
                                 <g:select class="form-control" name="orcamento.moeda" from="${Moeda.values()}"
                                           keys="${Moeda.values()*.name()}"
-                                          value="${centroCustoInstance.orcamento?.moeda?.name()}" required="required"/>
+                                          value="${centroCustoInstance.orcamentoAtual?.moeda?.name()}" required="required"/>
 
                             </div>
 
@@ -255,6 +255,53 @@
                         <div id="itensOrcamentarios"></div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <h2>Conta Bancária</h2>
+    <section>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label>Banco</label>
+                <g:select class="form-control" name="contaBancaria.banco.id" from="${com.acception.cadastro.Banco.list()}"
+                          required="required" noSelection="['': 'Selecione um banco...']" optionKey="id" value="${centroCustoInstance.contaBancaria?.banco?.id}"/>
+            </div>
+
+            <div class="col-md-6 form-group">
+                <label>Tipo Conta</label>
+                <g:select class="form-control" name="contaBancaria.tipoConta" from="${TipoContaBancaria.values()}"
+                          required="required" noSelection="['': 'Selecione um tipo...']" keys="${TipoContaBancaria.values()*.name()}"
+                          optionValue="nome" value="${centroCustoInstance.contaBancaria?.tipoConta?.name()}"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label>Agência</label>
+                <g:field type="number" name="contaBancaria.agencia" class="form-control" required="required" value="${centroCustoInstance.contaBancaria?.agencia}"/>
+            </div>
+
+            <div class="col-md-2 form-group">
+                <label>Dígito Agência</label>
+                <g:field type="text" maxlength="2" name="contaBancaria.dvAgencia" class="form-control" required="required" value="${centroCustoInstance.contaBancaria?.dvAgencia}"/>
+            </div>
+
+            <div class="col-md-4 form-group">
+                <label>Conta</label>
+                <g:field type="number" name="contaBancaria.conta" class="form-control" required="required" value="${centroCustoInstance.contaBancaria?.conta}"/>
+            </div>
+
+            <div class="col-md-2 form-group">
+                <label>Dígito Conta</label>
+                <g:field type="text" maxlength="2" name="contaBancaria.dvConta" class="form-control" required="required" value="${centroCustoInstance.contaBancaria?.dvConta}"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label>Saldo</label>
+                <g:textField name="contaBancaria.saldo" class="form-control currency" required="required" value="${centroCustoInstance.contaBancaria?.saldo}"/>
             </div>
         </div>
     </section>
@@ -301,20 +348,20 @@
 <script src="${assetPath(src: 'WizardInitCentroCusto.js')}"></script>
 
 <script>
-    var atualizarMoneyInputComValor = function (valor, name) {
-        if (valor) {
-            $("[name='" + name + "']").maskMoney('mask', valor)
-        }
-    };
-
     var initializeMoneyMask = function () {
-        $(".currency").maskMoney({
+        var inputs = $('.currency');
+
+        inputs.maskMoney({
             prefix: 'R$ ',
             allowNegative: true,
             thousands: '.',
             decimal: ',',
             affixesStay: false
         });
+
+        inputs.each(function(){ // function to apply mask on load!
+            $(this).maskMoney('mask', Number($(this).val() || 0));
+        })
     };
 
     var initializeDatepicker = function () {
@@ -485,7 +532,7 @@
             url: '${createLink(action: 'getItensOrcamentarios',controller:'centroCusto')}',
             type: 'POST',
             data: {
-                idOrcamento: '${centroCustoInstance.orcamento?.id}'
+                idOrcamento: '${centroCustoInstance.orcamentoAtual?.id}'
             },
             complete: function (result) {
                 if (result.responseText !== '{}') {
@@ -620,7 +667,7 @@
             url: '${createLink(action: 'getItensOrcamentarios',controller:'centroCusto')}',
             type: 'POST',
             data: {
-                idOrcamento: '${centroCustoInstance.orcamento?.id}'
+                idOrcamento: '${centroCustoInstance.orcamentoAtual?.id}'
             },
             complete: function (result) {
                 if (result.responseText !== '{}') {
@@ -647,10 +694,6 @@
         initializeTableItensOrcamentarios();
 
         initializeTableFuncionarios();
-
-        atualizarMoneyInputComValor(${centroCustoInstance.orcamento?.valorTotal ?: 0}, 'valorTotalOrcamento');
-
-        atualizarMoneyInputComValor(${centroCustoInstance.orcamento?.valorCambial ?: 0}, 'valorCambialOrcamento');
 
         $("#financiador").change(function () {
             var financiadorID_selected = $(this).find("option:selected")[0].value;

@@ -463,6 +463,7 @@
         }).on('changeDate', function (ev) {
             $(this).datepicker('hide');
         });
+
         $(".currency").maskMoney({
             prefix: 'R$ ',
             allowNegative: true,
@@ -470,6 +471,11 @@
             decimal: ',',
             affixesStay: false
         });
+
+        $(".currency").each(function(){ // function to apply mask on load!
+            $(this).maskMoney('mask', Number($(this).val() || 0));
+        });
+
         $('.percent').mask('##0,00%', {reverse: true});
     });
 </script>

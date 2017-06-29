@@ -15,9 +15,11 @@ class CentroCusto {
     Anexo planoDeTrabalho
     Responsavel responsavel
     StatusProjeto statusProjeto
-    Orcamento orcamento
+    ContaBancaria contaBancaria
 
-    static hasMany = [atividades: Atividade, arquivos:Arquivo]
+    static hasMany = [atividades: Atividade,
+                      arquivos: Arquivo,
+                      orcamentos: Orcamento]
 
     static belongsTo = [financiador: Financiador]
 
@@ -29,7 +31,14 @@ class CentroCusto {
         arquivos nullable: true
         responsavel nullable: true
         statusProjeto nullable: true
-        orcamento nullable: true
+    }
+
+    def getOrcamentoOriginal() {
+        return orcamentos?.min { it.dateCreated }
+    }
+
+    def getOrcamentoAtual() {
+        return orcamentos?.max { it.dateCreated }
     }
 
     String toString() {
