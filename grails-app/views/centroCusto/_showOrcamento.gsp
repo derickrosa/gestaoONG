@@ -1,46 +1,57 @@
 <g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
 
-<g:if test="${centroCustoInstance.orcamento}">
+<g:if test="${orcamento}">
     <table class="table table-bordered centroCusto">
 
-        <g:if test="${centroCustoInstance?.orcamento?.ano}">
+        <g:if test="${orcamento?.ano}">
             <tr>
                 <th id="orcamento.ano-label" class="property-label" width="34%">Ano</th>
 
-                <td aria-labelledby="orcamento.ano-label">${centroCustoInstance.orcamento.ano}</td>
+                <td aria-labelledby="orcamento.ano-label">${orcamento.ano}</td>
 
             </tr>
         </g:if>
 
-        <g:if test="${centroCustoInstance?.orcamento?.valorTotal}">
+        <g:if test="${orcamento?.valorTotal}">
             <tr>
                 <th id="orcamento.valorTotal-label" class="property-label">Valor Total</th>
 
-                <td aria-labelledby="orcamento.valorTotal-label">${centroCustoInstance.orcamento.moeda.representacao} ${df.format(centroCustoInstance.orcamento.valorTotal)}</td>
+                <td aria-labelledby="orcamento.valorTotal-label">${orcamento.moeda.representacao} ${df.format(orcamento.valorTotal)}</td>
             </tr>
         </g:if>
 
-        <g:if test="${centroCustoInstance?.orcamento?.moeda}">
+        <g:if test="${orcamento?.moeda}">
             <tr>
                 <th id="orcamento.moeda-label" class="property-label">Moeda</th>
 
-                <td aria-labelledby="orcamento.moeda-label"><g:fieldValue bean="${centroCustoInstance.orcamento}"
+                <td aria-labelledby="orcamento.moeda-label"><g:fieldValue bean="${orcamento}"
                                                                           field="moeda"/></td>
             </tr>
         </g:if>
 
-        <g:if test="${centroCustoInstance?.orcamento?.valorCambial}">
+        <g:if test="${orcamento?.valorCambial}">
             <tr>
                 <th id="orcamento.valorCambial-label" class="property-label">Valor Cambial</th>
 
-                <td aria-labelledby="orcamento.valorCambial-label">R$ ${df.format(centroCustoInstance.orcamento.valorCambial)}</td>
+                <td aria-labelledby="orcamento.valorCambial-label">R$ ${df.format(orcamento.valorCambial)}</td>
             </tr>
         </g:if>
 
         <tr></tr>
     </table>
 
-    <g:if test="${centroCustoInstance.orcamento.itensOrcamentarios}">
+    %{--Caso seja orçamento atual, então devemos disponibilizar um botão para replanejar o orçamento--}%
+    <g:if test="${isOrcamentoAtual}">
+        <div class="row text-center">
+            <a href="${createLink(controller: 'orcamento', action: 'create', params: ['orcamentoAnterior': centroCustoInstance.orcamentoAtual.id])}" class="btn btn-default">
+                <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Replanejar Orçamento
+            </a>
+        </div>
+
+        <br>
+    </g:if>
+
+    <g:if test="${orcamento.itensOrcamentarios}">
         <div class="panel panel-success">
             <div class="panel-heading">
                 Itens Orçamentários
@@ -59,11 +70,11 @@
                     </thead>
 
                     <tbody>
-                    <g:each in="${centroCustoInstance.orcamento.itensOrcamentarios}" var="item">
+                    <g:each in="${orcamento.itensOrcamentarios}" var="item">
                         <tr>
                             <td style="text-align: center; vertical-align: middle;">${item.codigo}</td>
                             <td style="text-align: center; vertical-align: middle;">${item.nome}</td>
-                            <td style="text-align: center; vertical-align: middle;">${centroCustoInstance.orcamento.moeda.representacao} ${df.format(item.valor)}</td>
+                            <td style="text-align: center; vertical-align: middle;">${orcamento.moeda.representacao} ${df.format(item.valor)}</td>
                             <td style="text-align: center; vertical-align: middle;">${item.tipoCusto}</td>
                             <td>
                                 <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#funcionarios_${item.id}">

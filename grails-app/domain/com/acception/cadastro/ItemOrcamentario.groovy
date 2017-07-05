@@ -15,4 +15,8 @@ class ItemOrcamentario {
 
     static constraints = {
     }
+
+    String toString() {
+        "${nome} (${codigo})"
+    }
 }

@@ -132,11 +132,20 @@
 							</tr>
 						</g:if>
 
+						<g:if test="${funcionarioInstance?.setor}">
+							<tr>
+								<th id="setor-label" class="property-label"><g:message code="funcionario.funcao.label" default="Setor" /></th>
+
+								<td  aria-labelledby="setor-label"><g:fieldValue bean="${funcionarioInstance}" field="setor"/></td>
+
+							</tr>
+						</g:if>
+
 						<g:if test="${funcionarioInstance?.salario}">
 							<tr>
-								<th id="funcao-label" class="property-label"><g:message code="funcionario.funcao.label" default="Função" /></th>
+								<th id="funcao-label" class="property-label"><g:message code="funcionario.funcao.label" default="Salário Anual" /></th>
 
-								<td  aria-labelledby="funcao-label"><g:fieldValue bean="${funcionarioInstance}" field="funcao"/></td>
+								<td  aria-labelledby="funcao-label">R$ <g:fieldValue bean="${funcionarioInstance}" field="salario"/></td>
 
 							</tr>
 						</g:if>
@@ -168,10 +177,6 @@
 							</table>
 						</div>
 					</div>
-
-
-
-
 				</div>
 			</div>
 

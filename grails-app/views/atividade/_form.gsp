@@ -161,14 +161,6 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
         </div>
     </div>
 
-    %{--<div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'anexos', 'error')} ">
-        <label for="anexos">
-            <g:message code="atividade.anexos.label" default="Anexos"/>
-
-        </label>
-        <g:select name="anexos" from="${com.acception.cadastro.Anexo.list()}" multiple="multiple" optionKey="id" size="5" value="${atividadeInstance?.anexos*.id}" class="form-control"/>
-
-    </div>--}%
     <div class="row">
         <div class="col-md-6">
 
@@ -296,20 +288,6 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
         </div>
     </div>
 
-
-    <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'anexos', 'error')} ">
-        <label for="planoDeTrabalho">
-            <g:message code="centroCusto.planoDeTrabalho.label" default="Anexar Documentos"/>
-        </label>
-
-        %{--<input type="hidden" id="previousPlanoDeTrabalho" name="previousPlanoDeTrabalho"
-               value="${atividadeInstance?.anexos}">
-        <input type="hidden" id="numFilesUploaded" name="numFilesUploaded"
-               value="${atividadeInstance?.anexos}">--}%
-        <input type="file" id="planoDeTrabalho" name="documentFile">
-        <input type="file" id="planoDeTrabalho" name="documentFile1">
-        %{--<input type="file" id="planoDeTrabalho" name="planoDeTrabalho.2" value="">--}%
-    </div>
 </section>
 <script src="${assetPath(src: 'jquery.cookie-1.3.1.js')}"></script>
 <script src="${assetPath(src: 'jquery.steps.js')}"></script>
@@ -332,41 +310,6 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
             format: 'dd/mm/yyyy',
             language: 'pt-BR',
             autoclose: true
-        });
-    };
-
-    var initializeFileInput = function () {
-        $('#planoDeTrabalho').fileinput({
-            language: 'pt-BR',
-            showUpload: false,
-            maxFileCount: 1,
-            overwriteInitial: true,
-            previewFileType: 'text',
-            <g:if test="${atividadeInstance?.anexos}">
-            initialPreview: [
-                "${createLink(controller: 'anexo', action: 'download', id: "${centroCustoInstance?.planoDeTrabalho?.id}")}"
-            ],
-            initialPreviewAsData: true,
-            initialPreviewConfig: [
-                {
-                    type: "object",
-                    caption: "${centroCustoInstance?.planoDeTrabalho?.nome}",
-                }
-            ],
-            initialPreviewShowDelete: false,
-            </g:if>
-        });
-
-        $('#planoDeTrabalho').on('change', function (event) {
-            var numFilesUploaded = $('#numFilesUploaded');
-
-            numFilesUploaded.val(1);
-        });
-
-        $('.fileinput-remove-button').on('click', function () {
-            var numFilesUploaded = $('#numFilesUploaded');
-
-            numFilesUploaded.val(0);
         });
     };
 

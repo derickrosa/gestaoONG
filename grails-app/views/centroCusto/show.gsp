@@ -5,6 +5,9 @@
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'centroCusto.label', default: 'Centro de Custo')}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
+    <asset:stylesheet src="uploadfile.css"/>
+    <asset:javascript src="jquery.uploadfile.min.js"/>
+    <g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
 </head>
 
 <body>
@@ -41,7 +44,10 @@
                 <li><a href="#orcamento" data-toggle="tab" aria-expanded="true">Orçamento</a>
                 </li>
 
-                <li><a href="#orcamento" data-toggle="tab" aria-expanded="true">Atividade</a>
+                <li><a href="#pessoal" data-toggle="tab" aria-expanded="true">Pessoal</a>
+                </li>
+
+                <li><a href="#contaBancaria" data-toggle="tab" aria-expanded="true">Conta Bancária</a>
                 </li>
 
             </ul>
@@ -52,15 +58,60 @@
                 </div>
 
                 <div class="tab-pane fade in" id="orcamento">
-                    <g:render template="showOrcamento" model="[centroCustoInstance: centroCustoInstance]"/>
+                    <g:if test="${centroCustoInstance.orcamentos?.size() > 1}">
+                        <ul class="nav nav-pills">
+                            <li class="active"><a href="#orcamentoAtual" data-toggle="tab" aria-expanded="true">Orçamento Atual</a></li>
+                            <li><a href="#orcamentoOriginal" data-toggle="tab" aria-expanded="true">Orçamento Original</a></li>
+                            <li><a href="#historicoOrcamentos" data-toggle="tab" aria-expanded="true">Histórico de Orçamentos</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="orcamentoAtual">
+                                <g:render template="showOrcamento" model="[orcamento: centroCustoInstance.orcamentoAtual, isOrcamentoAtual: true]"/>
+                            </div>
+
+                            <div class="tab-pane fade in" id="orcamentoOriginal">
+                                <g:render template="showOrcamento" model="[orcamento: centroCustoInstance.orcamentoOriginal]"/>
+                            </div>
+
+                            <div class="tab-pane fade in" id="historicoOrcamentos">
+                                <g:render template="historicoOrcamentos" model="[listaOrcamentos: centroCustoInstance.orcamentos]"/>
+                            </div>
+                        </div>
+                    </g:if>
+                    <g:else>
+                        <g:render template="showOrcamento" model="[orcamento: centroCustoInstance.orcamentoAtual, isOrcamentoAtual: true]"/>
+                    </g:else>
+
                 </div>
 
-                <div class="tab-pane fade in" id="atividade">
+                <div class="tab-pane fade in" id="pessoal">
+                    <g:render template="showPessoal" model="[centroCustoInstance: centroCustoInstance]"/>
+                </div>
 
+                <div class="tab-pane fade in" id="contaBancaria">
+                    <g:render template="showContaBancaria" model="[centroCustoInstance: centroCustoInstance]"/>
                 </div>
             </div>
 
             <br>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            <g:message code="projeto.informacoesGerais.label" default="Arquivos"/>
+                        </div>
+
+                        <div class="panel-body">
+                            <div id="fileuploader">Upload</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
             <g:form url="[resource: centroCustoInstance, action: 'delete']" method="DELETE">
                 <fieldset class="buttons">
@@ -78,5 +129,56 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function()
+    {
+        $("#fileuploader").uploadFile({
+            url:"${createLink(action: 'carregarArquivo', controller: 'centroCusto',id: "${centroCustoInstance.id}")}",
+            fileName:"file",
+            showDelete: true,
+            showDownload:true,
+            showPreview:true,
+            previewHeight: "200px",
+            previewWidth: "200px",
+            statusBarWidth:'250px',
+            onLoad:function(obj)
+            {
+                $.ajax({
+                    cache: false,
+                    url: "${createLink(action:'getFiles',id: "${centroCustoInstance.id}")}",
+                    dataType: "json",
+                    success: function(data)
+                    {
+                        for(var i=0;i<data.length;i++)
+                        {
+                            obj.createProgress(data[i].name,data[i].path,data[i].size,data[i].id);
+                        }
+                    }
+                });
+            },
+            downloadCallback:function(id,pd)
+            {
+                location.href = "${createLink(action: 'baixarArquivo', controller: 'centroCusto')}?idArquivo=" + id
+            },
+            deleteCallback: function (id, pd) {
+                $.ajax({
+                    url: "${createLink(action:'deletarArquivo',id: "${centroCustoInstance.id}")}",
+                    dataType: "json",
+                    data: {idArquivo:id},
+                    success: function(data)
+                    {
+                        console.log('Documento removido...')
+                    }
+                });
+            },
+        });
+
+        var showHistorico = ${params.showOrcamento ?: false};
+
+        if (showHistorico) {
+            $('a[href="#orcamento"]').tab('show')
+        }
+    });
+</script>
 </body>
 </html>

@@ -201,4 +201,14 @@ class Util {
         while (t.size() < len) t = c.toString() + t
         t
     }
+
+    static moneyMask(value, String moeda = 'R$') {
+        def df = new DecimalFormat('###,##0.00')
+
+        if (value == null) {
+            return null;
+        }
+
+        return "${moeda} ${df.format(value)} "
+    }
 }
