@@ -370,6 +370,24 @@
                 </ul>
             </li>
 
+            <li class="panel ">
+                <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle"
+                   data-target="#component-finac">
+                    <i class="icon-tasks"></i> Financeiro
+
+                    <span class="pull-right">
+                        <i class="icon-angle-left"></i>
+                    </span>
+                </a>
+                <ul class="collapse" id="component-finac">
+
+                    <li class=""><a href="tabs_panels.html">Orçamento</a></li>
+                    <li class=""><a href="notifications.html">Despesas</a></li>
+                    <li class=""><a href="more_notifications.html">Lançamentos</a></li>
+
+                </ul>
+            </li>
+
             <sec:ifAnyGranted roles="ROLE_SUPORTE">
                 <li class="panel ">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle"

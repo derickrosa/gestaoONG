@@ -17,7 +17,7 @@ class CentroCusto {
     StatusProjeto statusProjeto
     Orcamento orcamento
 
-    static hasMany = [atividades: Atividade]
+    static hasMany = [atividades: Atividade, despesas:Despesa]
 
     static belongsTo = [financiador: Financiador]
 

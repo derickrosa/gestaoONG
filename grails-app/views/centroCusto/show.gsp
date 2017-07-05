@@ -41,6 +41,9 @@
                 <li><a href="#orcamento" data-toggle="tab" aria-expanded="true">Orçamento</a>
                 </li>
 
+                <li><a href="#orcamento" data-toggle="tab" aria-expanded="true">Atividade</a>
+                </li>
+
             </ul>
 
             <div class="tab-content">
@@ -50,6 +53,10 @@
 
                 <div class="tab-pane fade in" id="orcamento">
                     <g:render template="showOrcamento" model="[centroCustoInstance: centroCustoInstance]"/>
+                </div>
+
+                <div class="tab-pane fade in" id="atividade">
+
                 </div>
             </div>
 
