@@ -141,6 +141,8 @@ class FinanciadorController {
             params.participante.cnpj = Util.cnpjToRaw(params.participante.cnpj)
         }
 
+        financiadorInstance.participante.properties = params.participante
+
         def participante = financiadorInstance.participante
         participante.save(failOnError:true, flush:true)
 
