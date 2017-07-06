@@ -1,6 +1,6 @@
 package com.acception.cadastro
 
-import com.acception.cadastro.enums.Lancamento
+import com.acception.cadastro.Lancamento
 import com.acception.cadastro.enums.TipoDespesa
 
 class Despesa {

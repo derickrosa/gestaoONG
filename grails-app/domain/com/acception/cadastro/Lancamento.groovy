@@ -1,8 +1,11 @@
-package com.acception.cadastro.enums
+package com.acception.cadastro
 
 import com.acception.cadastro.Despesa
 import com.acception.cadastro.Pagamento
 import com.acception.cadastro.TipoAjuste
+import com.acception.cadastro.enums.StatusLancamento
+import com.acception.cadastro.enums.TipoLancamento
+
 
 class Lancamento {
 
@@ -18,9 +21,6 @@ class Lancamento {
     String descricao
     String codigoLancamento
 
-
-
-    //LancamentoConta lancamentoOriginal
 
     Date dataPagamentoPrevista
     Date dataPagamento
@@ -48,15 +48,11 @@ class Lancamento {
     }
 
 
-
     static mapping = {
         table 'lancamento';
         id generator: 'sequence', params: [sequence: 'lancamento_seq']
         statusLancamento index: 'idx_lancto_statusLanc'
     }
-
-
-
 
     String toString() {
         def df=new java.text.SimpleDateFormat('dd/MM/yyyy')
