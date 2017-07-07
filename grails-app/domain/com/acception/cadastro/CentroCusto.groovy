@@ -17,7 +17,6 @@ class CentroCusto {
     StatusProjeto statusProjeto
     ContaBancaria contaBancaria
 
-
     static hasMany = [atividades: Atividade,
                       arquivos: Arquivo,
                       despesas:Despesa,

@@ -6,7 +6,7 @@ package com.acception.cadastro.enums
 enum TipoDespesa {
     ATIVIDADE('Atividade'),
     PESSOAL('Pessoal'),
-    ADIANTAMENTO('Pessoal'),
+    ADIANTAMENTO('Adiantamento'),
     CUSTO_ADMINISTRATIVO('Custo Administrativo')
 
 
@@ -17,7 +17,7 @@ enum TipoDespesa {
     }
 
     static def list() {
-        [ATIVIDADE,PESSOAL,CUSTO_ADMINISTRATIVO]
+        [ATIVIDADE, PESSOAL, ADIANTAMENTO, CUSTO_ADMINISTRATIVO]
     }
 
 }
