@@ -44,6 +44,9 @@
                 <li><a href="#orcamento" data-toggle="tab" aria-expanded="true">Orçamento</a>
                 </li>
 
+                <li><a href="#atividade" data-toggle="tab" aria-expanded="true">Atividade</a>
+                </li>
+
                 <li><a href="#pessoal" data-toggle="tab" aria-expanded="true">Pessoal</a>
                 </li>
 
@@ -85,6 +88,10 @@
 
                 </div>
 
+                <div class="tab-pane fade in" id="atividade">
+                    <g:render template="showAtividades" model="[centroCustoInstance: centroCustoInstance]"/>
+                </div>
+
                 <div class="tab-pane fade in" id="pessoal">
                     <g:render template="showPessoal" model="[centroCustoInstance: centroCustoInstance]"/>
                 </div>
@@ -97,21 +104,7 @@
             <br>
 
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
 
-                        <div class="panel-heading">
-                            <g:message code="projeto.informacoesGerais.label" default="Arquivos"/>
-                        </div>
-
-                        <div class="panel-body">
-                            <div id="fileuploader">Upload</div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
 
             <g:form url="[resource: centroCustoInstance, action: 'delete']" method="DELETE">
                 <fieldset class="buttons">

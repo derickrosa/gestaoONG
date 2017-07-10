@@ -64,7 +64,7 @@
         </tr>
     </g:if>
 
-    <g:if test="${centroCustoInstance?.planoDeTrabalho}">
+    %{--<g:if test="${centroCustoInstance?.planoDeTrabalho}">
         <tr>
             <th id="planoDeTrabalho-label" class="property-label"><g:message
                     code="centroCusto.planoDeTrabalho.label" default="Plano De Trabalho"/></th>
@@ -77,7 +77,7 @@
             </td>
 
         </tr>
-    </g:if>
+    </g:if>--}%
 
     <g:if test="${centroCustoInstance?.statusProjeto}">
         <tr>
@@ -112,3 +112,19 @@
         </tr>
     </g:if>
 </table>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <g:message code="projeto.informacoesGerais.label" default="Arquivos"/>
+            </div>
+
+            <div class="panel-body">
+                <div id="fileuploader">Upload</div>
+            </div>
+
+        </div>
+    </div>
+</div>

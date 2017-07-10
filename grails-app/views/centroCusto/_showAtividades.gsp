@@ -1,0 +1,81 @@
+<div id="list-atividade" class="body" role="main">
+    <g:if test="${centroCustoInstance.atividades}">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                Atividades
+            </div>
+
+            <div class="panel-body">
+                <table class="table table-hover text-center" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-center">Codigo</th>
+                        <th class="text-center">Nome</th>
+                        <th class="text-center">Tipo</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <g:each in="${centroCustoInstance.atividades}" var="atividadeInstance">
+                        <tr>
+                          <td>
+                        <g:if test="${atividadeInstance.subAtividades}">
+                                <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#funcionarios_${atividadeInstance.id}">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                        </g:if>
+                        <g:else>
+                        </g:else>
+                            </td>
+                    </td>
+                            <td style="text-align: center; vertical-align: middle;">${atividadeInstance.codigo}</td>
+                            <td style="text-align: center; vertical-align: middle;">${atividadeInstance.nome}</td>
+                            <td style="text-align: center; vertical-align: middle;">${atividadeInstance.tipo}</td>
+                            <td style="text-align: center; vertical-align: middle;">${atividadeInstance.status}</td>
+
+                        </tr>
+
+                        <tr id="funcionarios_${atividadeInstance.id}" class="collapse">
+                            <td colspan="5">
+
+                                <g:if test="${atividadeInstance.subAtividades}">
+                                    <table class="table table-hover table-bordered text-center">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center" width="50%">Código</th>
+                                            <th class="text-center" width="50%">Nome</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <g:each in="${atividadeInstance.subAtividades}" var="s">
+                                            <tr>
+                                                <td>${s.codigo}</td>
+                                                <td>${s.nome}</td>
+                                            </tr>
+                                        </g:each>
+
+
+                                        </tbody>
+                                    </table>
+                                </g:if>
+                                <g:else>
+                                    Não existem subatividades registradas.
+                                </g:else>
+
+                            </td>
+
+                        </tr>
+
+                    </g:each>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </g:if>
+
+    <div class="pagination">
+        <g:paginate total="${atividadeInstanceCount ?: 0}"/>
+    </div>
+</div>

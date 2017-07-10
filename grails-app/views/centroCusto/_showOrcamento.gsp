@@ -77,10 +77,15 @@
                             <td style="text-align: center; vertical-align: middle;">${orcamento.moeda.representacao} ${df.format(item.valor)}</td>
                             <td style="text-align: center; vertical-align: middle;">${item.tipoCusto}</td>
                             <td>
+                        <g:if test="${item.salariosFuncionarios}">
                                 <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#funcionarios_${item.id}">
                                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Ver Funcionários
                             </button></td>
                             %{--<td>${item.salariosFuncionarios}</td>--}%
+                            </g:if>
+                            <g:else>
+                                Não se Aplica
+                            </g:else>
                         </tr>
 
                         <tr id="funcionarios_${item.id}" class="collapse">
