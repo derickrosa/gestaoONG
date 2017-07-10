@@ -382,7 +382,7 @@
                 <ul class="collapse" id="component-finac">
 
                     <li class=""><a href="tabs_panels.html">Orçamento</a></li>
-                    <li class=""><a href="notifications.html">Despesas</a></li>
+                    <li class=""><g:link controller="despesa">Despesas</g:link></li>
                     <li class=""><a href="more_notifications.html">Lançamentos</a></li>
 
                 </ul>

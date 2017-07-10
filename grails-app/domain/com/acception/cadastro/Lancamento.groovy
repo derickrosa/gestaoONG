@@ -56,7 +56,7 @@ class Lancamento {
 
     String toString() {
         def df=new java.text.SimpleDateFormat('dd/MM/yyyy')
-        "${this.tipoLancamento} #${this.id} ST: ${this.statusLancamento} VL: ${this.valor} PC: ${this.parcela} DT.P: ${df.format(this.dataPagamentoPrevista)}"
+        "${this.tipoLancamento} #${this.id} ST: ${this.statusLancamento} VL: ${this.valor} PC: ${this.parcela} DE: ${df.format(this.dataEmissao)}"
     }
 
 

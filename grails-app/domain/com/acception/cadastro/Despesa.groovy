@@ -8,12 +8,11 @@ class Despesa {
     TipoDespesa tipoDespesa
     Fornecedor fornecedor
     Atividade atividade
-
-
     Double valor
     Date data
     String descricao
     Funcionario funcionario
+    Boolean parcelado = false
 
     static hasMany = [lancamentos: Lancamento]
     static belongsTo = [centroCusto: CentroCusto]

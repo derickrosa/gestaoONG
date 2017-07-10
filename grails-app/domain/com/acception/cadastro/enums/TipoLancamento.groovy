@@ -7,11 +7,11 @@ public enum TipoLancamento {
     IOF_DEVIDO('IOF Devido'),
     DESCONTO('Desconto'),
     JUROS('Juros'),
-    PA('Pagamento')
-
+    PAGAMENTO_ADIANTADO('Pagamento Adiantado')
 
     String nome
     String descricao
+
     TipoLancamento(nome,descricao=null) {
         this.nome=nome
         if (!descricao)
@@ -20,7 +20,7 @@ public enum TipoLancamento {
     }
 
     static def list() {
-        [PAGAR,RECEBER,TARIFA,IOF_DEVIDO,DESCONTO,JUROS,PA]
+        [PAGAR, RECEBER, TARIFA, IOF_DEVIDO, DESCONTO, JUROS, PAGAMENTO_ADIANTADO]
     }
 
 }

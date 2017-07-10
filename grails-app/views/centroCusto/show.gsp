@@ -53,6 +53,9 @@
                 <li><a href="#contaBancaria" data-toggle="tab" aria-expanded="true">Conta Bancária</a>
                 </li>
 
+                <li><a href="#despesas" data-toggle="tab" aria-expanded="true">Despesas</a>
+                </li>
+
             </ul>
 
             <div class="tab-content">
@@ -98,6 +101,10 @@
 
                 <div class="tab-pane fade in" id="contaBancaria">
                     <g:render template="showContaBancaria" model="[centroCustoInstance: centroCustoInstance]"/>
+                </div>
+
+                <div class="tab-pane fade in" id="despesas">
+                    <g:render template="showDespesas" model="[centroCustoInstance: centroCustoInstance]"/>
                 </div>
             </div>
 
