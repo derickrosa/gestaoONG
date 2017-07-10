@@ -2,6 +2,7 @@ package com.acception.cadastro
 
 import com.acception.cadastro.enums.TipoDespesa
 import com.acception.cadastro.enums.TipoLancamento
+import com.acception.util.Util
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -31,6 +32,8 @@ class DespesaController {
             return
         }
 
+        despesaInstance.save flush: true
+
         _updateDespesa(despesaInstance, params)
 
         if (despesaInstance.hasErrors()) {
@@ -50,11 +53,14 @@ class DespesaController {
     }
 
     def _updateDespesa(Despesa despesaInstance, params) {
-        def numParcelas = params.numParcelas ? params.numParcelas.toInteger() : 1
-        def valorParcela = despesaInstance.valor / numParcelas
-        def tipoLancamento = despesaInstance.tipoDespesa == TipoDespesa.ADIANTAMENTO ? TipoLancamento.PAGAMENTO_ADIANTADO : TipoLancamento.PAGAR
+        log.debug(despesaInstance.valor)
 
-        log.debug("Num Parcelas: ${numParcelas}")
+        def numParcelas = params.numParcelas ? params.numParcelas.toInteger() : 1
+        def valorParcela = Util.parse(params.valor) / numParcelas
+
+        log.debug("Valor Parcela: " + valorParcela)
+
+        def tipoLancamento = despesaInstance.tipoDespesa == TipoDespesa.ADIANTAMENTO ? TipoLancamento.PAGAMENTO_ADIANTADO : TipoLancamento.PAGAR
 
         def lancamentosAnteriores = despesaInstance.lancamentos.collect()
 
@@ -63,12 +69,16 @@ class DespesaController {
         1.upto(numParcelas) {
             def numParcela = it
 
-            def lancamento = Lancamento.findOrCreateByDespesaAndValorAndParcela(despesaInstance, valorParcela, numParcela)
+            def lancamento = lancamentosAnteriores.find {
+                it.despesa == despesaInstance && it.valor == valorParcela.toDouble() && it.parcela == numParcela
+            } ?: new Lancamento(valor: valorParcela, parcela: numParcela)
+
             lancamento.dataEmissao = despesaInstance.data
             lancamento.tipoLancamento = tipoLancamento
             lancamento.descricao = despesaInstance.descricao
             lancamento.valorBruto = valorParcela
-            lancamento.save()
+            lancamento.despesa = despesaInstance
+            lancamento.save(flush: true)
 
             listaAtualizadaLancamentos << lancamento
         }
@@ -113,6 +123,10 @@ class DespesaController {
 
     @Transactional
     def delete(Despesa despesaInstance) {
+
+        for (lancamento in despesaInstance.lancamentos) {
+            lancamento.delete()
+        }
 
         if (despesaInstance == null) {
             notFound()
