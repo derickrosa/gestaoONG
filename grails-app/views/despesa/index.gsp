@@ -32,13 +32,6 @@
             </g:if>
             <table class="table table-bordered table-striped text-center">
                 <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Valor</th>
-                    </tr>
-                </thead>
-
-                <thead>
                 <tr>
 
                     <th class="text-center">Descrição</th>

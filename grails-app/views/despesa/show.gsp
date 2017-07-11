@@ -40,6 +40,38 @@
 
             <table class="table table-bordered despesa">
 
+                <g:if test="${despesaInstance?.valor}">
+                    <tr>
+                        <th id="valor-label" class="property-label"><g:message code="despesa.valor.label"
+                                                                               default="Valor"/></th>
+
+                        <td aria-labelledby="valor-label"><g:fieldValue bean="${despesaInstance}" field="valor"/></td>
+
+                    </tr>
+                </g:if>
+
+                <g:if test="${despesaInstance?.descricao}">
+                    <tr>
+                        <th id="descricao-label" class="property-label"><g:message code="despesa.descricao.label"
+                                                                                   default="Descrição"/></th>
+
+                        <td aria-labelledby="descricao-label"><g:fieldValue bean="${despesaInstance}"
+                                                                            field="descricao"/></td>
+
+                    </tr>
+                </g:if>
+
+                <g:if test="${despesaInstance?.tipoDespesa}">
+                    <tr>
+                        <th id="tipoDespesa-label" class="property-label"><g:message code="despesa.tipoDespesa.label"
+                                                                                     default="Tipo Despesa"/></th>
+
+                        <td aria-labelledby="tipoDespesa-label"><g:fieldValue bean="${despesaInstance.tipoDespesa}"
+                                                                              field="nome"/></td>
+
+                    </tr>
+                </g:if>
+
                 <g:if test="${despesaInstance?.fornecedor}">
                     <tr>
                         <th id="fornecedor-label" class="property-label"><g:message code="despesa.fornecedor.label"
@@ -65,7 +97,7 @@
                 <g:if test="${despesaInstance?.funcionario}">
                     <tr>
                         <th id="funcionario-label" class="property-label"><g:message code="despesa.funcionario.label"
-                                                                                     default="Funcionario"/></th>
+                                                                                     default="Funcionário"/></th>
 
                         <td aria-labelledby="funcionario-label"><g:link controller="funcionario" action="show"
                                                                         id="${despesaInstance?.funcionario?.id}">${despesaInstance?.funcionario?.encodeAsHTML()}</g:link></td>
@@ -76,7 +108,7 @@
                 <g:if test="${despesaInstance?.centroCusto}">
                     <tr>
                         <th id="centroCusto-label" class="property-label"><g:message code="despesa.centroCusto.label"
-                                                                                     default="Centro Custo"/></th>
+                                                                                     default="Centro de Custo"/></th>
 
                         <td aria-labelledby="centroCusto-label"><g:link controller="centroCusto" action="show"
                                                                         id="${despesaInstance?.centroCusto?.id}">${despesaInstance?.centroCusto?.encodeAsHTML()}</g:link></td>
@@ -89,18 +121,7 @@
                         <th id="data-label" class="property-label"><g:message code="despesa.data.label"
                                                                               default="Data"/></th>
 
-                        <td aria-labelledby="data-label"><g:formatDate date="${despesaInstance?.data}"/></td>
-
-                    </tr>
-                </g:if>
-
-                <g:if test="${despesaInstance?.descricao}">
-                    <tr>
-                        <th id="descricao-label" class="property-label"><g:message code="despesa.descricao.label"
-                                                                                   default="Descricao"/></th>
-
-                        <td aria-labelledby="descricao-label"><g:fieldValue bean="${despesaInstance}"
-                                                                            field="descricao"/></td>
+                        <td aria-labelledby="data-label"><g:formatDate date="${despesaInstance?.data}" format="dd/MM/yyyy"/></td>
 
                     </tr>
                 </g:if>
@@ -112,27 +133,6 @@
 
                         <td aria-labelledby="parcelado-label"><g:formatBoolean
                                 boolean="${despesaInstance?.parcelado}"/></td>
-
-                    </tr>
-                </g:if>
-
-                <g:if test="${despesaInstance?.tipoDespesa}">
-                    <tr>
-                        <th id="tipoDespesa-label" class="property-label"><g:message code="despesa.tipoDespesa.label"
-                                                                                     default="Tipo Despesa"/></th>
-
-                        <td aria-labelledby="tipoDespesa-label"><g:fieldValue bean="${despesaInstance}"
-                                                                              field="tipoDespesa"/></td>
-
-                    </tr>
-                </g:if>
-
-                <g:if test="${despesaInstance?.valor}">
-                    <tr>
-                        <th id="valor-label" class="property-label"><g:message code="despesa.valor.label"
-                                                                               default="Valor"/></th>
-
-                        <td aria-labelledby="valor-label"><g:fieldValue bean="${despesaInstance}" field="valor"/></td>
 
                     </tr>
                 </g:if>
@@ -160,7 +160,7 @@
                             <g:each in="${despesaInstance?.lancamentos?.sort { it.parcela }}" var="l">
                                 <tr>
                                     <td>${l.parcela}</td>
-                                    <td>R$ ${df.format(l.valor)}</td>
+                                    <td>R$ ${df.format(l.valor ?: 0)}</td>
                                     <td><g:formatDate date="${l.dataEmissao}" format="dd/MM/yyyy"/></td>
                                     <td>${l.tipoLancamento?.nome}</td>
                                     <td>${l.statusLancamento?.nome}</td>

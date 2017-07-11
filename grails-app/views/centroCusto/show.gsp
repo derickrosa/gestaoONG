@@ -50,12 +50,8 @@
                 <li><a href="#pessoal" data-toggle="tab" aria-expanded="true">Pessoal</a>
                 </li>
 
-                <li><a href="#contaBancaria" data-toggle="tab" aria-expanded="true">Conta Bancária</a>
+                <li><a href="#financeiro" data-toggle="tab" aria-expanded="true">Financeiro</a>
                 </li>
-
-                <li><a href="#despesas" data-toggle="tab" aria-expanded="true">Despesas</a>
-                </li>
-
             </ul>
 
             <div class="tab-content">
@@ -99,12 +95,8 @@
                     <g:render template="showPessoal" model="[centroCustoInstance: centroCustoInstance]"/>
                 </div>
 
-                <div class="tab-pane fade in" id="contaBancaria">
-                    <g:render template="showContaBancaria" model="[centroCustoInstance: centroCustoInstance]"/>
-                </div>
-
-                <div class="tab-pane fade in" id="despesas">
-                    <g:render template="showDespesas" model="[centroCustoInstance: centroCustoInstance]"/>
+                <div class="tab-pane fade in" id="financeiro">
+                    <g:render template="showFinanceiro" model="[centroCustoInstance: centroCustoInstance]"/>
                 </div>
             </div>
 
