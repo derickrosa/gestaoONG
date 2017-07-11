@@ -68,7 +68,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 </style>
 <section>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'nome', 'error')} ">
                 <label for="nome">
                     <g:message code="atividade.nome.label" default="Nome"/>
@@ -78,24 +78,9 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group ${hasErrors(bean: atividadeInstance, field: 'centroCusto', 'error')} ">
-                <label class="control-label" for="atividade">
-                    <g:message code="atividade.centroCusto.label" default="Centro Custo"/>
-
-                </label>
-                <g:select class="form-control" id="centroCusto" name="centroCusto.id"
-                          from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id"
-                          value="${atividadeInstance?.id}" noSelection="['': 'Selecione Centro de Custo...']"/>
-
-            </div>
-        </div>
-
-
-        <div class="col-md-6">
+        <g:hiddenField name="id" value="${params?.id}"/>
+        <div class="col-md-4">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'linhas', 'error')} ">
                 <label for="linhas">
                     <g:message code="atividade.linhas.label" default="Linhas de Ação"/>

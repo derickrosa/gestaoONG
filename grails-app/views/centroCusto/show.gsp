@@ -92,7 +92,7 @@
                 </div>
 
                 <div class="tab-pane fade in" id="atividade">
-                    <g:render template="showAtividades" model="[centroCustoInstance: centroCustoInstance]"/>
+                    <g:render template="listAtividades" model="[centroCustoInstance: centroCustoInstance]"/>
                 </div>
 
                 <div class="tab-pane fade in" id="pessoal">
