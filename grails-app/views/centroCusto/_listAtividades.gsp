@@ -30,7 +30,12 @@
                         </g:else>
                             </td>
                     </td>
-                            <td style="text-align: center; vertical-align: middle;">${atividadeInstance.codigo}</td>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <g:link controller="atividade" action="show"
+                                    id="${atividadeInstance.id}">
+                                    ${atividadeInstance.codigo}
+                                </g:link>
+                            </td>
                             <td style="text-align: center; vertical-align: middle;">${atividadeInstance.nome}</td>
                             <td style="text-align: center; vertical-align: middle;">${atividadeInstance.tipo}</td>
                             <td style="text-align: center; vertical-align: middle;">${atividadeInstance.status}</td>
@@ -74,6 +79,18 @@
             </div>
         </div>
     </g:if>
+    <g:else>
+        <div class="well text-center">Sem registros!</div>
+    </g:else>
+
+    <br>
+
+    <div class="row text-center">
+        <g:link controller="atividade" action="create" params="${[centroCustoInstance:centroCustoInstance?.id]}" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span>
+            Cadastrar Atividade
+        </g:link>
+    </div>
 
     <div class="pagination">
         <g:paginate total="${atividadeInstanceCount ?: 0}"/>

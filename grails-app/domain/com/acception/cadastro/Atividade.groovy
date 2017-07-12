@@ -32,7 +32,7 @@ class Atividade {
         descricao nullable: true
         despesas nullable: true
         status nullable: true
-        centroCusto nullable: true
+        centroCusto nullable: false
         tipo nullable: true
         inicio nullable: true
         termino nullable: true

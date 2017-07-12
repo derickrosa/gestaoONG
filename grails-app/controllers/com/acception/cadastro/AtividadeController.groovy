@@ -20,8 +20,25 @@ class AtividadeController {
     }
 
     def create() {
-        respond new Atividade(params)
+        log.debug("Ct Custo: ${params.centroCustoInstance}")
+        def centroCustoInstance
+        def atividadeInstance = Atividade.get(params.atividade.toLong())
+        if (params.atividade){
+            centroCustoInstance = atividadeInstance.centroCusto
+        } else {
+            centroCustoInstance = CentroCusto.get(params.centroCustoInstance.toLong())
+        }
+
+        if(params.atividade)
+            [atividadeInstance: new Atividade(params), atividade: atividadeInstance, centroCustoInstance: centroCustoInstance]
+        else if (params.centroCustoInstance){
+            log.debug("Enviando CC")
+            [atividadeInstance: new Atividade(params), centroCustoInstance: centroCustoInstance]
+        }
+        else
+            respond new Atividade(params)
     }
+
 
     @Transactional
     def save(Atividade atividadeInstance) {
@@ -31,8 +48,11 @@ class AtividadeController {
             return
         }
 
+        log.debug("Paramentro: ${params.centroCusto}")
+
         if (params.centroCusto.id) {
             def cc = CentroCusto.get(params.centroCusto.id as Long)
+            log.debug(" Add CC Nome: ${cc.nome}")
             cc.addToAtividades(atividadeInstance)
             cc.save flush: true, failOnError: true
         }
@@ -63,13 +83,19 @@ class AtividadeController {
 
         atividadeInstance.save flush: true, failOnError: true
 
-        request.withFormat {
+        if(atividadeInstance.atividade){
+            redirect(controller:"atividade", action: "show", id: atividadeInstance.atividade.id)
+        } else {
+            redirect(controller:"centroCusto", action: "show", id: atividadeInstance.centroCusto.id)
+        }
+
+        /*request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'atividade.label', default: 'Atividade'), atividadeInstance.id])
                 redirect atividadeInstance
             }
             '*' { respond atividadeInstance, [status: CREATED] }
-        }
+        }*/
     }
 
     def edit(Atividade atividadeInstance) {

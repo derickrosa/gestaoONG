@@ -29,8 +29,8 @@
 <br>
 
 <div class="row text-center">
-    <g:link action="create" params="${atividadeInstance?.centroCusto?.id}" class="btn btn-default btn-sm">
-        <span class="glyphicon glyphicon-floppy-remove"></span>
+    <g:link action="create" params="${[atividade:atividadeInstance.id]}" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-plus"></span>
         Nova Subatividade
     </g:link>
 </div>

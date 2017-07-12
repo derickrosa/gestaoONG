@@ -79,7 +79,10 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
             </div>
         </div>
 
-        <g:hiddenField name="id" value="${params?.id}"/>
+        <g:hiddenField name="centroCusto.id" value="${centroCustoInstance?.id}"/>
+        <g:hiddenField name="atividade.id" value="${atividade?.id}"/>
+
+
         <div class="col-md-4">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'linhas', 'error')} ">
                 <label for="linhas">
