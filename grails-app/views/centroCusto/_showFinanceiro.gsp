@@ -129,3 +129,9 @@
 <g:else>
     <div class="well">Sem despesas!</div>
 </g:else>
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <a class="btn btn-default" href="${createLink(controller: 'despesa', action: 'create', params: ['centroCusto.id': centroCustoInstance.id])}">Registrar Despesa</a>
+    </div>
+</div>
