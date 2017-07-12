@@ -10,4 +10,8 @@ class Fornecedor extends Papel{
     static constraints = {
         ramo nullable: true, maxSize:20
     }
+
+    String toString() {
+        "${participante.nome + ' [' + ramo+']'}"
+    }
 }
