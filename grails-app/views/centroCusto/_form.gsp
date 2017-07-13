@@ -219,7 +219,7 @@
 
                                 <input type="text" id="valorTotalOrcamento" name="valorTotalOrcamento"
                                        class="form-control currency"
-                                       required>
+                                       required value="${centroCustoInstance.orcamentoAtual?.valorTotal}">
                             </div>
 
                             <div class="col-md-3 form-group">
@@ -236,7 +236,8 @@
 
                                 <input type="text" id="valorCambialOrcamento" name="valorCambialOrcamento"
                                        class="form-control currency"
-                                       required>
+                                       required value="${centroCustoInstance.orcamentoAtual?.valorCambial}
+                                ">
                             </div>
                         </div>
                     </div>
@@ -348,22 +349,6 @@
 <script src="${assetPath(src: 'WizardInitCentroCusto.js')}"></script>
 
 <script>
-    var initializeMoneyMask = function () {
-        var inputs = $('.currency');
-
-        inputs.maskMoney({
-            prefix: 'R$ ',
-            allowNegative: true,
-            thousands: '.',
-            decimal: ',',
-            affixesStay: false
-        });
-
-        inputs.each(function(){ // function to apply mask on load!
-            $(this).maskMoney('mask', Number($(this).val() || 0));
-        })
-    };
-
     var initializeDatepicker = function () {
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
@@ -685,8 +670,6 @@
     };
 
     $(function () {
-        initializeMoneyMask();
-
         initializeDatepicker();
 
         initializeFileInput();
