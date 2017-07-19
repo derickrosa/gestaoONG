@@ -5,7 +5,9 @@ package com.acception.cadastro.enums
  */
 enum StatusProjeto {
     EM_ANDAMENTO(descricao: 'Em andamento'),
-    FINALIZADO(descricao: 'Finalizado')
+    FINALIZADO(descricao: 'Finalizado'),
+    SUSPENSO(descricao: "Suspenso"),
+    CANCELADO(descricao: "Cancelado")
 
     String descricao
 

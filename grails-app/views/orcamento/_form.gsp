@@ -254,24 +254,14 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                             table.loadJsonData(result.responseText);
                         }
 
-                        atualizarValoresItensOrcamentarios(isEditForm);
-
-                        if (! isEditForm) {
-                            resetarSalariosFuncionarios();
-                        }
+                        atualizarValoresItensOrcamentarios();
                     }
                 }
             });
         }
     };
 
-    var resetarSalariosFuncionarios = function () {
-        $.each($('.itensOrcamento\\.listaFuncionariosSalario'), function (i, element) {
-            $(element).val('');
-        });
-    };
-
-    var atualizarValoresItensOrcamentarios = function(isEdit) {
+    var atualizarValoresItensOrcamentarios = function() {
         $.each($('#itensOrcamentarios .currency'), function(index, element){
             $(element).maskMoney({
                 prefix: 'R$ ',
@@ -281,14 +271,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 affixesStay: false
             });
 
-            // Segundo o mr Derick, todos os valores devem ser vazios, logo setaremos como 0.
-
-            if (isEdit) {
-                $(element).maskMoney('mask', Number($(element)[0].defaultValue))
-            } else {
-                $(element).maskMoney('mask', Number(0))
-            }
-
+            $(element).maskMoney('mask', Number($(element)[0].defaultValue))
         });
     };
 

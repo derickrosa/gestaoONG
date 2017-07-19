@@ -8,6 +8,7 @@ class ItemOrcamentario {
     String nome
     Double valor
     TipoCusto tipoCusto
+    Date dateCreated
 
     static belongsTo = [orcamento: Orcamento]
 
