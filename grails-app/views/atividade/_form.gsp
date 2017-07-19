@@ -66,6 +66,18 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 
 }
 </style>
+
+<g:if test="${atividade?.nome && !atividade.isSubatividade()}">
+    <h3 class="page-header control-label well text-center" id="btn-dropdowns" style="margin: 0px 0 20px;">
+        <a class="anchorjs-link "></a>Cadastro de Subatividade / Módulo<br><small>${atividade?.nome}</small>
+    </h3>
+</g:if>
+<g:else>
+    <h2 class="page-header control-label well text-center" id="btn-dropdowns" style="margin: 0px 0 20px;">
+        <a class="anchorjs-link "></a>Cadastro de Atividade%{-- / Módulo<br><small>${atividade?.nome}</small>--}%
+    </h2>
+</g:else>
+
 <section>
     <div class="row">
         <div class="col-md-8">
@@ -120,11 +132,10 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
     </div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'tipo', 'error')} ">
                 <label for="tipo">
                     <g:message code="atividade.tipo.label" default="Tipo"/>
-
                 </label>
                 <g:select name="tipo" from="${com.acception.cadastro.enums.TipoAtividade?.values()}"
                           class="form-control" keys="${com.acception.cadastro.enums.TipoAtividade.values()*.name()}"
@@ -134,7 +145,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'status', 'error')} ">
                 <label for="status">
                     <g:message code="atividade.status.label" default="Status"/>
@@ -146,6 +157,27 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                           value="${atividadeInstance?.status?.name()}" noSelection="['': '']"/>
 
             </div>
+        </div>
+
+        <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'inicio', 'error')} col-md-3">
+            <label class="control-label" for="inicio">
+                <g:message code="atividade.inicio.label" default="Data Início"/>
+            </label>
+            <input required="required" name="inicio" format="dd/MM/yyyy"
+                   value="${formatDate(format: "dd/MM/yyyy", date: atividadeInstance?.inicio)}"
+                   class="form-control datepicker"/>
+
+        </div>
+
+        <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'termino', 'error')} col-md-3">
+            <label class="control-label" for="final">
+                <g:message code="atividade.termino.label" default="Data Término"/>
+
+            </label>
+            <input required="required" name="termino" format="dd/MM/yyyy"
+                   value="${formatDate(format: "dd/MM/yyyy", date: atividadeInstance?.termino)}"
+                   class="form-control datepicker"/>
+
         </div>
     </div>
 
@@ -201,28 +233,9 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
     </div>--}%
 
     <div class="row">
-        <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'inicio', 'error')} col-md-4">
-            <label class="control-label" for="inicio">
-                <g:message code="atividade.inicio.label" default="Data Início"/>
-            </label>
-            <input required="required" name="inicio" format="dd/MM/yyyy"
-                   value="${formatDate(format: "dd/MM/yyyy", date: atividadeInstance?.inicio)}"
-                   class="form-control datepicker"/>
 
-        </div>
 
-        <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'termino', 'error')} col-md-4">
-            <label class="control-label" for="final">
-                <g:message code="atividade.termino.label" default="Data Término"/>
-
-            </label>
-            <input required="required" name="termino" format="dd/MM/yyyy"
-                   value="${formatDate(format: "dd/MM/yyyy", date: atividadeInstance?.termino)}"
-                   class="form-control datepicker"/>
-
-        </div>
-
-        <div class="col-md-4">
+        %{--<div class="col-md-4">
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'periodo', 'error')} ">
                 <label for="periodo">
                     <g:message code="atividade.periodo.label" default="Período"/>
@@ -231,7 +244,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 <g:textField class="form-control" name="periodo" value="${atividadeInstance?.periodo}"/>
 
             </div>
-        </div>
+        </div>--}%
     </div>
 
     <div class="row">
@@ -256,7 +269,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 </label>
 
                 <g:select class="form-control" id="municipio" name="municipio.id"
-                          from="${com.acception.cadastro.Cidade.createCriteria().list{eq('estado',atividadeInstance.estado) order('nome','asc')}}"
+                          from="${com.acception.cadastro.Cidade.withCriteria{eq('estado',atividadeInstance.estado) order('nome','asc')}}"
                           optionKey="id"
                           value="${atividadeInstance?.municipio?.id}"
                           noSelection="['null': 'Selecione um município...']"/>
@@ -403,7 +416,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 
         initializeDatepicker();
 
-        initializeFileInput();
+        //initializeFileInput();
 
         //initializeTableItensOrcamentarios();
 

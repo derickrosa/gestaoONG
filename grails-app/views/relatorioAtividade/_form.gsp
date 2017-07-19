@@ -5,9 +5,11 @@
 <div class="row">
     <div class="col-lg-12">
         <g:if test="${relatorioAtividadeInstance?.atividade?.nome}">
-            <h4 class="page-header control-label" id="btn-dropdowns" style="margin: 0px 0 20px;">
-                <a class="anchorjs-link "></a>${relatorioAtividadeInstance?.atividade?.nome}
-            </h4>
+            <h3 class="page-header control-label well text-center" id="btn-dropdowns" style="margin: 0px 0 20px;">
+                <a class="anchorjs-link "></a> Relatório de Atividade <br> <small> ${relatorioAtividadeInstance?.atividade?.nome} <br>Período: <g:formatDate date="${relatorioAtividadeInstance?.atividade?.inicio}" format="dd/MM/yyyy"/>  a <g:formatDate date="${relatorioAtividadeInstance?.atividade?.termino}" format="dd/MM/yyyy"/></small>
+            </h3>
+
+
         </g:if>
         <div class="panel panel-success">
 
@@ -17,15 +19,23 @@
 
             <div class="panel-body">
 
+                %{--<g:hiddenField name="centroCusto.id" value="${centroCustoInstance?.id}"/>
+                <g:hiddenField name="atividade.id" value="${atividade?.id}"/>--}%
 
-                <div class="form-group ${hasErrors(bean: relatorioAtividadeInstance, field: 'atividade', 'error')} ">
+
+                <div class="form-group ${hasErrors(bean: relatorioAtividadeInstance, field: 'atividade', 'error')}">
                     <label class="control-label" for="atividade">
                         <g:message code="relatorioAtividade.atividade.label" default="Atividade"/>
 
                     </label>
-                    <g:select class="form-control" id="atividade" name="atividade.id" from="${com.acception.cadastro.Atividade.list()}" optionKey="id" value="${relatorioAtividadeInstance?.atividade?.id}" noSelection="['null': 'Selecione uma atividade...']"/>
+                    <g:select class="form-control" id="atividade" name="atividade.id"
+                              from="${com.acception.cadastro.Atividade.list()}" optionKey="id"
+                              value="${atividade ? atividade?.id : relatorioAtividadeInstance?.atividade?.id}"
+                              noSelection="['null': 'Selecione uma atividade...']" required="required"/>
 
                 </div>
+
+
 
                 <div class="form-group ${hasErrors(bean: relatorioAtividadeInstance, field: 'comunidadesEnvolvidas', 'has-error')} ">
                     <label class="control-label" for="comunidadesEnvolvidas">
@@ -139,7 +149,7 @@
 
                     <div class="form-group ${hasErrors(bean: relatorioAtividadeInstance, field: 'idosos60anos', 'has-error')} col-md-4">
                         <label class="control-label" for="idosos60anos">
-                            <g:message code="atividade.idosos60anos.label" default="Idosos (60anos ou mais)"/>
+                            <g:message code="atividade.idosos60anos.label" default="Idosos (60 anos ou mais)"/>
 
                         </label>
                         <g:field class="form-control" id="idosos60anos" name="idosos60anos" type="number"
@@ -282,29 +292,26 @@
                 <div class="row">
                     <div class="form-group ${hasErrors(bean: relatorioAtividadeInstance, field: 'financiador', 'has-error')} col-md-8">
                         <label class="control-label" for="financiador">
-                            <g:message code="atividade.financiador.label" default="Financiador"/>
+                            <g:message code="relatorioAtividade.financiador.label" default="Financiador"/>
 
                         </label>
                         <g:select class="form-control" id="financiador" name="financiador.id"
                                   from="${com.acception.cadastro.Financiador.list()}" optionKey="id"
-                                  value="${relatorioAtividadeInstance?.financiador?.id}" class="form-control"
-                                  noSelection="['null': 'Selecione um financiador...']"/>
+                                  value="${financiador ? financiador?.id : relatorioAtividadeInstance?.financiador?.id}"
+                                  noSelection="['null': 'Selecione um financiador...']" required="required"/>
 
                     </div>
 
                     <div class="form-group ${hasErrors(bean: relatorioAtividadeInstance, field: 'centroCusto', 'has-error')} col-md-4">
                         <label class="control-label" for="centroCusto">
-                            <g:message code="atividade.centroCusto.label" default="Centro Custo"/>
+                            <g:message code="relatorioAtividade.centroCusto.label" default="Centro Custo"/>
 
                         </label>
                         <g:select class="form-control" id="centroCusto" name="centroCusto.id"
                                   from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id"
-                                  value="${atividadeInstance?.id}" noSelection="['': 'Selecione Centro de Custo...']"/>
-
+                                  value="${centroCusto ? centroCusto?.id : relatorioAtividadeInstance?.centroCusto?.id}"
+                                  noSelection="['': 'Selecione Centro de Custo...']" required="required"/>
                     </div>
-
-
-
                 </div>
 
                 <div class="form-group ${hasErrors(bean: relatorioAtividadeInstance, field: 'origemRecursoProjeto', 'has-error')} ">
@@ -319,7 +326,7 @@
                 </div>
 
 
-                <div class="row">
+                %{--<div class="row">
                     <div class="form-group ${hasErrors(bean: relatorioAtividadeInstance, field: 'valorServicoesTerceirosPessoaFisica', 'has-error')} col-md-4">
                         <label class="control-label" for="valorServicoesTerceirosPessoaFisica">
                             <g:message code="atividade.valorServicoesTerceirosPessoaFisica.label"
@@ -440,7 +447,7 @@
                                  value="${formatNumber(number: relatorioAtividadeInstance.valorTotalAtividade, format: '#,##0.00')}" onkeyup="sum();"/>
                     <small class="text-muted">O valor total da atividade é calculado automaticamente com base nas entradas das outras despesas.</small>
 
-                </div>
+                </div>--}%
 
             </div>
 
@@ -450,6 +457,8 @@
 
 <script>
     $(document).ready(function () {
+        $('select').attr('disabled', 'disabled');
+
         $("#select-comunidades-envolvidas").chosen();
         $("#select-municipios-envolvidas").chosen();
         $("#atividade").chosen();
@@ -459,6 +468,10 @@
         if (! numeroArquivos || numeroArquivos === '0') {
             $("#tabelaArquivos").addClass("hidden");
         }
+
+        $('form').submit(function() {
+            $('select').removeAttr('disabled');
+        });
     });
 
     function sum() {

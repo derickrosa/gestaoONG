@@ -2,6 +2,7 @@ package com.acception.cadastro
 
 import com.acception.cadastro.enums.StatusAtividade
 import com.acception.cadastro.enums.TipoAtividade
+import com.acception.util.Util
 
 class Atividade {
     static auditable = true
@@ -17,7 +18,6 @@ class Atividade {
 
     Date inicio
     Date termino
-    String periodo
     Atividade atividade
 
     Estado estado
@@ -26,6 +26,8 @@ class Atividade {
 
     static hasMany=[arquivos:Arquivo, linhas:LinhaAcao, despesas:Despesa, relatorios:RelatorioAtividade]
     static belongsTo = [LinhaAcao, CentroCusto]
+    static transients = ['periodo','isSubatividade']
+
     static constraints = {
         nome maxSize:100
         arquivos nullable: true
@@ -35,12 +37,11 @@ class Atividade {
         centroCusto nullable: false
         tipo nullable: true
         inicio nullable: true
-        termino nullable: true
+        termino nullable: false
         periodo nullable: true
         atividade nullable: true
         estado nullable: true
         municipio nullable: true
-        linhas nullable: true
         despesas nullable: true
         relatorios nullable: true
     }
@@ -52,6 +53,19 @@ class Atividade {
 
     List<Atividade> getSubAtividades() {
         Atividade.findAllByAtividade(this)
+    }
+
+    def getPeriodo(){
+        def periodo
+
+        def date1 = Util.truncDate(this.inicio)
+        def date2 = Util.truncDate(this.termino)
+
+        use(groovy.time.TimeCategory) {
+            periodo = date2 - date1
+        }
+
+        periodo
     }
 
     def beforeInsert() {
@@ -66,5 +80,12 @@ class Atividade {
 
     String toString() {
         "${nome + ' [' + status+']'}"
+    }
+
+    def isSubatividade(){
+        if(this.atividade)
+            true
+        else
+            false
     }
 }

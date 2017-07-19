@@ -56,7 +56,7 @@ class RelatorioAtividade {
     static constraints = {
         dateCreated nullable: true
         lastUpdated nullable: true
-        atividade nullable: true
+        atividade nullable: false
         arquivos nullable: true
         comunidadesEnvolvidas nullable: true
         totalComunidadesEnvolvidas nullable: true
@@ -86,8 +86,8 @@ class RelatorioAtividade {
         autoDeterminacaoCorAmarelo nullable: true
         autoDeterminacaoCorOutras nullable: true
 
-        financiador nullable: true
-        centroCusto nullable: true
+        financiador nullable: false
+        centroCusto nullable: false
         origemRecursoProjeto nullable: true
 
         valorServicoesTerceirosPessoaFisica nullable: true

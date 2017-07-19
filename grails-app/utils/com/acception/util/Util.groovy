@@ -18,6 +18,16 @@ class Util {
         return format.parse(amount.replaceAll("[^\\d.,]", "")).doubleValue();
     }
 
+    static Date truncDate(d){
+        Calendar cal=new GregorianCalendar()
+        cal.setTime(d)
+        cal.set(Calendar.HOUR_OF_DAY,0)
+        cal.set(Calendar.MINUTE,0)
+        cal.set(Calendar.SECOND,0)
+        cal.set(Calendar.MILLISECOND,0)
+        cal.getTime()
+    }
+
     static def phoneToRaw(String fullphone) {
         String phone = fullphone
         phone = phone.replaceAll('\\)', '')

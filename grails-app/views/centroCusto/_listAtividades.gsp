@@ -19,6 +19,9 @@
 
                     <tbody>
                     <g:each in="${centroCustoInstance.atividades}" var="atividadeInstance">
+                        <g:if test="${!atividadeInstance.isSubatividade()}">
+
+
                         <tr>
                           <td>
                         <g:if test="${atividadeInstance.subAtividades}">
@@ -56,7 +59,11 @@
                                         <tbody>
                                         <g:each in="${atividadeInstance.subAtividades}" var="s">
                                             <tr>
-                                                <td>${s.codigo}</td>
+                                                <td>
+                                                    <g:link controller="atividade" action="show" id="${s.id}">
+                                                            ${s.codigo}
+                                                    </g:link>
+                                                </td>
                                                 <td>${s.nome}</td>
                                             </tr>
                                         </g:each>
@@ -72,7 +79,7 @@
                             </td>
 
                         </tr>
-
+                    </g:if>
                     </g:each>
                     </tbody>
                 </table>

@@ -26,9 +26,9 @@
             <p>
                 <g:link class="btn btn-default" action="index"><span class="glyphicon glyphicon-list"></span> <g:message
                         code="default.list.label" args="[entityName]"/></g:link>
-                <g:link class="btn btn-default" action="create"><span
+                %{--<g:link class="btn btn-default" action="create"><span
                         class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label"
-                                                                            args="[entityName]"/></g:link>
+                                                                            args="[entityName]"/></g:link>--}%
             </p>
         </div>
 
@@ -36,8 +36,19 @@
             <li class="active"><a href="#dadosBasicos" data-toggle="tab" aria-expanded="false">Dados Básicos</a>
             </li>
 
-            <li><a href="#subatividades " data-toggle="tab" aria-expanded="true">Subatividades</a>
-            </li>
+
+
+            <g:if test="${!atividadeInstance.isSubatividade()}">
+
+                <li><a href="#subatividades " data-toggle="tab" aria-expanded="true">Subatividades / Módulos</a>
+                </li>
+            </g:if>
+
+
+
+                <li><a href="#relatorios" data-toggle="tab" aria-expanded="true">Relatórios</a>
+                </li>
+
 
         </ul>
 
@@ -45,9 +56,17 @@
             <div class="tab-pane fade in active" id="dadosBasicos">
                 <g:render template="showAtividade" model="[atividadeInstance: atividadeInstance]"/>
             </div>
-            <div class="tab-pane fade in" id="subatividades">
-                <g:render template="showSubatividades" model="[atividadeInstance: atividadeInstance]"/>
-            </div>
+            <g:if test="${!atividadeInstance.isSubatividade()}">
+                <div class="tab-pane fade in" id="subatividades">
+                    <g:render template="showSubatividades" model="[atividadeInstance: atividadeInstance]"/>
+                </div>
+            </g:if>
+
+
+                <div class="tab-pane fade in" id="relatorios">
+                    <g:render template="showRelatorios" model="[atividadeInstance: atividadeInstance]"/>
+                </div>
+
         </div>
 
 

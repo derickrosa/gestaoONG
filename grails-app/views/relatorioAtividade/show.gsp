@@ -45,7 +45,7 @@
                         <th id="nome-label" class="property-label"><g:message code="atividade.nome.label"
                                                                               default="Atividade"/></th>
 
-                        <td aria-labelledby="nome-label"><g:link controller="atividade" class="show"
+                        <td aria-labelledby="nome-label"><g:link controller="atividade" action="show"
                                                                  id="${relatorioAtividadeInstance?.atividade?.id}">${relatorioAtividadeInstance?.atividade?.nome} [${relatorioAtividadeInstance?.atividade?.status}]</g:link></td>
 
                     </tr>
@@ -449,7 +449,7 @@
                             </table>
 
                             <g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
-                            <div class="table-responsive">
+                            %{--<div class="table-responsive">
                                 <table class="table table-hover">
                                     <tbody>
                                     <tr>
@@ -508,7 +508,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>
+                            </div>--}%
 
                         </div>
                         <!-- /.panel-body -->

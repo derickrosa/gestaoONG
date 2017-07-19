@@ -10,16 +10,18 @@
 
 <div id="content">
     <div class="inner" style="min-height: 700px;">
-        <div class="row">
+        %{--<div class="row">
             <div class="col-lg-12">
                 <h1><g:message code="default.create.label" args="[entityName]"/></h1>
             </div>
-        </div>
+        </div>--}%
         <hr/>
         <!--BLOCK SECTION -->
 
         <div class="nav" role="navigation">
             <p>
+                <g:link class="btn btn-default" controller="atividade" action="show" id="${relatorioAtividadeInstance?.atividade?.id}"><span class="glyphicon glyphicon-arrow-left"></span> <g:message
+                        code="default.list.label.voltar" default="Voltar"></g:message></g:link>
                 <g:link class="btn btn-default" action="index"><span class="glyphicon glyphicon-list"></span> <g:message
                         code="default.list.label" args="[entityName]"/></g:link>
             </p>

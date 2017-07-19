@@ -42,7 +42,7 @@
         <g:if test="${atividadeInstance?.atividade}">
             <tr>
                 <th id="atividade-label" class="property-label"><g:message code="atividade.atividade.label"
-                                                                           default="Atividade"/></th>
+                                                                           default="Atividade Principal"/></th>
 
                 <td aria-labelledby="atividade-label"><g:link controller="atividade" action="show"
                                                               id="${atividadeInstance?.atividade?.id}">${atividadeInstance?.atividade?.encodeAsHTML()}</g:link></td>

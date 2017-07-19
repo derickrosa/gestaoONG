@@ -10,6 +10,7 @@ enum TipoAtividade {
     REUNIAO('Reunião'),
     OFICINA('Oficina'),
     ENCONTRO('Encontro'),
+    FORMACAO('Formação'),
     MONITORAMENTO('Monitoramento'),
     CONSULTORIA('Consultoria'),
     ARTICULACAO('Articulação')

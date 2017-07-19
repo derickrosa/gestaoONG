@@ -22,7 +22,9 @@ class AtividadeController {
     def create() {
         log.debug("Ct Custo: ${params.centroCustoInstance}")
         def centroCustoInstance
-        def atividadeInstance = Atividade.get(params.atividade.toLong())
+        def atividadeInstance
+        if(params.atividade)
+            atividadeInstance = Atividade.get(params.atividade.toLong())
         if (params.atividade){
             centroCustoInstance = atividadeInstance.centroCusto
         } else {
