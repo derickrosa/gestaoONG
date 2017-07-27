@@ -12,6 +12,8 @@ class Atividade {
     String descricao
     StatusAtividade status = StatusAtividade.NAO_INICIADA
     CentroCusto centroCusto
+    Integer modulo
+
 
     String objetivo
     TipoAtividade tipo
@@ -44,6 +46,7 @@ class Atividade {
         municipio nullable: true
         despesas nullable: true
         relatorios nullable: true
+        modulo nullable: true
     }
 
     static mapping = {
@@ -72,7 +75,6 @@ class Atividade {
         if (!inicio) {
             inicio = new Date()
         }
-
         if (!codigo) {
             codigo = inicio[Calendar.YEAR] + sprintf('%06d', Atividade.count())
         }

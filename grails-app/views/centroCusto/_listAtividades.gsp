@@ -25,7 +25,7 @@
                         <tr>
                           <td>
                         <g:if test="${atividadeInstance.subAtividades}">
-                                <a style="cursor:pointer;" data-toggle="collapse" data-target="#funcionarios_${atividadeInstance.id}">
+                                <a class="expanse" style="cursor:pointer;" data-toggle="collapse" data-target="#funcionarios_${atividadeInstance.id}">
                                     <span class="glyphicon glyphicon-plus"></span>
                                 </a>
                         </g:if>
@@ -64,7 +64,7 @@
                                                             ${s.codigo}
                                                     </g:link>
                                                 </td>
-                                                <td>${s.nome}</td>
+                                                <td>${s.nome} ${s.modulo?' [ Módulo '+s.modulo+']':''}</td>
                                             </tr>
                                         </g:each>
 
@@ -103,3 +103,24 @@
         <g:paginate total="${atividadeInstanceCount ?: 0}"/>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+   // $('.expanse').attr('disabled', 'disabled');
+
+
+
+    $('.expanse').click(function() {
+        if($(this).children('span').hasClass( "glyphicon-plus" )){
+            $(this).children('span').removeClass('glyphicon-plus');
+            $(this).children('span').addClass('glyphicon-minus');
+        } else {
+            $(this).children('span').removeClass('glyphicon-minus');
+            $(this).children('span').addClass('glyphicon-plus');
+        }
+
+      //  this.attr('disabled', 'disabled');
+    //$('select').removeAttr('disabled');
+    });
+    });
+</script>

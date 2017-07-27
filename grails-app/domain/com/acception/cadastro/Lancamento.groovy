@@ -11,7 +11,9 @@ class Lancamento {
 
     Date dateCreated
     Date lastUpdated
+
     Double valor
+    String numeroTitulo
     Date dataEmissao
 
 
@@ -33,6 +35,8 @@ class Lancamento {
     TipoAjuste tipoAjuste
 
     Despesa despesa
+
+    static belongsTo = [centroCusto: CentroCusto]
 
     static constraints = {
         dataPagamento nullable:true

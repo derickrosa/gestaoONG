@@ -5,7 +5,7 @@ class NotaFiscal {
     Anexo anexo
     Double valor
 
-    static belongsTo = [pagamento: Pagamento]
+    //static belongsTo = [pagamento: Pagamento]
 
     static constraints = {
         anexo nullable:true

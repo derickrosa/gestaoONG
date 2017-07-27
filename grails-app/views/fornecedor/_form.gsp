@@ -1,7 +1,6 @@
 <%@ page import="com.acception.cadastro.Fornecedor" %>
 
-<div class="row">
-    <div class="col-md-10">
+
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group fieldcontain ${hasErrors(bean: funcionarioInstance, field: 'tipoPessoa', 'error')} ">
@@ -76,7 +75,7 @@
 
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group fieldcontain ${hasErrors(bean: fornecedorInstance, field: 'telefone', 'error')} ">
             <label for="telefone">
                 <g:message code="fornecedor.telefone.participante.label" default="Telefone"/>
@@ -87,7 +86,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group fieldcontain ${hasErrors(bean: fornecedorInstance, field: 'telefoneAdicional', 'error')} ">
             <label for="telefoneAdicional">
                 <g:message code="fornecedor.participante.telefoneAdicional.label" default="Telefone Adicional"/>
@@ -99,13 +98,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
-
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group fieldcontain ${hasErrors(bean: fornecedorInstance, field: 'email', 'error')}">
             <label for="email">
                 <g:message code="fornecedor.participante.email.label" default="Email"/>
@@ -115,7 +108,7 @@
 
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group fieldcontain ${hasErrors(bean: fornecedorInstance, field: 'emailAdicional', 'error')}">
             <label for="emailAdicional">
                 <g:message code="fornecedor.participante.emailAdicional.label" default="Email Adicional"/>
@@ -127,8 +120,7 @@
     </div>
 </div>
 
-</div>
-</div>
+
 
 
 <script>

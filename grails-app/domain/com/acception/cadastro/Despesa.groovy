@@ -15,7 +15,6 @@ class Despesa {
     Boolean parcelado = false
 
     String codigo
-    String numeroTitulo
 
     static hasMany = [lancamentos: Lancamento]
     static belongsTo = [centroCusto: CentroCusto]

@@ -12,6 +12,6 @@ class Fornecedor extends Papel{
     }
 
     String toString() {
-        "${participante.nome + ' [' + ramo+']'}"
+        "${participante ? participante.nome : '' + ' [' + ramo+']'}"
     }
 }

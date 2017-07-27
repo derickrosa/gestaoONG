@@ -94,8 +94,12 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
         <g:hiddenField name="centroCusto.id" value="${centroCustoInstance?.id}"/>
         <g:hiddenField name="atividade.id" value="${atividade?.id}"/>
 
-
-        <div class="col-md-4">
+        <g:if test="${atividade?.nome && !atividade.isSubatividade()}">
+            <div class="col-md-3">
+        </g:if>
+        <g:else>
+            <div class="col-md-4">
+        </g:else>
             <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'linhas', 'error')} ">
                 <label for="linhas">
                     <g:message code="atividade.linhas.label" default="Linhas de Ação"/>
@@ -129,6 +133,17 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
             </div>
         </div>
 
+    <g:if test="${atividade?.nome && !atividade.isSubatividade()}">
+        <div class="col-md-1">
+                <div class="form-group fieldcontain ${hasErrors(bean: atividadeInstance, field: 'modulo', 'error')} ">
+        <label for="modulo">
+            <g:message code="atividade.ano.label" default="Módulo"/>
+
+        </label>
+        <g:field class="form-control" id="modulo" name="modulo" type="number" min="0"
+                 value="${atividadeInstance.modulo}"/>
+        </div>
+    </g:if>
     </div>
 
     <div class="row">

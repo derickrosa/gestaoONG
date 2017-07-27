@@ -19,7 +19,7 @@
                         ${s?.codigo}
 
                 </td>
-                <td>${s?.nome}</td>
+                <td>${s?.nome} ${s.modulo?' [ Módulo '+s.modulo+']':''}</td>
                 <td>
                     <g:link controller="atividade" action="show" id="${s.id}">
                         <spam class="glyphicon glyphicon-search" />
