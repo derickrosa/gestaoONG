@@ -90,7 +90,9 @@ class CentroCustoController {
         orcamento.ano = Integer.parseInt(params.orcamento?.ano)
         orcamento.valorTotal = Util.parse(params.valorTotalOrcamento)
         orcamento.moeda = Moeda.valueOf(params.orcamento?.moeda)
-        orcamento.valorCambial = Util.parse(params.valorCambialOrcamento)
+        orcamento.valorCambial = params.valorCambialOrcamento ? Util.parse(params.valorCambialOrcamento) : 1
+        orcamento.save()
+
         atualizarItensOrcamentarios(orcamento, params.itensOrcamento)
 
         centroCustoInstance.contaBancaria.tipoConta = TipoContaBancaria.valueOf(params.contaBancaria?.tipoConta)

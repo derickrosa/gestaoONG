@@ -12,7 +12,7 @@
 <div class="col-md-2">
 <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'codigo', 'error')} ">
     <label for="codigo">
-        <g:message code="financiador.codigo.label" default="Codigo"/>
+        <g:message code="financiador.codigo.label" default="Código"/>
         
     </label>
     <g:textField class="form-control"  name="codigo" maxlength="20" value="${financiadorInstance?.codigo}"/>

@@ -1,3 +1,4 @@
+<%@ page import="com.acception.cadastro.enums.Moeda" %>
 <g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
 
 <g:if test="${orcamento}">
@@ -29,7 +30,7 @@
             </tr>
         </g:if>
 
-        <g:if test="${orcamento?.valorCambial}">
+        <g:if test="${orcamento?.moeda != Moeda.REAL && orcamento?.valorCambial}">
             <tr>
                 <th id="orcamento.valorCambial-label" class="property-label">Valor Cambial</th>
 

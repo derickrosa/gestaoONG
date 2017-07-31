@@ -695,6 +695,17 @@
                 }
             })
         });
+
+        $("#orcamento\\.moeda").change(function () {
+            if ($(this).val() === "REAL") {
+                $("#valorCambialOrcamento").prop("disabled", true)
+                                            .maskMoney('mask', 1)
+            } else {
+                $("#valorCambialOrcamento").prop("disabled", false)
+            }
+        });
+
+        $("#orcamento\\.moeda").change();
     });
 </script>
 
