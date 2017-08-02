@@ -46,7 +46,7 @@
                                 <g:if test="${financiadorInstance?.codigo}">
                                     <tr>
                                         <th id="codigo-label" class="property-label"><g:message
-                                                code="financiador.codigo.label" default="Codigo"/></th>
+                                                code="financiador.codigo.label" default="Código"/></th>
 
                                         <td aria-labelledby="codigo-label"><g:fieldValue bean="${financiadorInstance}"
                                                                                          field="codigo"/></td>
@@ -54,7 +54,7 @@
                                     </tr>
                                 </g:if>
 
-                                <g:if test="${financiadorInstance?.participante.nome}">
+                                <g:if test="${financiadorInstance?.participante?.nome}">
                                     <tr>
                                         <th id="participante-nome-label" class="property-label"><g:message
                                                 code="financiador.participante.nome.label" default="Nome"/></th>
@@ -65,7 +65,7 @@
                                     </tr>
                                 </g:if>
 
-                                <g:if test="${financiadorInstance?.participante.cnpj}">
+                                <g:if test="${financiadorInstance?.participante?.cnpj}">
                                     <tr>
                                         <th id="participante-cnpj-label" class="property-label"><g:message
                                                 code="financiador.participante.cnpj.label" default="CNPJ"/></th>
@@ -150,7 +150,7 @@
                             </div>
                             <!-- /.panel-heading -->
                             <div class="panel-body">
-                                <table class="table table-striped table-bordered table-hover">
+                                <table class="table table-striped table-bordered table-hover text-center">
                                     <thead>
                                     <tr>
                                         <th class="text-center">Nome</th>
@@ -163,13 +163,13 @@
                                         <tr>
                                             <td>
                                                 <g:link controller="responsavel" action="show"
-                                                        id="${r.id}">${r.participante.nome}</g:link>
+                                                        id="${r.id}">${r.participante?.nome}</g:link>
                                             </td>
                                             <td>
-                                                ${r.participante.email}
+                                                ${r.participante?.email}
                                             </td>
                                             <td>
-                                                ${r.participante.telefone}
+                                                ${r.participante?.telefone}
                                             </td>
 
                                         </tr>

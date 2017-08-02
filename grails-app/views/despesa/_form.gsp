@@ -70,7 +70,6 @@
 
 </div>
 
-
 <div class="row">
 
 
@@ -85,23 +84,6 @@
                class="form-control datepicker"/>
 
     </div>
-</div>
-
-
-<div class="form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'parcelado', 'error')} ">
-    <g:checkBox name="parcelado" value="${despesaInstance?.parcelado}" />
-
-    <label for="parcelado">
-        <g:message code="despesa.parcelado.label" default="A despesa é parcelada?"/>
-    </label>
-</div>
-
-<div class="form-group" id="divNumeroParcelas" style="display: none">
-    <label for="numParcelas">
-        Número de Parcelas
-    </label>
-
-    <input min="1" type="number" class="form-control" name="numParcelas" id="numParcelas" value="${despesaInstance?.lancamentos?.size()}">
 </div>
 
 <script>
@@ -126,29 +108,38 @@
             }
         };
 
-        var showHideNumeroParcelasInput = function (isParcelado) {
-            if (isParcelado) {
-                $("#divNumeroParcelas").show('slow');
-                $("#numParcelas").prop("required", true).prop("disabled", false);
-            } else {
-                $("#divNumeroParcelas").hide('slow');
-                $("#numParcelas").prop("required", false).prop("disabled", true);
-            }
+        var atualizarSelectAtividades = function (centroCustoId) {
+          if (centroCustoId) {
+              $.ajax({
+                  url: "${createLink(controller: 'atividade', action: 'getAtividadesDeCentroCusto')}",
+                  method: 'POST',
+                  data: {
+                      centroCustoId: centroCustoId
+                  },
+                  success: function (response) {
+                      console.log(response);
+                  },
+
+                  failure: function (response) {
+                      console.log(response);
+
+                  }
+              })
+          }
         };
 
         refreshFormBasedOnTipoDespesa("${despesaInstance?.tipoDespesa}");
 
-        showHideNumeroParcelasInput(${despesaInstance?.parcelado});
-
         $("#centroCusto").chosen();
+
+        $("#centroCusto").on("change", function () {
+            console.log('here');
+
+           atualizarSelectAtividades($(this).val());
+        });
 
         $("#tipoDespesa").on('change', function () {
             refreshFormBasedOnTipoDespesa($(this).val());
         });
-
-        $("#parcelado").on("change", function () {
-            showHideNumeroParcelasInput(this.checked);
-        })
-
     })
 </script>

@@ -40,6 +40,8 @@ class OrcamentoController {
             return
         }
 
+        orcamentoInstance.save()
+
         _updateOrcamento(orcamentoInstance, params)
 
         orcamentoInstance.save flush: true

@@ -4,8 +4,8 @@ package com.acception.cadastro.enums
  * Created by derick on 11/05/17.
  */
 enum Setor {
-    PUBLICO(descricao: 'Público'),
-    PRIVADO(descricao: 'Privado')
+    TECNICO(descricao: 'Técnico'),
+    ADMINISTRATIVO(descricao: 'Administrativo')
 
     String descricao
 

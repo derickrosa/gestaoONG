@@ -44,7 +44,7 @@
                 <li><a href="#orcamento" data-toggle="tab" aria-expanded="true">Orçamento</a>
                 </li>
 
-                <li><a href="#atividade" data-toggle="tab" aria-expanded="true">Atividade</a>
+                <li><a href="#tabAtividades" data-toggle="tab" aria-expanded="true">Atividade</a>
                 </li>
 
                 <li><a href="#pessoal" data-toggle="tab" aria-expanded="true">Pessoal</a>
@@ -65,6 +65,7 @@
                             <li class="active"><a href="#orcamentoAtual" data-toggle="tab" aria-expanded="true">Orçamento Atual</a></li>
                             <li><a href="#orcamentoOriginal" data-toggle="tab" aria-expanded="true">Orçamento Original</a></li>
                             <li><a href="#historicoOrcamentos" data-toggle="tab" aria-expanded="true">Histórico de Orçamentos</a></li>
+                            <li><a href="#comparacaoOrcamentos" data-toggle="tab" aria-expanded="true">Tabela Comparativa</a></li>
                         </ul>
 
                         <div class="tab-content">
@@ -79,6 +80,10 @@
                             <div class="tab-pane fade in" id="historicoOrcamentos">
                                 <g:render template="historicoOrcamentos" model="[listaOrcamentos: centroCustoInstance.orcamentos]"/>
                             </div>
+
+                            <div class="tab-pane fade in" id="comparacaoOrcamentos">
+                                <g:render template="/orcamento/tabelaComparativa" model="[listaOrcamentos: centroCustoInstance.orcamentos]"/>
+                            </div>
                         </div>
                     </g:if>
                     <g:else>
@@ -87,7 +92,7 @@
 
                 </div>
 
-                <div class="tab-pane fade in" id="atividade">
+                <div class="tab-pane fade in" id="tabAtividades">
                     <g:render template="listAtividades" model="[centroCustoInstance: centroCustoInstance]"/>
                 </div>
 
@@ -101,9 +106,6 @@
             </div>
 
             <br>
-
-
-
 
             <g:form url="[resource: centroCustoInstance, action: 'delete']" method="DELETE">
                 <fieldset class="buttons">

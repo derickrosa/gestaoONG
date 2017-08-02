@@ -51,12 +51,11 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                         <input type="hidden" name="orcamentoAnterior" value="${params?.orcamentoAnterior}">
                     </g:if>
 
-
                     <div class="col-md-3 form-group">
                         <label for="orcamento.ano">Ano</label>
 
                         <input type="number" min="0" id="orcamento.ano" name="orcamento.ano" class="form-control"
-                               value="${orcamentoInstance?.ano}" required>
+                               value="${orcamentoInstance.ano ?: params['orcamentoInstance.ano']}" required>
                     </div>
 
                     <div class="col-md-3 form-group">
@@ -64,7 +63,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 
                         <input type="text" id="valorTotalOrcamento" name="valorTotalOrcamento"
                                class="form-control currency"
-                               required value="${orcamentoInstance.valorTotal}">
+                               required value="${orcamentoInstance.valorTotal ?: params['orcamentoInstance.valorTotal']}">
                     </div>
 
                     <div class="col-md-3 form-group">
@@ -72,7 +71,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 
                         <g:select class="form-control" name="orcamento.moeda" from="${Moeda.values()}"
                                   keys="${com.acception.cadastro.enums.Moeda.values()*.name()}"
-                                  value="${orcamentoInstance?.moeda?.name()}" required="required"/>
+                                  value="${orcamentoInstance?.moeda?.name() ?: params['orcamento.moeda']}" required="required"/>
 
                     </div>
 
@@ -81,7 +80,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 
                         <input type="text" id="valorCambialOrcamento" name="valorCambialOrcamento"
                                class="form-control currency"
-                               required value="${orcamentoInstance.valorCambial}">
+                               required value="${orcamentoInstance.valorCambial ?: params['orcamentoInstance.valorCambial']}">
                     </div>
                 </div>
             </div>
@@ -384,6 +383,17 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
         initializeTableItensOrcamentarios();
 
         initializeTableFuncionarios();
+
+        $("#orcamento\\.moeda").change(function () {
+            if ($(this).val() === "REAL") {
+                $("#valorCambialOrcamento").prop("disabled", true)
+                        .maskMoney('mask', 1)
+            } else {
+                $("#valorCambialOrcamento").prop("disabled", false)
+            }
+        });
+
+        $("#orcamento\\.moeda").change();
     });
 </script>
 
