@@ -60,7 +60,7 @@ class DespesaController {
 
         log.debug("Valor Parcela: " + valorParcela)
 
-        def tipoLancamento = despesaInstance.tipoDespesa == TipoDespesa.ADIANTAMENTO ? TipoLancamento.PAGAMENTO_ADIANTADO : TipoLancamento.PAGAR
+        def tipoLancamento = despesaInstance.tipoDespesa == TipoDespesa.ADIANTAMENTO ? TipoLancamento.PAGAMENTO_ADIANTADO : TipoLancamento.DEBITO
 
         def lancamentosAnteriores = despesaInstance.lancamentos.collect()
 

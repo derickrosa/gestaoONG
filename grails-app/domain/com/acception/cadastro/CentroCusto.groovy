@@ -20,7 +20,8 @@ class CentroCusto {
     static hasMany = [atividades: Atividade,
                       arquivos: Arquivo,
                       despesas:Despesa,
-                      orcamentos: Orcamento]
+                      orcamentos: Orcamento,
+                      lancamentos: Lancamento]
 
     static belongsTo = [financiador: Financiador]
 

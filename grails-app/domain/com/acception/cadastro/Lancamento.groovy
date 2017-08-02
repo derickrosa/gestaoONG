@@ -1,8 +1,6 @@
 package com.acception.cadastro
 
-import com.acception.cadastro.Despesa
-import com.acception.cadastro.Pagamento
-import com.acception.cadastro.TipoAjuste
+
 import com.acception.cadastro.enums.StatusLancamento
 import com.acception.cadastro.enums.TipoLancamento
 
@@ -15,40 +13,32 @@ class Lancamento {
     Double valor
     String numeroTitulo
     Date dataEmissao
-
-
-
     TipoLancamento tipoLancamento
     StatusLancamento statusLancamento = StatusLancamento.ABERTO
     String descricao
-    String codigoLancamento
-
-
-    Date dataPagamentoPrevista
     Date dataPagamento
-    Date dataPagamentoOriginal
-    Date dataAbono
-    Double valorBruto
+    Date dataCancelamento
+    String codigoLancamento
+    Anexo documento
 
     Integer parcela
-    Pagamento pagamento
+
     TipoAjuste tipoAjuste
 
-    Despesa despesa
+    EventoFinanceiro eventoFinanceiro
 
     static belongsTo = [centroCusto: CentroCusto]
 
     static constraints = {
         dataPagamento nullable:true
-        dataAbono nullable: true
-        pagamento nullable:true
-        valorBruto  nullable:true
+        dataCancelamento nullable: true
         parcela nullable:true
         tipoAjuste nullable:true
-        dataPagamentoOriginal nullable:true
-        despesa nullable:true
         descricao nullable: true
         codigoLancamento nullable: true
+        numeroTitulo nullable: false
+        eventoFinanceiro nullable: true
+        documento nullable: true
     }
 
 
@@ -60,7 +50,7 @@ class Lancamento {
 
     String toString() {
         def df=new java.text.SimpleDateFormat('dd/MM/yyyy')
-        "${this.tipoLancamento} #${this.id} ST: ${this.statusLancamento} VL: ${this.valor} PC: ${this.parcela} DE: ${df.format(this.dataEmissao)}"
+        "${this.tipoLancamento} #${this.id} ST: ${this.statusLancamento} VL: ${this.valor} DE: ${df.format(this.dataEmissao)}"
     }
 
 
