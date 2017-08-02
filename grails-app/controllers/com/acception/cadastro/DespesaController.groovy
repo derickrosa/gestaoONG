@@ -1,8 +1,10 @@
 package com.acception.cadastro
 
+import com.acception.cadastro.enums.StatusLancamento
 import com.acception.cadastro.enums.TipoDespesa
 import com.acception.cadastro.enums.TipoLancamento
 import com.acception.util.Util
+import grails.converters.JSON
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -10,7 +12,7 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class DespesaController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE", criarDespesa: "POST"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -55,8 +57,7 @@ class DespesaController {
     def _updateDespesa(Despesa despesaInstance, params) {
         log.debug(despesaInstance.valor)
 
-        def numParcelas = params.numParcelas ? params.numParcelas.toInteger() : 1
-        def valorParcela = Util.parse(params.valor) / numParcelas
+        def valorParcela = Util.parse(params.valor)
 
         log.debug("Valor Parcela: " + valorParcela)
 
@@ -66,30 +67,55 @@ class DespesaController {
 
         def listaAtualizadaLancamentos = []
 
-        1.upto(numParcelas) {
-            def numParcela = it
+        def lancamento = lancamentosAnteriores.find {
+            it.despesa == despesaInstance && it.valor == valorParcela.toDouble()
+        } ?: new Lancamento(valor: valorParcela)
 
-            def lancamento = lancamentosAnteriores.find {
-                it.despesa == despesaInstance && it.valor == valorParcela.toDouble() && it.parcela == numParcela
-            } ?: new Lancamento(valor: valorParcela, parcela: numParcela)
+        lancamento.dataEmissao = despesaInstance.data
+        lancamento.tipoLancamento = tipoLancamento
+        lancamento.descricao = despesaInstance.descricao
+        lancamento.valorBruto = valorParcela
+        lancamento.despesa = despesaInstance
+        lancamento.save(flush: true)
 
-            lancamento.dataEmissao = despesaInstance.data
-            lancamento.tipoLancamento = tipoLancamento
-            lancamento.descricao = despesaInstance.descricao
-            lancamento.valorBruto = valorParcela
-            lancamento.despesa = despesaInstance
-            lancamento.save(flush: true)
+        listaAtualizadaLancamentos << lancamento
 
-            listaAtualizadaLancamentos << lancamento
-        }
-
-        for (Lancamento lancamento in lancamentosAnteriores) {
-            if (! listaAtualizadaLancamentos.contains(lancamento)) {
-                log.debug(">> Lançamento ${lancamento} deve ser deletado!")
-                despesaInstance.removeFromLancamentos(lancamento)
-                lancamento.delete()
+        for (Lancamento l in lancamentosAnteriores) {
+            if (! listaAtualizadaLancamentos.contains(l)) {
+                log.debug(">> Lançamento ${l} deve ser deletado!")
+                despesaInstance.removeFromLancamentos(l)
+                l.delete()
             }
         }
+    }
+
+    @Transactional
+    def criarDespesa() {
+        def despesa = new Despesa(params)
+
+        despesa.valor = Util.parse(params.valor)
+        despesa.save()
+
+        def lancamento = new Lancamento(despesa: despesa)
+
+        lancamento.valor = despesa.valor
+        lancamento.valorBruto = despesa.valor
+        lancamento.tipoLancamento = despesa.tipoDespesa == TipoDespesa.ADIANTAMENTO ? TipoLancamento.PAGAMENTO_ADIANTADO : TipoLancamento.PAGAR
+        lancamento.dataEmissao = despesa.data
+        lancamento.descricao = despesa.descricao
+        lancamento.statusLancamento = StatusLancamento.BAIXADO
+        lancamento.centroCusto = despesa.centroCusto
+        lancamento.save()
+
+        despesa.save(flush: true)
+
+        render(['success': true, 'despesa': ['id': despesa.id,
+                                             'tipo': despesa.tipoDespesa.nome,
+                                             'descricao': despesa.descricao,
+                                             'valor': despesa.valor,
+                                             'data': despesa.data.format('dd/MM/yyyy'),
+                                             'centroCusto': despesa.centroCusto.toString(),
+                                             'atividade': despesa.atividade ? despesa.atividade.toString() : '']] as JSON)
     }
 
     def edit(Despesa despesaInstance) {

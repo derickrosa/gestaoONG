@@ -1,6 +1,7 @@
 package com.acception.cadastro
 
 import com.acception.util.Util
+import grails.converters.JSON
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -8,7 +9,7 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class FornecedorController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE", criarFornecedor: "POST"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -121,6 +122,38 @@ class FornecedorController {
             }
             '*'{ render status: NO_CONTENT }
         }
+    }
+
+    @Transactional
+    def criarFornecedor() {
+        def fornecedor = new Fornecedor(params)
+
+        def p = null
+
+        if (params.tipoPessoa == "FISICA") {
+            p = new PessoaFisica(params.participante)
+        } else if (params.tipoPessoa == "JURIDICA") {
+            p = new PessoaJuridica(params.participante)
+        } else {
+            render(['success': false, 'error': 'Escolha um tipo de fornecedor válido!'] as JSON)
+        }
+
+        if (params.telefoneRaw) {
+            def dadosTelefone = Util.phoneToRaw(params.telefoneRaw)
+            p.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
+        }
+
+        if (params.telefoneAdicionalRaw) {
+            def dadosTelefone = Util.phoneToRaw(params.telefoneAdicionalRaw)
+            p.telefoneAdicional = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
+        }
+
+        p.addToPapeis(fornecedor)
+
+        p.save(flush: true, failOnError: true)
+        fornecedor.save(flush: true, failOnError: true)
+
+        render(['success': true, 'fornecedor': ['id': fornecedor.id, 'nome': fornecedor.toString()]] as JSON)
     }
 
     protected void notFound() {

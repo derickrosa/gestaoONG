@@ -302,7 +302,7 @@
         <div class="row">
             <div class="col-md-6 form-group">
                 <label>Saldo</label>
-                <g:textField name="contaBancaria.saldo" class="form-control currency" required="required" value="${centroCustoInstance.contaBancaria?.saldo}"/>
+                <g:textField name="contaBancaria.saldo" class="form-control currency" required="required" value="${centroCustoInstance.contaBancaria?.saldo}" data-allow-zero="true"/>
             </div>
         </div>
     </section>
@@ -706,6 +706,14 @@
         });
 
         $("#orcamento\\.moeda").change();
+
+        $("#contaBancaria\\.saldo").maskMoney({
+            prefix: 'R$ ',
+            decimal: ',',
+            thousands: '.',
+            affixesStay: false,
+            allowZero: true
+        });
     });
 </script>
 

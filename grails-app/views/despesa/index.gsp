@@ -21,16 +21,18 @@
         <!--BLOCK SECTION -->
 
         <div class="nav" role="navigation">
-        <p>
-            <g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span> Criar Despesa </g:link>
-        </p>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modalCriacaoDespesas">
+                <span class="glyphicon glyphicon-plus"></span> Criar Despesa
+            </button>
         </div>
+
+        <br>
 
         <div id="list-despesa" class="body" role="main">
             <g:if test="${flash.message}">
                 <div class="alert alert-info" role="status">${flash.message}</div>
             </g:if>
-            <table class="table table-bordered table-striped text-center">
+            <table class="table table-bordered table-striped text-center" id="tableDespesas">
                 <thead>
                 <tr>
 
@@ -46,23 +48,33 @@
                 </tr>
                 </thead>
                 <tbody>
-                <g:each in="${despesaInstanceList}" status="i" var="despesaInstance">
-                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
-                        <td><g:link action="show" id="${despesaInstance?.id}">${despesaInstance.descricao}</g:link></td>
+                <g:if test="${despesaInstanceList}">
+                    <g:each in="${despesaInstanceList}" status="i" var="despesaInstance">
+                        <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
-                        <td>R$ ${df.format(despesaInstance.valor)}</td>
+                            <td><g:link action="show" id="${despesaInstance?.id}">${despesaInstance.descricao}</g:link></td>
 
-                        <td>${despesaInstance.tipoDespesa?.nome}</td>
+                            <td>R$ ${df.format(despesaInstance.valor)}</td>
 
-                        <td><g:formatDate format="dd/MM/yyyy" date="${despesaInstance.data}"/></td>
+                            <td>${despesaInstance.tipoDespesa?.nome}</td>
 
-                        <td><g:link controller="centroCusto" action="show"
-                                    id="${despesaInstance.centroCusto?.id}">${fieldValue(bean: despesaInstance, field: "centroCusto")}</g:link></td>
-                        
-                        <td>${fieldValue(bean: despesaInstance, field: "atividade")}</td>
+                            <td><g:formatDate format="dd/MM/yyyy" date="${despesaInstance.data}"/></td>
+
+                            <td><g:link controller="centroCusto" action="show"
+                                        id="${despesaInstance.centroCusto?.id}">${fieldValue(bean: despesaInstance, field: "centroCusto")}</g:link></td>
+
+                            <td>${fieldValue(bean: despesaInstance, field: "atividade")}</td>
+                        </tr>
+                    </g:each>
+                </g:if>
+                <g:else>
+                    <tr id="alertNoDespesas">
+                        <td colspan="6"><strong>Sem despesas cadastradas!</strong></td>
                     </tr>
-                </g:each>
+                </g:else>
+
+
                 </tbody>
             </table>
 
@@ -72,5 +84,35 @@
         </div>
     </div>
 </div>
+
+<g:render template="modalCreate"/>
+
+<script>
+    document.getElementById("formCriacaoDespesa").addEventListener("despesaCriada", function (e) {
+        var table = $("#tableDespesas tbody");
+
+        var warningNaoHaDespesasCadastradas = $("#alertNoDespesas");
+
+        console.log(warningNaoHaDespesasCadastradas);
+
+        if (warningNaoHaDespesasCadastradas) {
+            warningNaoHaDespesasCadastradas.hide();
+        }
+
+        var tableRow = $("<tr>");
+
+        tableRow.append($("<td>").append("<a href='${createLink(controller: 'despesa', action: 'show')}/" + e.detail.id +  "'>" + e.detail.descricao + "</a>"));
+        tableRow.append($("<td>").text("R$ " + e.detail.valor));
+        tableRow.append($("<td>").text(e.detail.tipo));
+        tableRow.append($("<td>").text(e.detail.data));
+        tableRow.append($("<td>").text(e.detail.centroCusto));
+        tableRow.append($("<td>").text(e.detail.atividade));
+
+        tableRow.addClass('success');
+
+        table.append(tableRow);
+    }, false);
+</script>
+
 </body>
 </html>

@@ -1,6 +1,5 @@
 package com.acception.cadastro
 
-import com.acception.cadastro.Lancamento
 import com.acception.cadastro.enums.TipoDespesa
 
 class Despesa {
@@ -12,8 +11,6 @@ class Despesa {
     Date data
     String descricao
     Funcionario funcionario
-    Boolean parcelado = false
-
     String codigo
 
     static hasMany = [lancamentos: Lancamento]

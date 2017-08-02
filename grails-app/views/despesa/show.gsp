@@ -126,17 +126,6 @@
                     </tr>
                 </g:if>
 
-                <g:if test="${despesaInstance?.parcelado}">
-                    <tr>
-                        <th id="parcelado-label" class="property-label"><g:message code="despesa.parcelado.label"
-                                                                                   default="Parcelado"/></th>
-
-                        <td aria-labelledby="parcelado-label"><g:formatBoolean
-                                boolean="${despesaInstance?.parcelado}"/></td>
-
-                    </tr>
-                </g:if>
-
             </table>
 
             <g:if test="${despesaInstance?.lancamentos}">
