@@ -44,7 +44,11 @@
     %{--Caso seja orçamento atual, então devemos disponibilizar um botão para replanejar o orçamento--}%
     <g:if test="${isOrcamentoAtual}">
         <div class="row text-center">
-            <a href="${createLink(controller: 'orcamento', action: 'create', params: ['orcamentoAnterior': centroCustoInstance.orcamentoAtual.id])}" class="btn btn-default">
+            <a href="${createLink(controller: 'orcamento', action: 'create', params: ['orcamentoAnterior': centroCustoInstance.orcamentoAtual.id,
+                                                                                      'orcamentoInstance.ano': centroCustoInstance.orcamentoAtual.ano,
+                                                                                      'orcamentoInstance.valorTotal': centroCustoInstance.orcamentoAtual.valorTotal,
+                                                                                      'orcamento.moeda': centroCustoInstance.orcamentoAtual.moeda.name(),
+                                                                                      'orcamentoInstance.valorCambial': centroCustoInstance.orcamentoAtual.valorCambial])}" class="btn btn-default">
                 <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Replanejar Orçamento
             </a>
         </div>
