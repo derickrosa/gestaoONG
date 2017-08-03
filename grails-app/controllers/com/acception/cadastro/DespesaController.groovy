@@ -114,7 +114,7 @@ class DespesaController {
                                              'descricao': despesa.descricao,
                                              'valor': despesa.valor,
                                              'data': despesa.data.format('dd/MM/yyyy'),
-                                             'centroCusto': despesa.centroCusto.toString(),
+                                             'centroCusto': ['nome': despesa.centroCusto.toString(), 'id': despesa.centroCusto.id],
                                              'atividade': despesa.atividade ? despesa.atividade.toString() : '']] as JSON)
     }
 

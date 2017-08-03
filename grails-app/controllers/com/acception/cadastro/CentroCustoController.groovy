@@ -12,7 +12,7 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class CentroCustoController {
     private static final okcontents = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']
-    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE", getAtividadesFromCentroCusto: "POST"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -337,6 +337,22 @@ class CentroCustoController {
         OutputStream out = response.outputStream
         out.write(arquivoInstance.bytes)
         out.close()
+    }
+
+    def getAtividadesFromCentroCusto(Long centroCustoId) {
+        if (centroCustoId) {
+            def centroCusto = CentroCusto.get(centroCustoId)
+
+            if (centroCusto) {
+                def listaAtividades = centroCusto.atividades.collect { ['id': it.id, 'descricao': it.toString()]}
+
+                render(['success': true, atividades: listaAtividades] as JSON)
+            } else {
+                render(['success': false] as JSON)
+            }
+        } else {
+            render(['success': false] as JSON)
+        }
     }
 
 }
