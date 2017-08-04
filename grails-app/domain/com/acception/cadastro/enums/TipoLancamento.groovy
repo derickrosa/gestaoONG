@@ -1,12 +1,8 @@
 package com.acception.cadastro.enums
 
 public enum TipoLancamento {
-    PAGAR('A Pagar','Venda'),
-    RECEBER('A Receber','A Receber'),
-    TARIFA('Tarifa','Tarifa'),
-    IOF_DEVIDO('IOF Devido'),
-    DESCONTO('Desconto'),
-    JUROS('Juros'),
+    DEBITO('Débito','Despesa'),
+    CREDITO('Crédito','Crédito'),
     PAGAMENTO_ADIANTADO('Pagamento Adiantado')
 
     String nome
@@ -20,7 +16,7 @@ public enum TipoLancamento {
     }
 
     static def list() {
-        [PAGAR, RECEBER, TARIFA, IOF_DEVIDO, DESCONTO, JUROS, PAGAMENTO_ADIANTADO]
+        [DEBITO, CREDITO, PAGAMENTO_ADIANTADO]
     }
 
 }
