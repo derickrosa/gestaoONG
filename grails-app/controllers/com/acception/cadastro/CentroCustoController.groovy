@@ -12,7 +12,7 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class CentroCustoController {
     private static final okcontents = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']
-    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE", getAtividadesFromCentroCusto: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)

@@ -245,7 +245,7 @@
                             <label for="fornecedor">
                                 <g:message code="despesa.fornecedor.label" default="Fornecedor"/>
                             </label>
-                            <g:select required="required" id="fornecedor" name="fornecedor.id" from="${Fornecedor.list()}"
+                            <g:select required="required" id="fornecedor" name="papel.id" from="${Fornecedor.list()}"
                                       optionKey="id" class="form-control" data-placeholder="Selecione um fornecedor..." noSelection="['': '']"/>
                             <a onclick="mudarParaCadastroDeFornecedor()"><small>Criar Fornecedor</small></a>
 
@@ -256,7 +256,7 @@
                                 <g:message code="despesa.funcionario.label" default="Funcionário"/>
 
                             </label>
-                            <g:select required="required" id="funcionario" name="funcionario.id" from="${Funcionario.list()}"
+                            <g:select required="required" id="funcionario" name="papel.id" from="${Funcionario.list()}"
                                       optionKey="id" class="form-control" noSelection="['': '']" data-placeholder="Selecione um funcionário..."/>
                         </div>
 

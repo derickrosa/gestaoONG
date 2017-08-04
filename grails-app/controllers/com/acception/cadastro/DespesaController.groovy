@@ -96,11 +96,10 @@ class DespesaController {
         despesa.valor = Util.parse(params.valor)
         despesa.save()
 
-        def lancamento = new Lancamento(despesa: despesa)
+        def lancamento = new Lancamento(eventoFinanceiro: despesa)
 
         lancamento.valor = despesa.valor
-        lancamento.valorBruto = despesa.valor
-        lancamento.tipoLancamento = despesa.tipoDespesa == TipoDespesa.ADIANTAMENTO ? TipoLancamento.PAGAMENTO_ADIANTADO : TipoLancamento.PAGAR
+        lancamento.tipoLancamento = despesa.tipoDespesa == TipoDespesa.ADIANTAMENTO ? TipoLancamento.PAGAMENTO_ADIANTADO : TipoLancamento.DEBITO
         lancamento.dataEmissao = despesa.data
         lancamento.descricao = despesa.descricao
         lancamento.statusLancamento = StatusLancamento.BAIXADO
