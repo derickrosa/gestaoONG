@@ -114,7 +114,8 @@ class DespesaController {
                                              'valor': despesa.valor,
                                              'data': despesa.data.format('dd/MM/yyyy'),
                                              'centroCusto': ['nome': despesa.centroCusto.toString(), 'id': despesa.centroCusto.id],
-                                             'atividade': despesa.atividade ? despesa.atividade.toString() : '']] as JSON)
+                                             'atividade': despesa.atividade ? despesa.atividade.toString() : '',
+                                             'papel': despesa.papel ? despesa.papel.toString() : '']] as JSON)
     }
 
     def edit(Despesa despesaInstance) {

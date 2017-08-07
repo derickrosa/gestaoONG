@@ -26,19 +26,6 @@
             </tr>
         </g:if>
 
-        <g:if test="${atividadeInstance?.despesas}">
-            <tr>
-                <th id="despesas-label" class="property-label"><g:message code="atividade.despesas.label"
-                                                                          default="Despesas"/></th>
-
-                <g:each in="${atividadeInstance.despesas}" var="d">
-                    <td aria-labelledby="despesas-label"><g:link controller="despesa" action="show"
-                                                                 id="${d.id}">${d?.encodeAsHTML()}</g:link></td>
-                </g:each>
-
-            </tr>
-        </g:if>
-
         <g:if test="${atividadeInstance?.atividade}">
             <tr>
                 <th id="atividade-label" class="property-label"><g:message code="atividade.atividade.label"
@@ -53,7 +40,7 @@
         <g:if test="${atividadeInstance?.centroCusto}">
             <tr>
                 <th id="centroCusto-label" class="property-label"><g:message code="atividade.centroCusto.label"
-                                                                             default="Centro Custo"/></th>
+                                                                             default="Centro de Custo"/></th>
 
                 <td aria-labelledby="centroCusto-label"><g:link controller="centroCusto" action="show"
                                                                 id="${atividadeInstance?.centroCusto?.id}">${atividadeInstance?.centroCusto?.encodeAsHTML()}</g:link></td>
@@ -64,9 +51,19 @@
         <g:if test="${atividadeInstance?.inicio}">
             <tr>
                 <th id="inicio-label" class="property-label"><g:message code="atividade.inicio.label"
-                                                                        default="Inicio"/></th>
+                                                                        default="Data de Início"/></th>
 
-                <td aria-labelledby="inicio-label"><g:formatDate date="${atividadeInstance?.inicio}"/></td>
+                <td aria-labelledby="inicio-label"><g:formatDate date="${atividadeInstance?.inicio}" format="dd/MM/yyyy" /></td>
+
+            </tr>
+        </g:if>
+
+        <g:if test="${atividadeInstance?.termino}">
+            <tr>
+                <th id="termino-label" class="property-label"><g:message code="atividade.termino.label"
+                                                                         default="Data de Término"/></th>
+
+                <td aria-labelledby="termino-label"><g:formatDate date="${atividadeInstance?.termino}" format="dd/MM/yyyy"/></td>
 
             </tr>
         </g:if>
@@ -119,7 +116,7 @@
         <g:if test="${atividadeInstance?.periodo}">
             <tr>
                 <th id="periodo-label" class="property-label"><g:message code="atividade.periodo.label"
-                                                                         default="Periodo"/></th>
+                                                                         default="Período"/></th>
 
                 <td aria-labelledby="periodo-label"><g:fieldValue bean="${atividadeInstance}"
                                                                   field="periodo"/></td>
@@ -138,15 +135,7 @@
             </tr>
         </g:if>
 
-        <g:if test="${atividadeInstance?.termino}">
-            <tr>
-                <th id="termino-label" class="property-label"><g:message code="atividade.termino.label"
-                                                                         default="Termino"/></th>
 
-                <td aria-labelledby="termino-label"><g:formatDate date="${atividadeInstance?.termino}"/></td>
-
-            </tr>
-        </g:if>
 
         <g:if test="${atividadeInstance?.tipo}">
             <tr>

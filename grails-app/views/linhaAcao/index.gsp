@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'linhaAcao.label', default: 'LinhaAcao')}"/>
+    <g:set var="entityName" value="${message(code: 'linhaAcao.label')}"/>
     <title><g:message code="default.list.label" args="[entityName]"/></title>
 </head>
 
@@ -13,7 +13,7 @@
     <div class="inner" style="min-height: 700px;">
         <div class="row">
             <div class="col-lg-12">
-                <h1><g:message code="default.list.label" args="[entityName]"/></h1>
+                <h1>Listagem de Linhas de Ação</h1>
             </div>
         </div>
         <hr/>
@@ -21,7 +21,7 @@
 
         <div class="nav" role="navigation">
         <p>
-            <g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="[entityName]" /></g:link>
+            <g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span> Criar Linha de Ação</g:link>
         </p>
         </div>
 
@@ -37,10 +37,10 @@
                                       title="${message(code: 'linhaAcao.nome.label', default: 'Nome')}"/>
                     
                     <g:sortableColumn property="descricao"
-                                      title="${message(code: 'linhaAcao.descricao.label', default: 'Descricao')}"/>
+                                      title="${message(code: 'linhaAcao.descricao.label', default: 'Descrição')}"/>
                     
                     <g:sortableColumn property="codigo"
-                                      title="${message(code: 'linhaAcao.codigo.label', default: 'Codigo')}"/>
+                                      title="${message(code: 'linhaAcao.codigo.label', default: 'Código')}"/>
                     
                 </tr>
                 </thead>

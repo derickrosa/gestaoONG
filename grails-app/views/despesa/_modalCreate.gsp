@@ -463,7 +463,9 @@
                                         descricao: response.despesa.descricao,
                                         tipo: response.despesa.tipo,
                                         valor: response.despesa.valor,
-                                        atividade: response.despesa.atividade}}));
+                                        atividade: response.despesa.atividade,
+                                        papel: response.despesa.papel
+                                    }}));
                         }
                     },
 
