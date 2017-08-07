@@ -5,7 +5,6 @@ class EventoFinanceiro {
     Date dateCreated
     Date lastUpdated
 
-    Papel papel
     Date data
     String descricao
     Double valor

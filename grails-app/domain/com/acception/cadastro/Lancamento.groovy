@@ -20,7 +20,7 @@ class Lancamento {
     Date dataCancelamento
     String codigoLancamento
     Anexo documento
-
+    Papel papel
     Integer parcela
 
     TipoAjuste tipoAjuste
