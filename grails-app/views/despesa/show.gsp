@@ -1,4 +1,4 @@
-<%@ page import="com.acception.cadastro.Despesa" %>
+<%@ page import="com.acception.cadastro.Fornecedor; com.acception.cadastro.Funcionario; com.acception.cadastro.Despesa" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -72,7 +72,7 @@
                     </tr>
                 </g:if>
 
-                <g:if test="${despesaInstance?.fornecedor}">
+                %{--<g:if test="${despesaInstance?.fornecedor}">
                     <tr>
                         <th id="fornecedor-label" class="property-label"><g:message code="despesa.fornecedor.label"
                                                                                     default="Fornecedor"/></th>
@@ -81,7 +81,7 @@
                                                                        id="${despesaInstance?.fornecedor?.id}">${despesaInstance?.fornecedor?.encodeAsHTML()}</g:link></td>
 
                     </tr>
-                </g:if>
+                </g:if>--}%
 
                 <g:if test="${despesaInstance?.atividade}">
                     <tr>
@@ -94,13 +94,24 @@
                     </tr>
                 </g:if>
 
-                <g:if test="${despesaInstance?.funcionario}">
+                <g:if test="${despesaInstance?.papel && despesaInstance?.papel instanceof Funcionario}">
                     <tr>
                         <th id="funcionario-label" class="property-label"><g:message code="despesa.funcionario.label"
                                                                                      default="Funcionário"/></th>
 
                         <td aria-labelledby="funcionario-label"><g:link controller="funcionario" action="show"
-                                                                        id="${despesaInstance?.funcionario?.id}">${despesaInstance?.funcionario?.encodeAsHTML()}</g:link></td>
+                                                                        id="${despesaInstance?.papel?.id}">${despesaInstance?.papel}</g:link></td>
+
+                    </tr>
+                </g:if>
+
+                <g:if test="${despesaInstance?.papel && despesaInstance?.papel instanceof Fornecedor}">
+                    <tr>
+                        <th id="fornecedor-label" class="property-label"><g:message code="despesa.fornecedor.label"
+                                                                                     default="Fornecedor"/></th>
+
+                        <td aria-labelledby="fornecedor-label"><g:link controller="fornecedor" action="show"
+                                                                        id="${despesaInstance?.papel?.id}">${despesaInstance?.papel}</g:link></td>
 
                     </tr>
                 </g:if>

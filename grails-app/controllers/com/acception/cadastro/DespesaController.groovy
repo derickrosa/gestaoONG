@@ -96,11 +96,10 @@ class DespesaController {
         despesa.valor = Util.parse(params.valor)
         despesa.save()
 
-        def lancamento = new Lancamento(despesa: despesa)
+        def lancamento = new Lancamento(eventoFinanceiro: despesa)
 
         lancamento.valor = despesa.valor
-        lancamento.valorBruto = despesa.valor
-        lancamento.tipoLancamento = despesa.tipoDespesa == TipoDespesa.ADIANTAMENTO ? TipoLancamento.PAGAMENTO_ADIANTADO : TipoLancamento.PAGAR
+        lancamento.tipoLancamento = despesa.tipoDespesa == TipoDespesa.ADIANTAMENTO ? TipoLancamento.PAGAMENTO_ADIANTADO : TipoLancamento.DEBITO
         lancamento.dataEmissao = despesa.data
         lancamento.descricao = despesa.descricao
         lancamento.statusLancamento = StatusLancamento.BAIXADO
@@ -114,8 +113,9 @@ class DespesaController {
                                              'descricao': despesa.descricao,
                                              'valor': despesa.valor,
                                              'data': despesa.data.format('dd/MM/yyyy'),
-                                             'centroCusto': despesa.centroCusto.toString(),
-                                             'atividade': despesa.atividade ? despesa.atividade.toString() : '']] as JSON)
+                                             'centroCusto': ['nome': despesa.centroCusto.toString(), 'id': despesa.centroCusto.id],
+                                             'atividade': despesa.atividade ? despesa.atividade.toString() : '',
+                                             'papel': despesa.papel ? despesa.papel.toString() : '']] as JSON)
     }
 
     def edit(Despesa despesaInstance) {

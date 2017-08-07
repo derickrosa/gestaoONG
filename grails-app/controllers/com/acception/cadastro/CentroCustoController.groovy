@@ -339,4 +339,20 @@ class CentroCustoController {
         out.close()
     }
 
+    def getAtividadesFromCentroCusto(Long centroCustoId) {
+        if (centroCustoId) {
+            def centroCusto = CentroCusto.get(centroCustoId)
+
+            if (centroCusto) {
+                def listaAtividades = centroCusto.atividades.collect { ['id': it.id, 'descricao': it.toString()]}
+
+                render(['success': true, atividades: listaAtividades] as JSON)
+            } else {
+                render(['success': false] as JSON)
+            }
+        } else {
+            render(['success': false] as JSON)
+        }
+    }
+
 }

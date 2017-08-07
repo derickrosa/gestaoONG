@@ -88,12 +88,25 @@
 <g:render template="modalCreate"/>
 
 <script>
+    Number.prototype.format = function(n, x, s, c) {
+        n = n == undefined ? 2 : n;
+
+        x = x == undefined ? 3 : x;
+
+        s = s == undefined ? '.' : s;
+
+        c = c == undefined ? ',' : c;
+
+        var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+                num = this.toFixed(Math.max(0, ~~n));
+
+        return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+    };
+
     document.getElementById("formCriacaoDespesa").addEventListener("despesaCriada", function (e) {
         var table = $("#tableDespesas tbody");
 
         var warningNaoHaDespesasCadastradas = $("#alertNoDespesas");
-
-        console.log(warningNaoHaDespesasCadastradas);
 
         if (warningNaoHaDespesasCadastradas) {
             warningNaoHaDespesasCadastradas.hide();
@@ -102,10 +115,10 @@
         var tableRow = $("<tr>");
 
         tableRow.append($("<td>").append("<a href='${createLink(controller: 'despesa', action: 'show')}/" + e.detail.id +  "'>" + e.detail.descricao + "</a>"));
-        tableRow.append($("<td>").text("R$ " + e.detail.valor));
+        tableRow.append($("<td>").text("R$ " + e.detail.valor.format()));
         tableRow.append($("<td>").text(e.detail.tipo));
         tableRow.append($("<td>").text(e.detail.data));
-        tableRow.append($("<td>").text(e.detail.centroCusto));
+        tableRow.append($("<td>").append("<a href='${createLink(controller: 'centroCusto', action: 'show')}/" + e.detail.centroCusto.id +  "'>" + e.detail.centroCusto.nome + "</a>"));
         tableRow.append($("<td>").text(e.detail.atividade));
 
         tableRow.addClass('success');

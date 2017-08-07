@@ -1,4 +1,4 @@
-<%@ page import="com.acception.cadastro.enums.TipoDespesa; com.acception.cadastro.Despesa" %>
+<%@ page import="com.acception.cadastro.Funcionario; com.acception.cadastro.Fornecedor; com.acception.cadastro.enums.TipoDespesa; com.acception.cadastro.Despesa" %>
 
 <asset:stylesheet src="bootstrap-datepicker.css"/>
 <asset:javascript src="plugins/jquery/jquery.validate.js"/>
@@ -228,30 +228,36 @@
                             </div>
                         </div>
 
-                        <div class="form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'atividade', 'error')}" style="display: none;">
+                        <div class="form-group fieldcontain" style="display: none;">
                             <label for="atividade">
                                 <g:message code="despesa.atividade.label" default="Atividade"/>
 
                             </label>
-                            <g:select required="required" id="atividade" name="atividade.id" from="${com.acception.cadastro.Atividade.list()}" optionKey="id" value="${despesaInstance?.atividade?.id}" class="form-control" noSelection="['': '']"/>
+
+                            <select required="required" id="atividade" name="atividade.id" class="form-control"
+                                    data-placeholder="Selecione um centro de custo que possua atividades primeiramente...">
+                                <option value></option>
+                            </select>
 
                         </div>
 
-                        <div class="form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'fornecedor', 'error')}" style="display: none;">
+                        <div class="form-group fieldcontain" style="display: none;">
                             <label for="fornecedor">
                                 <g:message code="despesa.fornecedor.label" default="Fornecedor"/>
                             </label>
-                            <g:select required="required" id="fornecedor" name="fornecedor.id" from="${com.acception.cadastro.Fornecedor.list()}" optionKey="id" value="${despesaInstance?.fornecedor?.id}" class="form-control" noSelection="['': '']"/>
+                            <g:select required="required" id="fornecedor" name="papel.id" from="${Fornecedor.list()}"
+                                      optionKey="id" class="form-control" data-placeholder="Selecione um fornecedor..." noSelection="['': '']"/>
                             <a onclick="mudarParaCadastroDeFornecedor()"><small>Criar Fornecedor</small></a>
 
                         </div>
 
-                        <div class="form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'funcionario', 'error')} " style="display: none;" >
+                        <div class="form-group fieldcontain" style="display: none;" >
                             <label for="funcionario">
                                 <g:message code="despesa.funcionario.label" default="Funcionário"/>
 
                             </label>
-                            <g:select required="required" id="funcionario" name="funcionario.id" from="${com.acception.cadastro.Funcionario.list()}" optionKey="id" value="${despesaInstance?.funcionario?.id}" class="form-control" noSelection="['': '']"/>
+                            <g:select required="required" id="funcionario" name="papel.id" from="${Funcionario.list()}"
+                                      optionKey="id" class="form-control" noSelection="['': '']" data-placeholder="Selecione um funcionário..."/>
                         </div>
 
                         <div class="row">
@@ -281,12 +287,6 @@
                             <div class="col-md-12 alert alert-success text-center">Despesa '<span id="descricaoDespesa"></span>', no valor de R$ <span id="valorDespesa"></span>, foi criada com sucesso!</div>
                         </div>
                     </div>
-
-                    <div id="cadastroFornecedor" style="display: none">
-                        <h3>Menu 1</h3>
-                        <p>Some content in menu 1.</p>
-                    </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
@@ -331,8 +331,66 @@
         $("#cpfOuCnpj input").removeClass('cpf').addClass('cnpj').attr("name", "participante.cnpj");
     }
 
+    // Essa função atualizará o select de atividades, permitindo apenas a seleção de atividades que são do centro de
+    // custo escolhido
+    function atualizarSelectAtividades (centroCustoId) {
+        if (centroCustoId) {
+            $.ajax({
+                url: "${createLink(controller: 'centroCusto', action: 'getAtividadesFromCentroCusto')}",
+                method: "POST",
+                data: {
+                    centroCustoId: centroCustoId
+                },
+                success: function (response) {
+                    var selectAtividade = $("#atividade");
+
+                    selectAtividade.html("<option value></option>");
+
+                    if (response.success === true) {
+                        for (var i = 0; i < response.atividades.length; i++) {
+                            var atividade = response.atividades[i];
+
+                            selectAtividade.append($("<option>").val(atividade.id)
+                                                                .text(atividade.descricao));
+                        }
+
+                        if (response.atividades.length > 0) {
+                            selectAtividade.attr('data-placeholder', 'Selecione uma atividade...');
+                        }
+
+                        selectAtividade.trigger("chosen:updated");
+                    } else {
+                        swal(
+                                'Oops...',
+                                'Ocorreu um erro ao carregar as atividades. Contate o suporte técnico!',
+                                'error'
+                        );
+                    }
+                },
+
+                error: function () {
+                    swal(
+                            'Oops...',
+                            'Ocorreu um erro ao carregar as atividades. Contate o suporte técnico!',
+                            'error'
+                    );
+                }
+            })
+        } else {
+            // Retirar todas as opções das atividades
+        }
+    }
+
     $(function() {
         $("#centroCusto").chosen();
+        $("#fornecedor").chosen();
+        $("#atividade").chosen();
+        $("#funcionario").chosen();
+
+        $("#centroCusto").on('change', function () {
+           atualizarSelectAtividades($(this).val());
+        });
+
 
         // A linha abaixo é para que a validação do form funcione para o chosen da linha acima.
         $.validator.setDefaults({ ignore: ":hidden:not(select)" });
@@ -363,6 +421,8 @@
                 hideInput("#fornecedor");
                 hideInput("#funcionario");
             }
+
+            $("#formCriacaoDespesa").find("select:not('#centroCusto')").trigger('chosen:updated')
         };
 
         $("#tipoDespesa").on('change', function () {
@@ -371,6 +431,7 @@
 
         var resetFormCriacaoDespesas = function (form) {
             $(form).find("input[type=text], textarea, select:not('#centroCusto')").val("");
+            $(form).find("select:not('#centroCusto')").trigger('chosen:updated');
         };
 
         $("#formCriacaoDespesa").validate({
@@ -402,7 +463,9 @@
                                         descricao: response.despesa.descricao,
                                         tipo: response.despesa.tipo,
                                         valor: response.despesa.valor,
-                                        atividade: response.despesa.atividade}}));
+                                        atividade: response.despesa.atividade,
+                                        papel: response.despesa.papel
+                                    }}));
                         }
                     },
 
@@ -441,6 +504,7 @@
 
                             fornecedorSelect.append($("<option>").text(response.fornecedor.nome).val(response.fornecedor.id));
                             fornecedorSelect.val(response.fornecedor.id);
+                            fornecedorSelect.trigger('chosen:updated');
                         }
                     },
 
