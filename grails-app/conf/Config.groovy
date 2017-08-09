@@ -175,6 +175,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/centroCusto/getAtividadesFromCentroCusto':           allRoles,
 	'/anexo/**':           allRoles,
 	'/user/**':           ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
+	'/lancamento/**':           ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
     '/financiador/**':    allRoles,
     '/financiador/findSolicitacoes': allRoles,
     '/responsavel/**':   ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],

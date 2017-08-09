@@ -30,6 +30,13 @@ class Lancamento {
     static belongsTo = [centroCusto: CentroCusto]
 
     static constraints = {
+        valor nullable:true
+        numeroTitulo nullable:true
+        descricao nullable:true
+        tipoLancamento nullable:true
+        papel nullable:true
+        statusLancamento nullable:true
+        dataEmissao nullable:true
         dataPagamento nullable:true
         dataCancelamento nullable: true
         parcela nullable:true
