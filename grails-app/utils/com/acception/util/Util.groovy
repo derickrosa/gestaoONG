@@ -221,4 +221,20 @@ class Util {
 
         return "${moeda} ${df.format(value)} "
     }
+
+    // When we make a AJAX request to create a given object, we have to send some values on the response, to update for
+    // example a table. This function updates the response with the values to send back.
+    static updateResponseWithValuesToSendBack(response, createdObject, attributes) {
+        def attributesToSendBack = attributes.split(',')
+
+        for (String attr in attributesToSendBack) {
+            def value = attr.split( /\./ ).inject( createdObject ) { obj, prop -> obj?."$prop" }
+
+            if (value instanceof Date) {
+                value = value.format('dd/MM/yyyy')
+            }
+
+            response[attr] = value?.toString()
+        }
+    }
 }

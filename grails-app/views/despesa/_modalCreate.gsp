@@ -391,7 +391,6 @@
            atualizarSelectAtividades($(this).val());
         });
 
-
         // A linha abaixo é para que a validação do form funcione para o chosen da linha acima.
         $.validator.setDefaults({ ignore: ":hidden:not(select)" });
 
@@ -446,7 +445,7 @@
                 $.ajax({
                     url: "${createLink(controller: 'despesa', action: 'criarDespesa')}",
                     method: "POST",
-                    data: $(form).serialize(),
+                    data: $(form).serialize() + "&attributes=" + getAttributesNecessaryToUpdateTable("${idTabelaParaAtualizar}").join(','),
                     success: function (response) {
                         if (response.success === true) {
                             resetFormCriacaoDespesas(form);
@@ -456,16 +455,7 @@
                             $("#valorDespesa").text(response.despesa.valor);
 
                             form.dispatchEvent(new CustomEvent("despesaCriada",
-                                    {detail: {
-                                        id: response.despesa.id,
-                                        centroCusto: response.despesa.centroCusto,
-                                        data: response.despesa.data,
-                                        descricao: response.despesa.descricao,
-                                        tipo: response.despesa.tipo,
-                                        valor: response.despesa.valor,
-                                        atividade: response.despesa.atividade,
-                                        papel: response.despesa.papel
-                                    }}));
+                                    {detail: response.despesa}));
                         }
                     },
 

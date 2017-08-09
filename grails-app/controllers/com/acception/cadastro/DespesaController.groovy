@@ -99,23 +99,22 @@ class DespesaController {
         def lancamento = new Lancamento(eventoFinanceiro: despesa)
 
         lancamento.valor = despesa.valor
+        lancamento.numeroTitulo = despesa.id.toString()
         lancamento.tipoLancamento = despesa.tipoDespesa == TipoDespesa.ADIANTAMENTO ? TipoLancamento.PAGAMENTO_ADIANTADO : TipoLancamento.DEBITO
         lancamento.dataEmissao = despesa.data
         lancamento.descricao = despesa.descricao
         lancamento.statusLancamento = StatusLancamento.BAIXADO
         lancamento.centroCusto = despesa.centroCusto
-        lancamento.save()
+        lancamento.papel = Papel.get(params.papel.id)
+        lancamento.save(flush: true, failOnError: true)
 
-        despesa.save(flush: true)
+        despesa.save(flush: true, failOnError: true)
 
-        render(['success': true, 'despesa': ['id': despesa.id,
-                                             'tipo': despesa.tipoDespesa.nome,
-                                             'descricao': despesa.descricao,
-                                             'valor': despesa.valor,
-                                             'data': despesa.data.format('dd/MM/yyyy'),
-                                             'centroCusto': ['nome': despesa.centroCusto.toString(), 'id': despesa.centroCusto.id],
-                                             'atividade': despesa.atividade ? despesa.atividade.toString() : '',
-                                             'papel': despesa.papel ? despesa.papel.toString() : '']] as JSON)
+        def despesaResponse = ['id': despesa.id]
+
+        Util.updateResponseWithValuesToSendBack(despesaResponse, despesa, params.attributes)
+
+        render(['success': true, 'despesa': despesaResponse] as JSON)
     }
 
     def edit(Despesa despesaInstance) {
