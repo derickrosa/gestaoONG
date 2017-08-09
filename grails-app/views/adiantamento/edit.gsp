@@ -1,9 +1,9 @@
-<%@ page import="com.acception.cadastro.Despesa" %>
+<%@ page import="com.acception.cadastro.Adiantamento" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="layout" content="main">
-    <g:set var="entityName" value="${message(code: 'despesa.label', default: 'Despesa')}"/>
+    <g:set var="entityName" value="${message(code: 'adiantamento.label', default: 'Adiantamento')}"/>
     <title><g:message code="default.edit.label" args="[entityName]"/></title>
 </head>
 
@@ -32,23 +32,23 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-12">
-                    <div id="edit-despesa" class="content scaffold-edit" role="main">
+                    <div id="edit-adiantamento" class="content scaffold-edit" role="main">
                         <g:if test="${flash.message}">
                             <div class="alert alert-danger" role="status">${flash.message}</div>
                         </g:if>
-                        <g:hasErrors bean="${despesaInstance}">
+                        <g:hasErrors bean="${adiantamentoInstance}">
                             <div class="alert alert-danger">
                                 <ul role="alert">
-                                    <g:eachError bean="${despesaInstance}" var="error">
+                                    <g:eachError bean="${adiantamentoInstance}" var="error">
                                         <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message
                                                 error="${error}"/></li>
                                     </g:eachError>
                                 </ul>
                             </div>
                         </g:hasErrors>
-                        <g:form url="[resource:despesaInstance, action:'update']" method="PUT" >
+                        <g:form url="[resource:adiantamentoInstance, action:'update']" method="PUT" >
 
-                        <g:hiddenField name="version" value="${despesaInstance?.version}"/>
+                        <g:hiddenField name="version" value="${adiantamentoInstance?.version}"/>
                         <g:render template="form"/>
                         <button type="submit" class="btn btn-default">
                             <span class="glyphicon glyphicon-edit"></span>
@@ -61,5 +61,23 @@
     </div>
     </div>
 </body>
+
+<script>
+    $(function() {
+        var makeChosenSelectReadOnly = function (selectId) {
+            var select = "#" + selectId;
+
+            $(select + ' option:not(:selected)').attr('disabled', true);
+            $(select).trigger('chosen:updated');
+        };
+
+        makeChosenSelectReadOnly('funcionario-PA');
+        makeChosenSelectReadOnly('centroCusto-PA');
+
+        $('#funcionario-PA option:not(:selected)').attr('disabled', true);
+        $('#funcionario-PA').trigger('chosen:updated');
+    })
+</script>
+
 
 </html>

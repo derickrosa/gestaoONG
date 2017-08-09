@@ -10,4 +10,12 @@ class Despesa extends EventoFinanceiro{
     static constraints = {
         atividade nullable: true
     }
+
+    def getLancamento() {
+        return Lancamento.createCriteria().get {
+            eventoFinanceiro {
+                idEq(this.id)
+            }
+        }
+    }
 }

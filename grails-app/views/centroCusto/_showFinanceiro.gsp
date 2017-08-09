@@ -82,6 +82,7 @@
 <ul class="nav nav-pills">
     <li class="active"><a href="#despesas" data-toggle="tab" aria-expanded="true">Despesas</a></li>
     <li><a href="#creditos" data-toggle="tab" aria-expanded="true">Créditos</a></li>
+    <li><a href="#pagamentos-adiantados" data-toggle="tab" aria-expanded="true">PA's</a></li>
 </ul>
 
 <div class="tab-content">
@@ -89,8 +90,8 @@
         <g:render template="showDespesas" model="[centroCustoInstance: centroCustoInstance]"/>
     </div>
 
-    <div class="tab-pane fade in" id="creditos">
-        <g:render template="showCreditos" model="[centroCustoInstance: centroCustoInstance]"/>
+    <div class="tab-pane fade in" id="pagamentos-adiantados">
+        <g:render template="showAdiantamentos" model="[centroCustoInstance: centroCustoInstance]"/>
     </div>
 
 </div>

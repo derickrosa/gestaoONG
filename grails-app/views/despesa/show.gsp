@@ -94,7 +94,7 @@
                     </tr>
                 </g:if>
 
-                <g:if test="${despesaInstance?.papel && despesaInstance?.papel instanceof Funcionario}">
+                %{--<g:if test="${despesaInstance?.papel && despesaInstance?.papel instanceof Funcionario}">
                     <tr>
                         <th id="funcionario-label" class="property-label"><g:message code="despesa.funcionario.label"
                                                                                      default="Funcionário"/></th>
@@ -103,9 +103,9 @@
                                                                         id="${despesaInstance?.papel?.id}">${despesaInstance?.papel}</g:link></td>
 
                     </tr>
-                </g:if>
+                </g:if>--}%
 
-                <g:if test="${despesaInstance?.papel && despesaInstance?.papel instanceof Fornecedor}">
+               %{-- <g:if test="${despesaInstance?.lancamentos[0]?.papel && despesaInstance?.papel instanceof Fornecedor}">
                     <tr>
                         <th id="fornecedor-label" class="property-label"><g:message code="despesa.fornecedor.label"
                                                                                      default="Fornecedor"/></th>
@@ -114,7 +114,7 @@
                                                                         id="${despesaInstance?.papel?.id}">${despesaInstance?.papel}</g:link></td>
 
                     </tr>
-                </g:if>
+                </g:if>--}%
 
                 <g:if test="${despesaInstance?.centroCusto}">
                     <tr>

@@ -12,11 +12,11 @@
 <table class="table table-hover text-center" id="tabelaDespesas">
     <thead>
     <tr>
-        <th class="text-center">Despesa</th>
-        <th class="text-center">Valor</th>
-        <th class="text-center">Tipo Despesa</th>
-        <th class="text-center">Data</th>
-        <th class="text-center">Destino</th>
+        <th class="text-center" data-attribute="descricao" data-render='<g:link controller="despesa" action="show" id="{id}">{descricao}</g:link>'>Despesa</th>
+        <th class="text-center" data-attribute="valor" data-render="R$ {valor}">Valor</th>
+        <th class="text-center" data-attribute="tipoDespesa.nome">Tipo Despesa</th>
+        <th class="text-center" data-attribute="data">Data</th>
+        <th class="text-center" data-attribute="lancamento.papel">Destino</th>
     </tr>
     </thead>
 
@@ -28,7 +28,7 @@
                 <td>R$ ${df.format(despesa.valor)}</td>
                 <td>${despesa.tipoDespesa?.nome}</td>
                 <td><g:formatDate date="${despesa.data}" format="dd/MM/yyyy"/></td>
-                <td>${despesa.papel ?: '--'}</td>
+                <td>${despesa.lancamento?.papel ?: '--'}</td>
             </tr>
         </g:each>
     </g:if>
@@ -43,30 +43,18 @@
 </table>
 
 
-<g:render template="/despesa/modalCreate" model="[centroCustoId: centroCustoInstance.id]"/>
+<g:render template="/despesa/modalCreate" model="[centroCustoId: centroCustoInstance.id, idTabelaParaAtualizar: '#tabelaDespesas']"/>
+
+<asset:javascript src="dynamicTable.js"/>
 
 <script>
     document.getElementById("formCriacaoDespesa").addEventListener("despesaCriada", function (e) {
-        console.log(e.detail);
-
-        var table = $("#tabelaDespesas > tbody");
-
         var warningNaoHaDespesasCadastradas = $("#alertNoDespesas");
 
         if (warningNaoHaDespesasCadastradas) {
             warningNaoHaDespesasCadastradas.hide();
         }
 
-        var tableRow = $("<tr>");
-
-        tableRow.append($("<td>").append("<a href='${createLink(controller: 'despesa', action: 'show')}/" + e.detail.id + "'>" + e.detail.descricao + "</a>"));
-        tableRow.append($("<td>").text("R$ " + e.detail.valor));
-        tableRow.append($("<td>").text(e.detail.tipo));
-        tableRow.append($("<td>").text(e.detail.data));
-        tableRow.append($("<td>").text(e.detail.papel));
-
-        tableRow.addClass('success');
-
-        table.append(tableRow);
+        addNewRowToTable('#tabelaDespesas', e.detail);
     }, false);
 </script>
