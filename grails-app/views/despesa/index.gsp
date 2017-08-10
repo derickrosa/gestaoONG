@@ -7,6 +7,7 @@
     <g:set var="entityName" value="${message(code: 'despesa.label', default: 'Despesa')}"/>
     <title><g:message code="default.list.label" args="[entityName]"/></title>
     <g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
+    <asset:javascript src="dynamicTable.js"/>
 </head>
 
 <body>
@@ -36,14 +37,13 @@
                 <thead>
                 <tr>
 
-                    <th class="text-center">Descrição</th>
-                    <th class="text-center">Valor</th>
-                    <th class="text-center">Tipo Despesa</th>
-                    <g:sortableColumn class="text-center" property="data"
-                                      title="${message(code: 'despesa.data.label', default: 'Data')}"/>
+                    <th class="text-center" data-attribute="descricao" data-render='<g:link controller="despesa" action="show" id="{id}">{descricao}</g:link>'>Descrição</th>
+                    <th class="text-center" data-attribute="valor" data-render="R$ {valor}">Valor</th>
+                    <th class="text-center" data-attribute="tipoDespesa.nome">Tipo Despesa</th>
+                    <th class="text-center" data-attribute="data">Data</th>
 
-                    <th class="text-center"><g:message code="despesa.centroCusto.label" default="Centro Custo"/></th>
-                    <th class="text-center"><g:message code="despesa.atividade.label" default="Atividade"/></th>
+                    <th class="text-center" data-attribute="centroCusto"><g:message code="despesa.centroCusto.label" default="Centro Custo"/></th>
+                    <th class="text-center" data-attribute="atividade"><g:message code="despesa.atividade.label" default="Atividade"/></th>
 
                 </tr>
                 </thead>
@@ -85,7 +85,7 @@
     </div>
 </div>
 
-<g:render template="modalCreate"/>
+<g:render template="modalCreate" model="[idTabelaParaAtualizar: '#tableDespesas']"/>
 
 <script>
     Number.prototype.format = function(n, x, s, c) {
@@ -104,26 +104,13 @@
     };
 
     document.getElementById("formCriacaoDespesa").addEventListener("despesaCriada", function (e) {
-        var table = $("#tableDespesas tbody");
-
         var warningNaoHaDespesasCadastradas = $("#alertNoDespesas");
 
         if (warningNaoHaDespesasCadastradas) {
             warningNaoHaDespesasCadastradas.hide();
         }
 
-        var tableRow = $("<tr>");
-
-        tableRow.append($("<td>").append("<a href='${createLink(controller: 'despesa', action: 'show')}/" + e.detail.id +  "'>" + e.detail.descricao + "</a>"));
-        tableRow.append($("<td>").text("R$ " + e.detail.valor.format()));
-        tableRow.append($("<td>").text(e.detail.tipo));
-        tableRow.append($("<td>").text(e.detail.data));
-        tableRow.append($("<td>").append("<a href='${createLink(controller: 'centroCusto', action: 'show')}/" + e.detail.centroCusto.id +  "'>" + e.detail.centroCusto.nome + "</a>"));
-        tableRow.append($("<td>").text(e.detail.atividade));
-
-        tableRow.addClass('success');
-
-        table.append(tableRow);
+        addNewRowToTable('#tableDespesas', e.detail);
     }, false);
 </script>
 
