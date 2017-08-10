@@ -1,25 +1,6 @@
-<%@ page import="com.acception.cadastro.enums.TipoDespesa; com.acception.cadastro.Despesa" %>
+<%@ page import="com.acception.cadastro.Funcionario; com.acception.cadastro.Fornecedor; com.acception.cadastro.enums.TipoDespesa; com.acception.cadastro.Despesa" %>
 
 <asset:stylesheet src="bootstrap-datepicker.css"/>
-
-<div class="row">
-    <div class="col-md-9 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'descricao', 'error')} ">
-        <label for="descricao">
-            <g:message code="despesa.descricao.label" default="Descrição"/>
-
-        </label>
-        <g:textField class="form-control" required="required" name="descricao" value="${despesaInstance?.descricao}"/>
-    </div>
-
-    <div class="col-md-3 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'valor', 'error')} ">
-        <label for="valor">
-            <g:message code="despesa.valor.label" default="Valor"/>
-
-        </label>
-
-        <input required="required" type="text" class="form-control currency" id="valor" name="valor" value="${despesaInstance?.valor}">
-    </div>
-</div>
 
 <div class="row">
     <div class="col-md-6 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'centroCusto', 'error')} ">
@@ -27,10 +8,9 @@
             <g:message code="despesa.centroCusto.label" default="Centro Custo"/>
 
         </label>
-        <g:select class="form-control" id="centroCusto" name="centroCusto.id" from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id" value="${despesaInstance?.centroCusto?.id}" noSelection="['null': '']" required="required" data-placeholder="Selecione um centro de custo..."/>
+        <g:select class="form-control" id="centroCusto" name="centroCusto.id" from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id" value="${centroCustoId}" noSelection="['': '']" required="required" data-placeholder="Selecione um centro de custo..."/>
 
     </div>
-
 
     <div class="col-md-6 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'tipoDespesa', 'error')} ">
         <label for="tipoDespesa">
@@ -43,43 +23,65 @@
     </div>
 </div>
 
-<div class="form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'atividade', 'error')} ">
+<div class="row">
+    <div class="col-md-12 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'descricao', 'error')} ">
+        <label for="descricao">
+            <g:message code="despesa.descricao.label" default="Descrição"/>
+
+        </label>
+        <g:textField class="form-control" required="required" name="descricao" value="${despesaInstance?.descricao}"/>
+    </div>
+</div>
+
+<div class="form-group fieldcontain" style="display: none;">
     <label for="atividade">
         <g:message code="despesa.atividade.label" default="Atividade"/>
 
     </label>
-    <g:select required="required" id="atividade" name="atividade.id" from="${com.acception.cadastro.Atividade.list()}" optionKey="id" value="${despesaInstance?.atividade?.id}" class="form-control" noSelection="['': '']"/>
+
+    <select required="required" id="atividade" name="atividade.id" class="form-control"
+            data-placeholder="Selecione um centro de custo que possua atividades primeiramente...">
+        <option value></option>
+    </select>
 
 </div>
 
-<div class="form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'fornecedor', 'error')} ">
+<div class="form-group fieldcontain" style="display: none;">
     <label for="fornecedor">
         <g:message code="despesa.fornecedor.label" default="Fornecedor"/>
-        
     </label>
-    <g:select required="required" id="fornecedor" name="fornecedor.id" from="${com.acception.cadastro.Fornecedor.list()}" optionKey="id" value="${despesaInstance?.fornecedor?.id}" class="form-control" noSelection="['': '']"/>
+    <g:select required="required" id="fornecedor" name="papel.id" from="${com.acception.cadastro.Fornecedor.list()}"
+              optionKey="id" class="form-control" data-placeholder="Selecione um fornecedor..." noSelection="['': '']"/>
+    <a onclick="mudarParaCadastroDeFornecedor()"><small>Criar Fornecedor</small></a>
 
 </div>
 
-<div class="form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'funcionario', 'error')} ">
+<div class="form-group fieldcontain" style="display: none;" >
     <label for="funcionario">
         <g:message code="despesa.funcionario.label" default="Funcionário"/>
-        
-    </label>
-    <g:select required="required" id="funcionario" name="funcionario.id" from="${com.acception.cadastro.Funcionario.list()}" optionKey="id" value="${despesaInstance?.funcionario?.id}" class="form-control" noSelection="['': '']"/>
 
+    </label>
+    <g:select required="required" id="funcionario" name="papel.id" from="${com.acception.cadastro.Funcionario.list()}"
+              optionKey="id" class="form-control" noSelection="['': '']" data-placeholder="Selecione um funcionário..."/>
 </div>
 
 <div class="row">
+    <div class="col-md-6 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'valor', 'error')} ">
+        <label for="valor">
+            <g:message code="despesa.valor.label" default="Valor"/>
 
+        </label>
 
-    <div class="col-md-4 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'data', 'error')} ">
+        <input required="required" type="text" class="form-control currency" id="valor" name="valor" data-allow-negative="false">
+    </div>
+
+    <div class="col-md-6 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'data', 'error')} ">
         <label for="data">
             <g:message code="despesa.data.label" default="Data"/>
 
         </label>
 
-        <input required="required" id="data" name="data" format="dd/MM/yyyy"
+        <input type="text" required="required" id="data" name="data" format="dd/MM/yyyy"
                value="${formatDate(format: "dd/MM/yyyy", date: despesaInstance?.data)}"
                class="form-control datepicker"/>
 
@@ -88,54 +90,95 @@
 
 <script>
     $(function() {
+        $("#centroCusto").chosen();
+        $("#fornecedor").chosen();
+        $("#atividade").chosen();
+        $("#funcionario").chosen();
+
         var refreshFormBasedOnTipoDespesa = function (tipoDespesa) {
+            var showInput = function (elementId) {
+                $(elementId).prop("disabled", false).parent().show('slow')
+            };
+
+            var hideInput = function (elementId) {
+                $(elementId).prop("disabled", true).val('').parent().hide('slow')
+            };
+
             if (tipoDespesa === "ATIVIDADE") {
-                $("#atividade").prop("disabled", false);
-                $("#fornecedor").prop("disabled", false);
-                $("#funcionario").prop("disabled", true).val('');
+                showInput("#atividade");
+                showInput("#fornecedor");
+                hideInput("#funcionario");
             } else if (tipoDespesa === "PESSOAL" || tipoDespesa == "ADIANTAMENTO") {
-                $("#atividade").prop("disabled", true).val('');
-                $("#fornecedor").prop("disabled", true).val('');
-                $("#funcionario").prop("disabled", false);
+                hideInput("#atividade");
+                hideInput("#fornecedor");
+                showInput("#funcionario");
             } else if (tipoDespesa === "CUSTO_ADMINISTRATIVO") {
-                $("#atividade").prop("disabled", true).val('');
-                $("#fornecedor").prop("disabled", false).val('');
-                $("#funcionario").prop("disabled", true);
+                hideInput("#atividade");
+                showInput("#fornecedor");
+                hideInput("#funcionario");
             } else {
-                $("#atividade").prop("disabled", true).val('');
-                $("#fornecedor").prop("disabled", true).val('');
-                $("#funcionario").prop("disabled", true).val('');
+                hideInput("#atividade");
+                hideInput("#fornecedor");
+                hideInput("#funcionario");
             }
+
+            $("#formCriacaoDespesa").find("select:not('#centroCusto')").trigger('chosen:updated')
         };
 
-        var atualizarSelectAtividades = function (centroCustoId) {
-          if (centroCustoId) {
-              $.ajax({
-                  url: "${createLink(controller: 'atividade', action: 'getAtividadesDeCentroCusto')}",
-                  method: 'POST',
-                  data: {
-                      centroCustoId: centroCustoId
-                  },
-                  success: function (response) {
-                      console.log(response);
-                  },
+        // Essa função atualizará o select de atividades, permitindo apenas a seleção de atividades que são do centro de
+        // custo escolhido
+        function atualizarSelectAtividades (centroCustoId) {
+            if (centroCustoId) {
+                $.ajax({
+                    url: "${createLink(controller: 'centroCusto', action: 'getAtividadesFromCentroCusto')}",
+                    method: "POST",
+                    data: {
+                        centroCustoId: centroCustoId
+                    },
+                    success: function (response) {
+                        var selectAtividade = $("#atividade");
 
-                  failure: function (response) {
-                      console.log(response);
+                        selectAtividade.html("<option value></option>");
 
-                  }
-              })
-          }
-        };
+                        if (response.success === true) {
+                            for (var i = 0; i < response.atividades.length; i++) {
+                                var atividade = response.atividades[i];
+
+                                selectAtividade.append($("<option>").val(atividade.id)
+                                        .text(atividade.descricao));
+                            }
+
+                            if (response.atividades.length > 0) {
+                                selectAtividade.attr('data-placeholder', 'Selecione uma atividade...');
+                            }
+
+                            selectAtividade.trigger("chosen:updated");
+                        } else {
+                            swal(
+                                    'Oops...',
+                                    'Ocorreu um erro ao carregar as atividades. Contate o suporte técnico!',
+                                    'error'
+                            );
+                        }
+                    },
+
+                    error: function () {
+                        swal(
+                                'Oops...',
+                                'Ocorreu um erro ao carregar as atividades. Contate o suporte técnico!',
+                                'error'
+                        );
+                    }
+                })
+            } else {
+                // Retirar todas as opções das atividades
+            }
+        }
 
         refreshFormBasedOnTipoDespesa("${despesaInstance?.tipoDespesa}");
 
-        $("#centroCusto").chosen();
-
-        $("#centroCusto").on("change", function () {
-            console.log('here');
-
-           atualizarSelectAtividades($(this).val());
+        $("#centroCusto").on('change', function () {
+            atualizarSelectAtividades($(this).val());
         });
 
         $("#tipoDespesa").on('change', function () {

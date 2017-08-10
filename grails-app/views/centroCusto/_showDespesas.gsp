@@ -1,3 +1,5 @@
+<asset:stylesheet src="dataTables.bootstrap.css"/>
+<asset:javascript src="dataTables.bootstrap.min.js"/>
 
 <div class="row">
     <div class="col-md-12 text-center">
@@ -48,6 +50,8 @@
 <asset:javascript src="dynamicTable.js"/>
 
 <script>
+    // var table = $("#tabelaDespesas").DataTable();
+
     document.getElementById("formCriacaoDespesa").addEventListener("despesaCriada", function (e) {
         var warningNaoHaDespesasCadastradas = $("#alertNoDespesas");
 
