@@ -1,6 +1,7 @@
 package com.acception.cadastro
 
 import com.acception.cadastro.enums.StatusProjeto
+import com.acception.cadastro.enums.TipoLancamento
 
 class CentroCusto {
 
@@ -25,6 +26,8 @@ class CentroCusto {
 
     static belongsTo = [financiador: Financiador]
 
+    static transients = ['saldo']
+
     static constraints = {
         dataInicio nullable: true
         dataFinal nullable: true
@@ -33,6 +36,19 @@ class CentroCusto {
         arquivos nullable: true
         responsavel nullable: true
         statusProjeto nullable: true
+    }
+
+    def getSaldo() {
+        def despesas = 0
+        def creditos = this.lancamentos.findAll{ it.tipoLancamento == TipoLancamento.CREDITO }
+
+        def valorCredito = creditos*.valor.sum() ?: 0
+
+        return valorCredito - despesas
+    }
+
+    def getSaldoInicial() {
+        return this.lancamentos.find { it.descricao == 'Saldo Inicial' }?.valor ?: 0
     }
 
     def getOrcamentoOriginal() {
@@ -44,6 +60,6 @@ class CentroCusto {
     }
 
     String toString() {
-        "${nome + '/' + ano}"
+        "(${codigo}) ${nome}/${ano}"
     }
 }

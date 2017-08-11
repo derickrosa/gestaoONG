@@ -1,4 +1,4 @@
-<%@ page import="com.acception.cadastro.Atividade" %>
+<%@ page import="com.acception.cadastro.enums.TipoAtividade; com.acception.cadastro.Atividade" %>
 
 <asset:stylesheet src="bootstrap-datepicker.css"/>
 <asset:javascript src="plugins/bootstrap/bootstrap-datepicker.min.js"/>
@@ -86,7 +86,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                     <g:message code="atividade.nome.label" default="Nome"/>
 
                 </label>
-                <g:textField class="form-control" name="nome" maxlength="100" value="${atividadeInstance?.nome}"/>
+                <g:textField class="form-control" required="required" name="nome" maxlength="100" value="${atividadeInstance?.nome}"/>
 
             </div>
         </div>
@@ -152,10 +152,10 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 <label for="tipo">
                     <g:message code="atividade.tipo.label" default="Tipo"/>
                 </label>
-                <g:select name="tipo" from="${com.acception.cadastro.enums.TipoAtividade?.values()}"
-                          class="form-control" keys="${com.acception.cadastro.enums.TipoAtividade.values()*.name()}"
+                <g:select name="tipo" from="${TipoAtividade?.values()}"
+                          class="form-control" keys="${TipoAtividade.values()*.name()}"
                           value="${atividadeInstance?.tipo?.name()}"
-                          noSelection="['null': 'Selecione o tipo de atividade...']"/>
+                          noSelection="['null': 'Selecione o tipo de atividade...']" required="required"/>
 
             </div>
         </div>
@@ -169,7 +169,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 <g:select name="status" from="${com.acception.cadastro.enums.StatusAtividade?.values()}"
                           class="form-control"
                           keys="${com.acception.cadastro.enums.StatusAtividade.values()*.name()}"
-                          value="${atividadeInstance?.status?.name()}" noSelection="['': '']"/>
+                          value="${atividadeInstance?.status?.name()}" noSelection="['': '']" required="required"/>
 
             </div>
         </div>
@@ -271,7 +271,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                 <g:select class="form-control" id="estado" name="estado.id"
                           from="${com.acception.cadastro.Estado.createCriteria().list{order('nome','asc')}}" optionKey="id"
                           value="${atividadeInstance?.estado?.id}"
-                          noSelection="['null': 'Selecione um estado...']"/>
+                          noSelection="['null': 'Selecione um estado...']" required="required"/>
 
             </div>
         </div>
@@ -287,7 +287,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
                           from="${com.acception.cadastro.Cidade.withCriteria{eq('estado',atividadeInstance.estado) order('nome','asc')}}"
                           optionKey="id"
                           value="${atividadeInstance?.municipio?.id}"
-                          noSelection="['null': 'Selecione um município...']"/>
+                          noSelection="['null': 'Selecione um município...']" required="required"/>
 
             </div>
         </div>
