@@ -43,7 +43,7 @@
 
     <g:else>
         <tr id="alertNoPagamentosAdiantados">
-            <td colspan="4">Sem PA's cadastradas para esse centro de custo!</td>
+            <td colspan="5">Sem PA's cadastradas para esse centro de custo!</td>
         </tr>
     </g:else>
 
