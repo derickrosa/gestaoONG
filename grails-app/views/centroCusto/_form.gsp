@@ -302,7 +302,10 @@
         <div class="row">
             <div class="col-md-6 form-group">
                 <label>Saldo</label>
-                <g:textField name="contaBancaria.saldo" class="form-control currency" required="required" value="${centroCustoInstance.contaBancaria?.saldo}" data-allow-zero="true"/>
+
+                <g:textField name="saldoInicialContaBancaria" class="form-control currency" required="required"
+                             value="${centroCustoInstance.saldo}" data-allow-zero="true"/>
+
             </div>
         </div>
     </section>
@@ -669,6 +672,11 @@
         });
     };
 
+    // Esse método irá fazer os ajustes necessários para quando este form for utilizado no contexto de edição
+    var adjustFormToEdit = function () {
+        $("#saldoInicialContaBancaria").prop('disabled', true);
+    };
+
     $(function () {
         initializeDatepicker();
 
@@ -707,13 +715,11 @@
 
         $("#orcamento\\.moeda").change();
 
-        $("#contaBancaria\\.saldo").maskMoney({
-            prefix: 'R$ ',
-            decimal: ',',
-            thousands: '.',
-            affixesStay: false,
-            allowZero: true
-        });
+        var actionName = "${actionName}";
+
+        if (actionName === 'edit') {
+            adjustFormToEdit();
+        }
     });
 </script>
 

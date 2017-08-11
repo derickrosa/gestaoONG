@@ -1,8 +1,10 @@
 package com.acception.cadastro
 
 import com.acception.cadastro.enums.Moeda
+import com.acception.cadastro.enums.StatusLancamento
 import com.acception.cadastro.enums.TipoContaBancaria
 import com.acception.cadastro.enums.TipoCusto
+import com.acception.cadastro.enums.TipoLancamento
 import com.acception.util.Util
 import grails.converters.JSON
 import java.text.DecimalFormat
@@ -43,6 +45,14 @@ class CentroCustoController {
 
         _updateCentroCusto(centroCustoInstance, params)
 
+        if (params.saldoInicialContaBancaria) {
+            def lancamentoSaldoInicial = criarLancamentoSaldoInicial(params.saldoInicialContaBancaria)
+
+            centroCustoInstance.addToLancamentos(lancamentoSaldoInicial)
+
+            centroCustoInstance.save(flush: true)
+        }
+
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'centroCusto.label', default: 'CentroCusto'), centroCustoInstance.id])
@@ -52,14 +62,26 @@ class CentroCustoController {
         }
     }
 
+    def criarLancamentoSaldoInicial(saldoInicial) {
+        def creditoInicial = new Lancamento(tipoLancamento: TipoLancamento.CREDITO)
+
+        creditoInicial.valor = Util.parse(saldoInicial)
+        creditoInicial.dataEmissao = new Date()
+        creditoInicial.dataPagamento = new Date()
+        creditoInicial.statusLancamento = StatusLancamento.BAIXADO
+        creditoInicial.numeroTitulo = ''
+        creditoInicial.descricao = "Saldo Inicial"
+        creditoInicial.save(flush: true, failOnError: true)
+
+        return creditoInicial
+    }
+
     def edit(CentroCusto centroCustoInstance) {
         respond centroCustoInstance
     }
 
     @Transactional
     def update(CentroCusto centroCustoInstance) {
-        log.debug(params)
-
         if (centroCustoInstance == null) {
             notFound()
             return
@@ -355,4 +377,22 @@ class CentroCustoController {
         }
     }
 
+    def getFuncionariosAtuaisDeCentroCusto(Long centroCustoId) {
+        def centroCusto = CentroCusto.get(centroCustoId)
+
+        if (centroCusto) {
+            def dadosFuncionarios = []
+            Set listaFuncionarios = centroCusto.orcamentoAtual?.itensOrcamentarios?.salariosFuncionarios?.funcionario
+
+            if (listaFuncionarios) {
+                listaFuncionarios = listaFuncionarios.flatten()
+
+                dadosFuncionarios = listaFuncionarios.collect {['id': it.id, 'nome': it.participante.nome]}
+            }
+
+            render(['success': true, funcionarios: dadosFuncionarios] as JSON)
+        } else {
+            render(['success': false] as JSON)
+        }
+    }
 }
