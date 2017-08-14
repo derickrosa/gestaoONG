@@ -366,9 +366,9 @@ class CentroCustoController {
             def centroCusto = CentroCusto.get(centroCustoId)
 
             if (centroCusto) {
-                def listaAtividades = centroCusto.atividades.collect { ['id': it.id, 'descricao': it.toString()]}
+                def listaAtividades = centroCusto.atividades.collect { ['id': it.id, 'label': it.toString()]}
 
-                render(['success': true, atividades: listaAtividades] as JSON)
+                render(['success': true, objects: listaAtividades] as JSON)
             } else {
                 render(['success': false] as JSON)
             }
@@ -387,10 +387,23 @@ class CentroCustoController {
             if (listaFuncionarios) {
                 listaFuncionarios = listaFuncionarios.flatten()
 
-                dadosFuncionarios = listaFuncionarios.collect {['id': it.id, 'nome': it.participante.nome]}
+                dadosFuncionarios = listaFuncionarios.collect {['id': it.id, 'label': it.participante.nome]}
             }
 
-            render(['success': true, funcionarios: dadosFuncionarios] as JSON)
+            render(['success': true, objects: dadosFuncionarios] as JSON)
+        } else {
+            render(['success': false] as JSON)
+        }
+    }
+
+    def getItensOrcamentariosDeCentroCusto(Long centroCustoId) {
+        def centroCusto = CentroCusto.get(centroCustoId)
+
+        if (centroCusto) {
+            def itensOrcamentarios = centroCusto.orcamentoAtual?.itensOrcamentarios?.collect {['id': it.id,
+                                                                                               'label': it.toString()]}
+
+            render(['success': true, objects: itensOrcamentarios] as JSON)
         } else {
             render(['success': false] as JSON)
         }

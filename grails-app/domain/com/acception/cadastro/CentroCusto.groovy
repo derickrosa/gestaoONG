@@ -20,7 +20,6 @@ class CentroCusto {
 
     static hasMany = [atividades: Atividade,
                       arquivos: Arquivo,
-                      despesas:Despesa,
                       orcamentos: Orcamento,
                       lancamentos: Lancamento]
 
@@ -57,6 +56,10 @@ class CentroCusto {
 
     def getOrcamentoAtual() {
         return orcamentos?.max { it.dateCreated }
+    }
+
+    def getDespesas() {
+        return orcamentos.itensOrcamentarios.despesas.flatten()
     }
 
     String toString() {

@@ -91,7 +91,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
             </div>
         </div>
 
-        <g:hiddenField name="centroCusto.id" value="${centroCustoInstance?.id}"/>
+        <g:hiddenField name="centroCusto.id" value="${centroCustoInstance?.id ?: atividadeInstance?.centroCusto?.id}"/>
         <g:hiddenField name="atividade.id" value="${atividade?.id}"/>
 
         <g:if test="${atividade?.nome && !atividade.isSubatividade()}">

@@ -1,5 +1,7 @@
 <asset:stylesheet src="dataTables.bootstrap.css"/>
 <asset:javascript src="dataTables.bootstrap.min.js"/>
+<asset:javascript src="dataTables.pt-br.js"/>
+
 
 <div class="row">
     <div class="col-md-12 text-center">
@@ -11,25 +13,27 @@
 
 <br>
 
-<table class="table table-hover text-center" id="tabelaDespesas">
+<table class="table table-hover text-center" id="tabelaDespesas" width="100%">
     <thead>
     <tr>
-        <th class="text-center" data-attribute="descricao" data-render='<g:link controller="despesa" action="show" id="{id}">{descricao}</g:link>'>Despesa</th>
-        <th class="text-center" data-attribute="valor" data-render="R$ {valor}">Valor</th>
-        <th class="text-center" data-attribute="tipoDespesa.nome">Tipo Despesa</th>
-        <th class="text-center" data-attribute="data">Data</th>
-        <th class="text-center" data-attribute="lancamento.papel">Destino</th>
+        <th>ID</th>
+        <th class="text-center">Despesa</th>
+        <th class="text-center">Valor</th>
+        <th class="text-center">Tipo Despesa</th>
+        <th class="text-center">Data</th>
+        <th class="text-center">Destino</th>
     </tr>
     </thead>
 
     <tbody>
     <g:if test="${centroCustoInstance.despesas}">
-        <g:each in="${centroCustoInstance.despesas.sort { it.data }}" var="despesa">
+        <g:each in="${centroCustoInstance.despesas.sort { it.data }}" var="despesa" status="i">
             <tr>
-                <td><g:link controller="despesa" action="show" id="${despesa.id}">${despesa.descricao}</g:link></td>
-                <td>R$ ${df.format(despesa.valor)}</td>
+                <td>${despesa.id}</td>
+                <td>${despesa.descricao}</td>
+                <td data-order="${i}">R$ ${df.format(despesa.valor)}</td>
                 <td>${despesa.tipoDespesa?.nome}</td>
-                <td><g:formatDate date="${despesa.data}" format="dd/MM/yyyy"/></td>
+                <td data-order="${despesa.data.getTime()}"><g:formatDate date="${despesa.data}" format="dd/MM/yyyy"/></td>
                 <td>${despesa.lancamento?.papel ?: '--'}</td>
             </tr>
         </g:each>
@@ -44,13 +48,38 @@
     </tbody>
 </table>
 
-
-<g:render template="/despesa/modalCreate" model="[centroCustoId: centroCustoInstance.id, idTabelaParaAtualizar: '#tabelaDespesas']"/>
-
-<asset:javascript src="dynamicTable.js"/>
+<g:render template="/despesa/modalCreate" model="[centroCustoId: centroCustoInstance.id]"/>
 
 <script>
-    // var table = $("#tabelaDespesas").DataTable();
+    var table = $("#tabelaDespesas").DataTable({
+        "columns": [
+            {
+                data: "id",
+                "visible": false,
+                "searchable": false
+            },
+            {
+                data: "name",
+                "orderable": false,
+                render: function (data, type, full, meta) {
+                    console.log(data);
+                    console.log(type);
+                    console.log(full);
+                    console.log(meta);
+
+                    var render = '<g:link controller="despesa" action="show" id="toReplace">' + full.name + '</g:link>';
+
+                    return render.replace('toReplace', full.id);
+                }
+            },
+            {data: "valor", "orderable": false},
+            {data: "tipo", "orderable": false},
+            {data: "data", "orderable": false},
+            {data: "destino"}
+        ],
+
+        "language": languagePtBr
+    });
 
     document.getElementById("formCriacaoDespesa").addEventListener("despesaCriada", function (e) {
         var warningNaoHaDespesasCadastradas = $("#alertNoDespesas");
@@ -59,6 +88,6 @@
             warningNaoHaDespesasCadastradas.hide();
         }
 
-        addNewRowToTable('#tabelaDespesas', e.detail);
+        table.row.add(e.detail).draw();
     }, false);
 </script>

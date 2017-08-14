@@ -7,6 +7,8 @@ class Despesa extends EventoFinanceiro{
     TipoDespesa tipoDespesa
     Atividade atividade
 
+    static belongsTo = [itemOrcamentario: ItemOrcamentario]
+
     static constraints = {
         atividade nullable: true
     }

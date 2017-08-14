@@ -3,18 +3,6 @@
 <asset:stylesheet src="bootstrap-datepicker.css"/>
 <asset:javascript src="plugins/jquery/jquery.validate.js"/>
 
-<style>
-label.error {
-    color: #8a1f11;
-    display: inline-block;
-    margin-left: 1.5em;
-}
-
-input.error, select.error {
-    background: rgb(251, 227, 228);
-}
-</style>
-
 <div class="modal fade" tabindex="-1" role="dialog" id="modalCriacaoFornecedor">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -211,123 +199,33 @@ input.error, select.error {
                 <h4 class="modal-title">Criar Despesa</h4>
             </div>
 
-            <form id="formCriacaoDespesa">
-                <div class="modal-body">
-                    <div id="cadastroDespesa">
-                        <div class="row">
-                            <div class="col-md-6 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'centroCusto', 'error')} ">
-                                <label for="centroCusto">
-                                    <g:message code="despesa.centroCusto.label" default="Centro Custo"/>
+            <div class="modal-body">
+                <div id="cadastroDespesa">
+                    <form id="formCriacaoDespesa">
+                        <g:render template="/despesa/form"/>
+                    </form>
 
-                                </label>
-                                <g:select class="form-control" id="centroCusto" name="centroCusto.id"
-                                          from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id"
-                                          value="${centroCustoId}" noSelection="['': '']" required="required"
-                                          data-placeholder="Selecione um centro de custo..."/>
-
-                            </div>
-
-                            <div class="col-md-6 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'tipoDespesa', 'error')} ">
-                                <label for="tipoDespesa">
-                                    <g:message code="despesa.tipoDespesa.label" default="Tipo de Despesa"/>
-
-                                </label>
-                                <g:select name="tipoDespesa" from="${TipoDespesa.values().nome}" class="form-control"
-                                          keys="${TipoDespesa.values()*.name()}"
-                                          value="${despesaInstance?.tipoDespesa?.name()}"
-                                          noSelection="['': 'Selecione um tipo de despesa...']" required="required"/>
-
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'descricao', 'error')} ">
-                                <label for="descricao">
-                                    <g:message code="despesa.descricao.label" default="Descrição"/>
-
-                                </label>
-                                <g:textField class="form-control" required="required" name="descricao"
-                                             value="${despesaInstance?.descricao}"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group fieldcontain" style="display: none;">
-                            <label for="atividade">
-                                <g:message code="despesa.atividade.label" default="Atividade"/>
-
-                            </label>
-
-                            <select required="required" id="atividade" name="atividade.id" class="form-control"
-                                    data-placeholder="Selecione um centro de custo que possua pelo menos uma atividade...">
-                                <option value></option>
-                            </select>
-
-                        </div>
-
-                        <div class="form-group fieldcontain" style="display: none;">
-                            <label for="fornecedor">
-                                <g:message code="despesa.fornecedor.label" default="Fornecedor"/>
-                            </label>
-                            <g:select required="required" id="fornecedor" name="papel.id" from="${Fornecedor.list()}"
-                                      optionKey="id" class="form-control" data-placeholder="Selecione um fornecedor..."
-                                      noSelection="['': '']"/>
-                            <a onclick="mudarParaCadastroDeFornecedor()"><small>Criar Fornecedor</small></a>
-
-                        </div>
-
-                        <div class="form-group fieldcontain" style="display: none;">
-                            <label for="funcionario">
-                                <g:message code="despesa.funcionario.label" default="Funcionário"/>
-
-                            </label>
-                            <g:select required="required" id="funcionario" name="papel.id" from="${Funcionario.list()}"
-                                      optionKey="id" class="form-control" noSelection="['': '']"
-                                      data-placeholder="Selecione um funcionário..."/>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'valor', 'error')} ">
-                                <label for="valor">
-                                    <g:message code="despesa.valor.label" default="Valor"/>
-
-                                </label>
-
-                                <input required="required" type="text" class="form-control currency" id="valor"
-                                       name="valor" data-allow-negative="false">
-                            </div>
-
-                            <div class="col-md-6 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'data', 'error')} ">
-                                <label for="data">
-                                    <g:message code="despesa.data.label" default="Data"/>
-
-                                </label>
-
-                                <input type="text" required="required" id="data" name="data" format="dd/MM/yyyy"
-                                       value="${formatDate(format: "dd/MM/yyyy", date: despesaInstance?.data)}"
-                                       class="form-control datepicker"/>
-
-                            </div>
-                        </div>
-
-                        <div class="row" id="alertOperacaoConcluida" style="display: none">
-                            <div class="col-md-12 alert alert-success text-center">Despesa '<span
-                                    id="descricaoDespesa"></span>', no valor de R$ <span
-                                    id="valorDespesa"></span>, foi criada com sucesso!</div>
-                        </div>
+                    <div class="row" id="alertOperacaoConcluida" style="display: none">
+                        <div class="col-md-12 alert alert-success text-center">Despesa '<span
+                                id="descricaoDespesa"></span>', no valor de R$ <span
+                                id="valorDespesa"></span>, foi criada com sucesso!</div>
                     </div>
                 </div>
+            </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-primary" id="btnSubmit"
-                            onclick="hideAlertSuccess()">Criar</button>
-                </div>
-            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="submit" form="formCriacaoDespesa" class="btn btn-primary" id="btnSubmit"
+                        onclick="hideAlertSuccess()">Criar</button>
+            </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 <script>
+    // A linha abaixo é para que a validação do form funcione para o chosen da linha acima.
+    $.validator.setDefaults({ignore: ":hidden:not(select)"});
+
     // Ao abrirmos o modal de criação de despesas, sempre removeremos o alerta de sucesso.
     $('#modalCriacaoDespesas').on('shown.bs.modal', function (e) {
         $("#alertOperacaoConcluida").hide();
@@ -361,170 +259,9 @@ input.error, select.error {
         $("#cpfOuCnpj input").removeClass('cpf').addClass('cnpj').attr("name", "participante.cnpj");
     }
 
-
-
     $(function () {
-        // Essa função atualizará o select de atividades, permitindo apenas a seleção de atividades que são do centro de
-        // custo escolhido
-        var atualizarSelectAtividades = function (centroCustoId) {
-            if (centroCustoId) {
-                $.ajax({
-                    url: "${createLink(controller: 'centroCusto', action: 'getAtividadesFromCentroCusto')}",
-                    method: "POST",
-                    data: {
-                        centroCustoId: centroCustoId
-                    },
-                    success: function (response) {
-                        var selectAtividade = $("#atividade");
-
-                        selectAtividade.html("<option value></option>");
-
-                        if (response.success === true) {
-                            for (var i = 0; i < response.atividades.length; i++) {
-                                var atividade = response.atividades[i];
-
-                                selectAtividade.append($("<option>").val(atividade.id)
-                                        .text(atividade.descricao));
-                            }
-
-                            if (response.atividades.length > 0) {
-                                selectAtividade.attr('data-placeholder', 'Selecione uma atividade...');
-                            } else {
-                                selectAtividade.attr('data-placeholder', 'Selecione um centro de custo que possua pelo menos uma atividade...');
-                            }
-
-                            selectAtividade.trigger("chosen:updated");
-                        } else {
-                            swal(
-                                    'Oops...',
-                                    'Ocorreu um erro ao carregar as atividades. Contate o suporte técnico!',
-                                    'error'
-                            );
-                        }
-                    },
-
-                    error: function () {
-                        swal(
-                                'Oops...',
-                                'Ocorreu um erro ao carregar as atividades. Contate o suporte técnico!',
-                                'error'
-                        );
-                    }
-                })
-            } else {
-                // Retirar todas as opções das atividades
-            }
-        };
-
-        var atualizarSelectFuncionarios = function (centroCustoId) {
-            var selectFuncionario = $("#funcionario");
-            selectFuncionario.html("<option value></option>");
-
-            if (centroCustoId) {
-                $.ajax({
-                    url: "${createLink(controller: 'centroCusto', action: 'getFuncionariosAtuaisDeCentroCusto')}",
-                    method: "POST",
-                    data: {
-                        centroCustoId: centroCustoId
-                    },
-                    success: function (response) {
-                        if (response.success === true) {
-                            for (var i = 0; i < response.funcionarios.length; i++) {
-                                var funcionario = response.funcionarios[i];
-
-                                selectFuncionario.append($("<option>").val(funcionario.id)
-                                        .text(funcionario.nome));
-                            }
-
-                            if (response.funcionarios.length > 0) {
-                                selectFuncionario.attr('data-placeholder', 'Selecione um funcionário...');
-                            } else {
-                                selectFuncionario.attr('data-placeholder', 'Selecione um centro de custo que possua pelo menos um funcionário...');
-                            }
-
-                            selectFuncionario.trigger("chosen:updated");
-                        } else {
-                            swal(
-                                    'Oops...',
-                                    'Ocorreu um erro ao carregar os funcionários. Contate o suporte técnico!',
-                                    'error'
-                            );
-                        }
-                    },
-
-                    error: function () {
-                        swal(
-                                'Oops...',
-                                'Ocorreu um erro ao carregar as atividades. Contate o suporte técnico!',
-                                'error'
-                        );
-                    }
-                })
-            } else {
-                selectFuncionario.attr('data-placeholder', 'Selecione um centro de custo que possua pelo menos um funcionário...');
-            }
-        };
-
-        var makeChosenReadOnly = function (selectSelector) {
-            $(selectSelector + ' option:not(:selected)').attr('disabled', true);
-            $(selectSelector).trigger('chosen:updated')
-        };
-
-        $("#centroCusto").chosen();
-        $("#fornecedor").chosen();
-        $("#atividade").chosen();
-        $("#funcionario").chosen();
-
-        $("#centroCusto").on('change', function () {
-            atualizarSelectAtividades($(this).val());
-
-            atualizarSelectFuncionarios($(this).val());
-        });
-
-        $("#centroCusto").change();
-
-        // A linha abaixo é para que a validação do form funcione para o chosen da linha acima.
+        // A linha abaixo é para que a validação do form funcione para os chosen
         $.validator.setDefaults({ignore: ":hidden:not(select)"});
-
-        var centroCustoId = "${centroCustoId}";
-
-        if (centroCustoId) {
-            makeChosenReadOnly('#centroCusto')
-        }
-
-        var refreshFormBasedOnTipoDespesa = function (tipoDespesa) {
-            var showInput = function (elementId) {
-                $(elementId).prop("disabled", false).parent().show('slow')
-            };
-
-            var hideInput = function (elementId) {
-                $(elementId).prop("disabled", true).val('').parent().hide('slow')
-            };
-
-            if (tipoDespesa === "ATIVIDADE") {
-                showInput("#atividade");
-                showInput("#fornecedor");
-                hideInput("#funcionario");
-            } else if (tipoDespesa === "PESSOAL" || tipoDespesa == "ADIANTAMENTO") {
-                hideInput("#atividade");
-                hideInput("#fornecedor");
-                showInput("#funcionario");
-            } else if (tipoDespesa === "CUSTO_ADMINISTRATIVO") {
-                hideInput("#atividade");
-                showInput("#fornecedor");
-                hideInput("#funcionario");
-            } else {
-                hideInput("#atividade");
-                hideInput("#fornecedor");
-                hideInput("#funcionario");
-            }
-
-            $("#formCriacaoDespesa").find("select:not('#centroCusto')").trigger('chosen:updated')
-        };
-
-        $("#tipoDespesa").on('change', function () {
-            refreshFormBasedOnTipoDespesa($(this).val());
-        });
 
         var resetFormCriacaoDespesas = function (form) {
             $(form).find("input[type=text], textarea, select:not('#centroCusto')").val("");
@@ -543,17 +280,27 @@ input.error, select.error {
                 $.ajax({
                     url: "${createLink(controller: 'despesa', action: 'criarDespesa')}",
                     method: "POST",
-                    data: $(form).serialize() + "&attributes=" + getAttributesNecessaryToUpdateTable("${idTabelaParaAtualizar}").join(','),
+                    data: $(form).serialize(),
                     success: function (response) {
                         if (response.success === true) {
-                            resetFormCriacaoDespesas(form);
+                            var descricao = $("#descricao").val();
+                            var valor = $("#valor").val();
 
                             $("#alertOperacaoConcluida").show('slow');
-                            $("#descricaoDespesa").text(response.despesa.descricao);
-                            $("#valorDespesa").text(response.despesa.valor);
+                            $("#descricaoDespesa").text(descricao);
+                            $("#valorDespesa").text(valor);
 
                             form.dispatchEvent(new CustomEvent("despesaCriada",
-                                    {detail: response.despesa}));
+                                    { detail: {
+                                        id: response.despesa.id,
+                                        name: descricao,
+                                        valor: "R$ " + valor,
+                                        tipo: $( "#tipoDespesa option:selected" ).text(),
+                                        data: $("#despesa-data").val(),
+                                        destino: response.despesa.destino
+                                    }}));
+
+                            resetFormCriacaoDespesas(form);
                         }
                     },
 

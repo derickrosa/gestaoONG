@@ -12,7 +12,7 @@ class ItemOrcamentario {
 
     static belongsTo = [orcamento: Orcamento]
 
-    static hasMany = [salariosFuncionarios: SalarioFuncionario]
+    static hasMany = [salariosFuncionarios: SalarioFuncionario, despesas: Despesa]
 
     static constraints = {
     }
