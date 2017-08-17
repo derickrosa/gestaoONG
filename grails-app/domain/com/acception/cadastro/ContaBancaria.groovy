@@ -11,7 +11,7 @@ class ContaBancaria {
     String conta
     String dvConta
     TipoContaBancaria tipoConta
-    Double saldo
+//    Double saldo
 
     Date dateCreated
     Date lastUpdated

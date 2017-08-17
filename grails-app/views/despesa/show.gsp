@@ -45,7 +45,7 @@
                         <th id="valor-label" class="property-label"><g:message code="despesa.valor.label"
                                                                                default="Valor"/></th>
 
-                        <td aria-labelledby="valor-label"><g:fieldValue bean="${despesaInstance}" field="valor"/></td>
+                        <td aria-labelledby="valor-label">R$ ${df.format(despesaInstance.valor)}</td>
 
                     </tr>
                 </g:if>
@@ -61,6 +61,18 @@
                     </tr>
                 </g:if>
 
+                <g:if test="${despesaInstance?.itemOrcamentario}">
+                    <tr>
+                        <th id="itemOrcamentario-label" class="property-label">Item Orçamentário</th>
+
+                        <td aria-labelledby="itemOrcamentario-label">
+                            <g:link controller="centroCusto" action="show" id="${despesaInstance?.itemOrcamentario?.orcamento?.centroCusto?.id}"
+                                    params="[showOrcamento: true]">${despesaInstance.itemOrcamentario}</g:link>
+                        </td>
+
+                    </tr>
+                </g:if>
+
                 <g:if test="${despesaInstance?.tipoDespesa}">
                     <tr>
                         <th id="tipoDespesa-label" class="property-label"><g:message code="despesa.tipoDespesa.label"
@@ -72,16 +84,26 @@
                     </tr>
                 </g:if>
 
-                %{--<g:if test="${despesaInstance?.fornecedor}">
+                <% def lancamento = despesaInstance?.lancamento?.papel%>
+
+                <g:if test="${lancamento}">
                     <tr>
-                        <th id="fornecedor-label" class="property-label"><g:message code="despesa.fornecedor.label"
-                                                                                    default="Fornecedor"/></th>
+                        <th id="papel-label" class="property-label">
+                            <g:if test="${lancamento instanceof Funcionario}">
+                                Funcionário
+                            </g:if>
+                            <g:elseif test="${lancamento instanceof Fornecedor}">
+                                Fornecedor
+                            </g:elseif>
+                            <g:else>
+                                Destino
+                            </g:else>
 
-                        <td aria-labelledby="fornecedor-label"><g:link controller="fornecedor" action="show"
-                                                                       id="${despesaInstance?.fornecedor?.id}">${despesaInstance?.fornecedor?.encodeAsHTML()}</g:link></td>
+                        </th>
 
+                        <td aria-labelledby="papel-label">${despesaInstance.lancamento?.papel}</td>
                     </tr>
-                </g:if>--}%
+                </g:if>
 
                 <g:if test="${despesaInstance?.atividade}">
                     <tr>
@@ -93,28 +115,6 @@
 
                     </tr>
                 </g:if>
-
-                %{--<g:if test="${despesaInstance?.papel && despesaInstance?.papel instanceof Funcionario}">
-                    <tr>
-                        <th id="funcionario-label" class="property-label"><g:message code="despesa.funcionario.label"
-                                                                                     default="Funcionário"/></th>
-
-                        <td aria-labelledby="funcionario-label"><g:link controller="funcionario" action="show"
-                                                                        id="${despesaInstance?.papel?.id}">${despesaInstance?.papel}</g:link></td>
-
-                    </tr>
-                </g:if>--}%
-
-               %{-- <g:if test="${despesaInstance?.lancamentos[0]?.papel && despesaInstance?.papel instanceof Fornecedor}">
-                    <tr>
-                        <th id="fornecedor-label" class="property-label"><g:message code="despesa.fornecedor.label"
-                                                                                     default="Fornecedor"/></th>
-
-                        <td aria-labelledby="fornecedor-label"><g:link controller="fornecedor" action="show"
-                                                                        id="${despesaInstance?.papel?.id}">${despesaInstance?.papel}</g:link></td>
-
-                    </tr>
-                </g:if>--}%
 
                 <g:if test="${despesaInstance?.centroCusto}">
                     <tr>

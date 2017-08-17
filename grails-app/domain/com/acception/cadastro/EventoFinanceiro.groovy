@@ -11,9 +11,8 @@ class EventoFinanceiro {
 
     List<Lancamento> lancamentos
 
-
-
     static belongsTo = [centroCusto: CentroCusto]
+
     static transients = ['lancamentos']
 
     static constraints = {

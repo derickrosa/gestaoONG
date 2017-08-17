@@ -1,6 +1,7 @@
 package com.acception.cadastro
 
 import com.acception.cadastro.enums.StatusProjeto
+import com.acception.cadastro.enums.TipoLancamento
 
 class CentroCusto {
 
@@ -19,11 +20,12 @@ class CentroCusto {
 
     static hasMany = [atividades: Atividade,
                       arquivos: Arquivo,
-                      despesas:Despesa,
                       orcamentos: Orcamento,
                       lancamentos: Lancamento]
 
     static belongsTo = [financiador: Financiador]
+
+    static transients = ['saldo']
 
     static constraints = {
         dataInicio nullable: true
@@ -35,6 +37,19 @@ class CentroCusto {
         statusProjeto nullable: true
     }
 
+    def getSaldo() {
+        def despesas = 0
+        def creditos = this.lancamentos.findAll{ it.tipoLancamento == TipoLancamento.CREDITO }
+
+        def valorCredito = creditos*.valor.sum() ?: 0
+
+        return valorCredito - despesas
+    }
+
+    def getSaldoInicial() {
+        return this.lancamentos.find { it.descricao == 'Saldo Inicial' }?.valor ?: 0
+    }
+
     def getOrcamentoOriginal() {
         return orcamentos?.min { it.dateCreated }
     }
@@ -43,7 +58,11 @@ class CentroCusto {
         return orcamentos?.max { it.dateCreated }
     }
 
+    def getDespesas() {
+        return orcamentos.itensOrcamentarios.despesas.flatten()
+    }
+
     String toString() {
-        "${nome + '/' + ano}"
+        "(${codigo}) ${nome}/${ano}"
     }
 }

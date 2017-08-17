@@ -92,6 +92,7 @@ class DespesaController {
     @Transactional
     def criarDespesa() {
         def despesa = new Despesa(params)
+        despesa.centroCusto = CentroCusto.get(params.centroCusto?.id)
 
         despesa.valor = Util.parse(params.valor)
         despesa.save()
@@ -104,15 +105,13 @@ class DespesaController {
         lancamento.dataEmissao = despesa.data
         lancamento.descricao = despesa.descricao
         lancamento.statusLancamento = StatusLancamento.BAIXADO
-        lancamento.centroCusto = despesa.centroCusto
+        lancamento.centroCusto = despesa.itemOrcamentario.orcamento.centroCusto
         lancamento.papel = Papel.get(params.papel.id)
         lancamento.save(flush: true, failOnError: true)
 
         despesa.save(flush: true, failOnError: true)
 
-        def despesaResponse = ['id': despesa.id]
-
-        Util.updateResponseWithValuesToSendBack(despesaResponse, despesa, params.attributes)
+        def despesaResponse = ['id': despesa.id, 'destino': despesa.lancamento.papel?.toString()]
 
         render(['success': true, 'despesa': despesaResponse] as JSON)
     }
@@ -127,8 +126,6 @@ class DespesaController {
             notFound()
             return
         }
-
-        _updateDespesa(despesaInstance, params)
 
         if (despesaInstance.hasErrors()) {
             respond despesaInstance.errors, view: 'edit'

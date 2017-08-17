@@ -17,13 +17,6 @@
             </div>
         </div>
         <hr/>
-        <!--BLOCK SECTION -->
-
-        <div class="nav" role="navigation">
-        <p>
-            <g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span> Criar Atividade </g:link>
-        </p>
-        </div>
 
         <div id="list-atividade" class="body" role="main">
             <g:if test="${flash.message}">

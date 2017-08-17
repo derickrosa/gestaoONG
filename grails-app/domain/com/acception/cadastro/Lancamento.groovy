@@ -31,7 +31,6 @@ class Lancamento {
 
     static constraints = {
         valor nullable:true
-        numeroTitulo nullable:true
         descricao nullable:true
         tipoLancamento nullable:true
         papel nullable:true
