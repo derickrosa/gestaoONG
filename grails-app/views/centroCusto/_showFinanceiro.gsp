@@ -90,6 +90,10 @@
         <g:render template="showDespesas" model="[centroCustoInstance: centroCustoInstance]"/>
     </div>
 
+    <div class="tab-pane fade" id="creditos">
+        <g:render template="showCreditos" model="[centroCustoInstance: centroCustoInstance]"/>
+    </div>
+
     <div class="tab-pane fade in" id="pagamentos-adiantados">
         <g:render template="showAdiantamentos" model="[centroCustoInstance: centroCustoInstance]"/>
     </div>
