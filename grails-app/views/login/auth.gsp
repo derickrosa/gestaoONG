@@ -7,10 +7,22 @@
 </head>
 
 <!-- BEGIN BODY -->
-<body>
+<body style="
+    /* background-color: lightblue; */
+    background-image: url('../images/amazonia_bg_large.jpg');
+    background-repeat: round;
+">
 
 <!-- PAGE CONTENT -->
-<div class="container">
+<div class="container" style="
+background-color: white;
+padding: 20px;
+border-: gray;
+border-radius: 5px;
+border: green;
+width: 370px !important;
+border-width: 5px;
+">
     <div class="text-center">
         <img src="${assetPath(src: 'logo-fase.png')}" alt=" Logo"/>
     </div>
@@ -21,7 +33,7 @@
 
 
             <form action="${postUrl}" class="form-signin" method='POST' id='loginForm' autocomplete='off'>
-                <p class="text-muted text-center btn-block btn btn-primary btn-rect">
+                <p class="text-muted text-center">
                     Entre com usuário e senha
                 </p>
 
@@ -41,7 +53,7 @@
     <g:if test='${flash.message}'>
         <p class="text-muted text-center ">${flash.message}</div>
     </g:if>
-   %{--     <div id="forgot" class="tab-pane">
+%{--        <div id="forgot" class="tab-pane">
             <form action="${postUrl}" class="form-signin">
                 <p class="text-muted text-center btn-block btn btn-primary btn-rect">Entre com um e-mail válido</p>
                 <input type="email" required="required" placeholder="Your E-mail" class="form-control"/>
@@ -53,7 +65,7 @@
 
     <div class="text-center">
         <ul class="list-inline">
-            <li><a class="text-muted" href="#login" data-toggle="tab">Login</a></li>
+          %{--  <li><a class="text-muted" href="#login" data-toggle="tab">Login</a></li>--}%
             <li><a class="text-muted" href="${createLink(controller: 'recuperarSenha',action:'esqueci')}" data-toggle="tab">Esqueci a senha</a></li>
         </ul>
     </div>
