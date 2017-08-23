@@ -338,7 +338,7 @@
 
             <li class="panel active">
                 <a href="index.html">
-                    <i class="icon-table"></i> Painel Inicial
+                    <i class="icon-table"></i> Página Inicial
 
                 </a>
             </li>
@@ -356,9 +356,9 @@
                 </a>
                 <ul class="collapse" id="component-nav">
 
-                    <li class=""><g:link controller="centroCusto" action="index">Centro de Custo</g:link></li>
-                    <li class=""><g:link controller="linhaAcao" action="index">Linha de Ação</g:link></li>
+                    <li class="hover"><g:link controller="centroCusto" action="index">Centro de Custo</g:link></li>
                     <li class=""><g:link controller="atividade" action="index">Atividade</g:link></li>
+                    <li class=""><g:link controller="linhaAcao" action="index">Linha de Ação</g:link></li>
                     <li class=""><g:link controller="financiador" action="index">Financiador</g:link></li>
                     <li class=""><g:link controller="funcionario" action="index">Funcionário</g:link></a></li>
                     <li class=""><g:link controller="fornecedor" action="index">Fornecedor</g:link></a></li>
@@ -377,10 +377,10 @@
                 </a>
                 <ul class="collapse" id="component-finac">
 
-                    <li class=""><g:link controller="orcamento" action="index">Orçamento</g:link></li>
+                    <li class=""><g:link controller="orcamento" action="index">Orçamentos</g:link></li>
                     <li class=""><g:link controller="despesa">Despesas</g:link></li>
                     <li class=""><g:link controller="adiantamento" action="index">Adiantamentos</g:link></li>
-                    <li class=""><a href="more_notifications.html">Lançamentos</a></li>
+                    <li class=""><g:link controller="lancamento" action="index">Lançamentos</g:link></li>
 
                 </ul>
             </li>
@@ -397,6 +397,8 @@
                 <ul class="collapse" id="component-rel">
 
                     <li class=""><g:link controller="relatorioAtividade" action="index">Relatório de Atividade</g:link></li>
+                    <li class=""><g:link controller="relatorioAtividade" action="index">Relatório de Movimentação Financeira</g:link></li>
+                    <li class=""><g:link controller="relatorioAtividade" action="index">Relatório de Financiadores</g:link></li>
 
                 </ul>
             </li>
