@@ -65,7 +65,7 @@
                 <g:render template="showDespesas" model="[atividadeInstance: atividadeInstance]"/>
             </div>
 
-        </div>
+        </div><br/>
 
     </div>
 </div>

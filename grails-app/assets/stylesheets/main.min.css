@@ -2101,3 +2101,22 @@ body.padTop53 {
     text-transform: uppercase !important;
     font-weight: 500 !important;
 }
+
+h1{
+    font-family: 'gloriola_stdbold', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase !important;
+    font-weight: bold !important;
+    font-size: x-large !important;
+}
+
+#dataTables-example_info{
+    font-family: 'gloriola_stdbold', "sans-serif", 'Courier', 'Arial' !important;
+    font-style: italic !important;
+    text-transform: uppercase !important;
+}
+
+.property-label{
+    font-family: 'gloriola_stdbold', "sans-serif", 'Courier', 'Arial' !important;
+    text-transform: uppercase !important;
+    font-weight: 600 !important;
+}

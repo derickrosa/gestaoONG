@@ -120,6 +120,7 @@
                     </button>
                 </fieldset>
             </g:form>
+            <br/>
         </div>
     </div>
 </div>

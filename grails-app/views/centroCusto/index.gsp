@@ -1,4 +1,3 @@
-
 <%@ page import="com.acception.cadastro.CentroCusto" %>
 <!DOCTYPE html>
 <html>
@@ -7,9 +6,9 @@
     <g:set var="entityName" value="${message(code: 'centroCusto.label', default: 'Centro de Custo')}"/>
     <title><g:message code="default.list.label" args="[entityName]"/></title>
     <style>
-        th {
-            text-align: center;
-        }
+    th {
+        text-align: center;
+    }
     </style>
     <export:resource/>
 </head>
@@ -32,9 +31,11 @@
         <!--BLOCK SECTION -->
 
         <div class="nav" role="navigation">
-        <p>
-            <g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="[entityName]" /></g:link>
-        </p>
+            <p>
+                <g:link class="btn btn-default" action="create"><span
+                        class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label"
+                                                                            args="[entityName]"/></g:link>
+            </p>
         </div>
 
         <div id="list-centroCusto" class="body" role="main">
@@ -69,15 +70,14 @@
 
                     <g:sortableColumn property="dataInicio"
                                       title="${message(code: 'centroCusto.dataInicio.label', default: 'Data Início')}"/>
-                    
+
                     <g:sortableColumn property="dataFinal"
                                       title="${message(code: 'centroCusto.dataFinal.label', default: 'Data Final')}"/>
-                    
+
                     <th><g:message code="centroCusto.planoDeTrabalho.label" default="Plano De Trabalho"/></th>
 
                     <g:sortableColumn property="statusProjeto"
                                       title="${message(code: 'centroCusto.statusProjeto.label', default: 'Status Projeto')}"/>
-
 
                 </tr>
                 </thead>
@@ -91,13 +91,14 @@
 
                             <td>${fieldValue(bean: centroCustoInstance, field: "nome")}</td>
 
-                            <td><g:formatNumber number="${centroCustoInstance.ano}" format="##0" /></td>
+                            <td><g:formatNumber number="${centroCustoInstance.ano}" format="##0"/></td>
 
                             <td><g:formatDate format="dd/MM/yyyy" date="${centroCustoInstance.dataInicio}"/></td>
 
                             <td><g:formatDate format="dd/MM/yyyy" date="${centroCustoInstance.dataFinal}"/></td>
 
-                            <td><g:link controller="anexo" action="show" id="${centroCustoInstance?.planoDeTrabalho?.id}">${centroCustoInstance?.planoDeTrabalho}</g:link></td>
+                            <td><g:link controller="anexo" action="show"
+                                        id="${centroCustoInstance?.planoDeTrabalho?.id}">${centroCustoInstance?.planoDeTrabalho}</g:link></td>
 
                             <td>${fieldValue(bean: centroCustoInstance, field: "statusProjeto")}</td>
 
@@ -109,7 +110,6 @@
                         <td colspan="5" class="text-center nao-ha-registros">Não há registros de ${entityName}.</td>
                     </tr>
                 </g:else>
-
 
                 </tbody>
             </table>
@@ -132,6 +132,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 </div>
 </body>

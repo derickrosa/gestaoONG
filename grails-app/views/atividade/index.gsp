@@ -102,7 +102,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="dataTables_info" id="dataTables-example_info" role="alert" aria-live="polite"
-                         aria-relevant="all">Exibindo 1 a 20 de ${atividadeInstanceCount == 1?atividadeInstanceCount + ' atividade cadastrada':atividadeInstanceCount + ' atividades cadastradas' }.</div>
+                         aria-relevant="all">Exibindo 1 a 20 de ${atividadeInstanceCount == 1 ? atividadeInstanceCount + ' atividade cadastrada' : atividadeInstanceCount + ' atividades cadastradas'}.</div>
                 </div>
 
                 <div class="col-sm-6">
