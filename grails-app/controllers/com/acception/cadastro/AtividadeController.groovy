@@ -1,5 +1,6 @@
 package com.acception.cadastro
 
+import com.acception.util.Util
 import grails.converters.JSON
 
 import static org.springframework.http.HttpStatus.*
@@ -7,13 +8,58 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class AtividadeController {
+    def exportService
     private static final okcontents = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Atividade.list(params), model: [atividadeInstanceCount: Atividade.count()]
+        params.max = Math.min(max ?: 20, 100)
+
+        def criteria = getCriteria(params)
+
+        if(params?.exportFormat && params.exportFormat != "html"){
+            response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
+            response.setHeader("Content-disposition", "attachment; filename=Atividade.${params.extension}")
+
+            def atividadeInstanceList = Atividade.createCriteria().list(params, criteria)
+
+            List fields=['nome','codigo','descricao','status']
+            Map labels=[nome:'Nome',
+                        codigo:'Código',
+                        descricao:'Descrição',
+            status:'Status']
+
+
+            log.debug("Gerando relatório de Atividade...")
+
+            Map parameters = ["column.widths": [0.3, 0.2, 0.4,0.1]]
+
+            exportService.export(params.exportFormat, response.outputStream,atividadeInstanceList, fields, labels, [:], parameters)
+            return
+        }
+
+        def atividadeInstanceList = Atividade.createCriteria().list(params, criteria)
+        def atividadeInstanceCount = Atividade.createCriteria().count(criteria)
+
+        def model = [atividadeInstanceList: atividadeInstanceList, atividadeInstanceCount: atividadeInstanceCount]
+        params.each { p -> if (p.key ==~ /search.*/ && p.value) model[p.key] = p.value }
+        model
     }
+
+
+    def getCriteria(pars){
+        def criteria = {
+            if (pars.searchNome)
+                or{
+                    ilike('nome', "%${pars.searchNome}%")
+                    ilike('nomeNormalizado', "%${Util.normalizar(pars.searchNome)}%")
+                }
+            if (pars.searchCodigo)
+                eq('codigo', pars.searchCodigo)
+        }
+        return criteria
+    }
+
 
     def show(Atividade atividadeInstance) {
         respond atividadeInstance

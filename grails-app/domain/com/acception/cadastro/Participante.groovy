@@ -1,6 +1,7 @@
 package com.acception.cadastro
 
 import com.acception.security.User
+import com.acception.util.Util
 
 class Participante {
 
@@ -10,6 +11,7 @@ class Participante {
     Date lastUpdated
 
     String nome
+    String nomeNormalizado
 
     /*
     Endereco endereco
@@ -31,6 +33,7 @@ class Participante {
 
     static constraints = {
         nome maxSize:100
+        nomeNormalizado nullable: true
         telefone nullable: true
         telefoneAdicional nullable: true
         email email:true, nullable:true
@@ -38,6 +41,20 @@ class Participante {
         user nullable:true
         papeis nullable:true
         senhaInicial nullable:true, maxSize:64
+    }
+
+    def beforeInsert() {
+        fillNomeNormalizado()
+    }
+
+    def beforeUpdate() {
+        fillNomeNormalizado()
+    }
+
+    def fillNomeNormalizado() {
+        if(this.nome != null) {
+            this.nomeNormalizado = Util.normalizar(this.nome)
+        }
     }
 
     String toString() {

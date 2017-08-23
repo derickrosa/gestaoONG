@@ -1,7 +1,11 @@
+import com.acception.cadastro.Atividade
+import com.acception.cadastro.CentroCusto
 import com.acception.cadastro.Cidade
 import com.acception.cadastro.Coordenada
 import com.acception.cadastro.Estado
+import com.acception.cadastro.LinhaAcao
 import com.acception.cadastro.Mesoregiao
+import com.acception.cadastro.Participante
 import com.acception.cadastro.enums.NomeMesoregiao
 import com.acception.security.Role
 import grails.util.Environment
@@ -14,10 +18,10 @@ class BootStrap {
         systemInicialLog()
         loadFixtures()
         loadPerfisAcesso()
-        //loadMaps()
     }
     def destroy = {
     }
+
 
     def systemInicialLog() {
         def version = grailsApplication.metadata['app.version']

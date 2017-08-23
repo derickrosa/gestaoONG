@@ -2,11 +2,13 @@ package com.acception.cadastro
 
 import com.acception.cadastro.enums.StatusProjeto
 import com.acception.cadastro.enums.TipoLancamento
+import com.acception.util.Util
 
 class CentroCusto {
 
     String codigo
     String nome
+    String nomeNormalizado
     String descricao
     Integer ano
     Date dateCreated
@@ -37,6 +39,19 @@ class CentroCusto {
         statusProjeto nullable: true
     }
 
+    def beforeInsert() {
+        fillNomeNormalizado()
+    }
+
+    def beforeUpdate() {
+        fillNomeNormalizado()
+    }
+
+    def fillNomeNormalizado() {
+        if(this.nome != null) {
+            this.nomeNormalizado = Util.normalizar(this.nome)
+        }
+    }
     def getSaldo() {
         def despesas = 0
         def creditos = this.lancamentos.findAll{ it.tipoLancamento == TipoLancamento.CREDITO }

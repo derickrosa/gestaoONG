@@ -11,9 +11,16 @@
             text-align: center;
         }
     </style>
+    <export:resource/>
 </head>
 
 <body>
+<%
+    def pars = [:]
+    pageScope.variables.each { k, v ->
+        if (k ==~ /search.*/ && v) pars[k] = v
+    }
+%>
 <div id="content">
     <div class="inner" style="min-height: 700px;">
         <div class="row">
@@ -34,6 +41,20 @@
             <g:if test="${flash.message}">
                 <div class="alert alert-info" role="status">${flash.message}</div>
             </g:if>
+
+            <div class="form-group">
+                <g:form controller="centroCusto" action="index" class="search-form">
+                    <div class="form-group">
+                        <g:render template="searchCentroCusto"/>
+                    </div>
+
+                    <div class="row">
+                        <button class="btn btn-default center-block search">Procurar <i class="icon-search"></i>
+                        </button>
+                    </div>
+                </g:form>
+            </div>
+
             <table class="table table-bordered table-striped">
                 <thead>
                 <tr>
@@ -61,7 +82,7 @@
                 </tr>
                 </thead>
                 <tbody class="text-center">
-                <g:if test="${centroCustoInstanceList}">
+                <g:if test="${centroCustoInstanceCount != 0}">
                     <g:each in="${centroCustoInstanceList}" status="i" var="centroCustoInstance">
                         <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
@@ -85,9 +106,7 @@
                 </g:if>
                 <g:else>
                     <tr>
-                        <th colspan="7">
-                            Sem registros!
-                        </th>
+                        <td colspan="5" class="text-center nao-ha-registros">Não há registros de ${entityName}.</td>
                     </tr>
                 </g:else>
 
@@ -95,10 +114,24 @@
                 </tbody>
             </table>
 
-            <div class="pagination">
-                <g:paginate total="${centroCustoInstanceCount ?: 0}"/>
+
+            <blockquote class="relatorio">
+                <p>Geração de Relatórios</p>
+                <export:formats formats="['excel', 'pdf']" params="${params}"/>
+            </blockquote>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="dataTables_info" id="dataTables-example_info" role="alert" aria-live="polite"
+                         aria-relevant="all">Exibindo 1 a 20 de ${centroCustoInstanceCount == 1 ? centroCustoInstanceCount + ' centro de custo cadastrado' : centroCustoInstanceCount + ' centros de custo cadastrados'}.</div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="pagination">
+                        <g:paginate total="${centroCustoInstanceCount ?: 0}"/>
+                    </div>
+                </div>
             </div>
-        </div>
     </div>
 </div>
 </body>

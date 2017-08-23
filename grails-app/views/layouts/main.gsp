@@ -338,7 +338,7 @@
 
             <li class="panel active">
                 <a href="index.html">
-                    <i class="icon-table"></i> Painel Inicial
+                    <i class="icon-dashboard"></i> Painel Inicial
 
                 </a>
             </li>
@@ -373,7 +373,7 @@
             <li class="panel ">
                 <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle"
                    data-target="#component-finac">
-                    <i class="icon-tasks"></i> Financeiro
+                    <i class="icon-dollar"></i> Financeiro
 
                     <span class="pull-right">
                         <i class="icon-angle-left"></i>
@@ -392,7 +392,7 @@
                 <li class="panel ">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle"
                        data-target="#component-sistema">
-                        <i class="icon-tasks"></i> Sistema
+                        <i class="icon-gears"></i> Sistema
 
                         <span class="pull-right">
                             <i class="icon-angle-left"></i>

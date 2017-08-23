@@ -8,12 +8,59 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class FornecedorController {
-
+    def exportService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE", criarFornecedor: "POST"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Fornecedor.list(params), model:[fornecedorInstanceCount: Fornecedor.count()]
+
+        def criteria = getCriteria(params)
+
+        if (params?.exportFormat && params.exportFormat != "html") {
+            response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
+            response.setHeader("Content-disposition", "attachment; filename=Fornecedor.${params.extension}")
+
+            def fornecedorInstanceList = Fornecedor.createCriteria().list(params, criteria)
+
+            List fields = ['participante.nome','participante.telefone','participante.email','setor']
+
+            Map labels = ['participante.nome':'Nome',
+                          'participante.telefone':'Telefone',
+                          'participante.email':'E-mail',
+                          'setor':'Setor']
+
+            Map formatters = [
+                    'financiador.nome'                                              : { d, v -> v ? v.descricao : 'Não informado.'}
+            ]
+
+
+            log.debug("Gerando relatório de Fornecedor...")
+
+            Map parameters = ["column.widths": [0.3, 0.2,0.2,0.3]]
+
+            exportService.export(params.exportFormat, response.outputStream, fornecedorInstanceList, fields, labels, formatters, parameters)
+            return
+        }
+
+        def fornecedorInstanceList = Fornecedor.createCriteria().list(params, criteria)
+        def fornecedorInstanceCount = Fornecedor.createCriteria().count(criteria)
+
+        def model = [fornecedorInstanceList: fornecedorInstanceList, fornecedorInstanceCount: fornecedorInstanceCount]
+        params.each { p -> if (p.key ==~ /search.*/ && p.value) model[p.key] = p.value }
+        model
+    }
+
+    def getCriteria(pars) {
+        def criteria = {
+            if (pars.searchNome)
+                participante {
+                    or {
+                        ilike('nome', "%${pars.searchNome}%")
+                        ilike('nomeNormalizado', "%${Util.normalizar(pars.searchNome)}%")
+                    }
+                }
+        }
+        return criteria
     }
 
     def show(Fornecedor fornecedorInstance) {

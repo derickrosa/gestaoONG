@@ -9,6 +9,7 @@ class Atividade {
 
     String codigo
     String nome
+    String nomeNormalizado
     String descricao
     StatusAtividade status = StatusAtividade.NAO_INICIADA
     CentroCusto centroCusto
@@ -32,11 +33,12 @@ class Atividade {
 
     static constraints = {
         nome maxSize:100
+        nomeNormalizado nullable: true
         arquivos nullable: true
         descricao nullable: true
         despesas nullable: true
         status nullable: true
-        centroCusto nullable: false
+        centroCusto nullable: true
         tipo nullable: true
         inicio nullable: true
         termino nullable: false
@@ -47,6 +49,16 @@ class Atividade {
         despesas nullable: true
         relatorios nullable: true
         modulo nullable: true
+    }
+
+    def beforeUpdate() {
+        fillNomeNormalizado()
+    }
+
+    def fillNomeNormalizado() {
+        if(this.nome != null) {
+            this.nomeNormalizado = Util.normalizar(this.nome)
+        }
     }
 
     static mapping = {
@@ -72,6 +84,8 @@ class Atividade {
     }
 
     def beforeInsert() {
+        fillNomeNormalizado()
+
         if (!inicio) {
             inicio = new Date()
         }

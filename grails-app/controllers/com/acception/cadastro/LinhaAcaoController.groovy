@@ -1,18 +1,47 @@
 package com.acception.cadastro
 
-
+import com.acception.cadastro.enums.TipoAtividade
+import com.acception.util.Util
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class LinhaAcaoController {
-
+    def exportService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond LinhaAcao.list(params), model:[linhaAcaoInstanceCount: LinhaAcao.count()]
+        params.max = Math.min(max ?: 20, 100)
+
+        def criteria = getCriteria(params)
+
+        if(params?.exportFormat && params.exportFormat != "html"){
+            response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
+            response.setHeader("Content-disposition", "attachment; filename=LinhaAcao.${params.extension}")
+
+            def linhaAcaoList = LinhaAcao.createCriteria().list(params, criteria)
+
+            List fields=['nome','codigo','descricao']
+            Map labels=[nome:'Nome',
+                        codigo:'Código',
+                        descricao:'Descrição']
+
+
+            log.debug("Gerando relatório de Linha de Acao...")
+
+            Map parameters = ["column.widths": [0.3, 0.2, 0.5]]
+
+            exportService.export(params.exportFormat, response.outputStream,linhaAcaoList, fields, labels, [:], parameters)
+            return
+        }
+
+        def linhaAcaoInstanceList = LinhaAcao.createCriteria().list(params, criteria)
+        def linhaAcaoInstanceCount = LinhaAcao.createCriteria().count(criteria)
+
+        def model = [linhaAcaoInstanceList: linhaAcaoInstanceList, linhaAcaoInstanceCount: linhaAcaoInstanceCount]
+        params.each { p -> if (p.key ==~ /search.*/ && p.value) model[p.key] = p.value }
+        model
     }
 
     def show(LinhaAcao linhaAcaoInstance) {
@@ -21,6 +50,19 @@ class LinhaAcaoController {
 
     def create() {
         respond new LinhaAcao(params)
+    }
+
+    def getCriteria(pars){
+        def criteria = {
+            if (pars.searchNome)
+                or{
+                ilike('nome', "%${pars.searchNome}%")
+                ilike('nomeNormalizado', "%${Util.normalizar(pars.searchNome)}%")
+                }
+            if (pars.searchCodigo)
+                eq('codigo', pars.searchCodigo)
+        }
+        return criteria
     }
 
     @Transactional

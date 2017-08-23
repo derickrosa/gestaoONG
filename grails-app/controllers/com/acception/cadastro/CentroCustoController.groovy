@@ -13,12 +13,54 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class CentroCustoController {
+    def exportService
     private static final okcontents = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']
     static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond CentroCusto.list(params), model: [centroCustoInstanceCount: CentroCusto.count()]
+
+        def criteria = getCriteria(params)
+
+        if (params?.exportFormat && params.exportFormat != "html") {
+            response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
+            response.setHeader("Content-disposition", "attachment; filename=CentroCusto.${params.extension}")
+
+            def centroCustoInstanceList = CentroCusto.createCriteria().list(params, criteria)
+
+            List fields = ['nome', 'codigo']
+            Map labels = ['nome'     : 'Nome',
+                          codigo   : 'Código']
+
+
+            log.debug("Gerando relatório de Centro de Custo...")
+
+            Map parameters = ["column.widths": [0.5, 0.5]]
+
+            exportService.export(params.exportFormat, response.outputStream, centroCustoInstanceList, fields, labels, [:], parameters)
+            return
+        }
+
+        def centroCustoInstanceList = CentroCusto.createCriteria().list(params, criteria)
+        def  centroCustoInstanceCount = CentroCusto.createCriteria().count(criteria)
+
+        def model = [centroCustoInstanceList: centroCustoInstanceList, centroCustoInstanceCount: centroCustoInstanceCount]
+        params.each { p -> if (p.key ==~ /search.*/ && p.value) model[p.key] = p.value }
+        model
+    }
+
+
+    def getCriteria(pars) {
+        def criteria = {
+            if (pars.searchNome)
+                or{
+                    ilike('nome', "%${pars.searchNome}%")
+                    ilike('nomeNormalizado', "%${Util.normalizar(pars.searchNome)}%")
+                }
+            if (pars.searchCodigo)
+                eq('codigo', pars.searchCodigo)
+        }
+        return criteria
     }
 
     def show(CentroCusto centroCustoInstance) {

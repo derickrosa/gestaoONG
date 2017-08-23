@@ -8,12 +8,54 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class FinanciadorController {
-
+    def exportService
     /*static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]*/
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Financiador.list(params), model:[financiadorInstanceCount: Financiador.count()]
+
+        def criteria = getCriteria(params)
+
+        if (params?.exportFormat && params.exportFormat != "html") {
+            response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
+            response.setHeader("Content-disposition", "attachment; filename=Financiador.${params.extension}")
+
+            def financiadorInstanceList = Financiador.createCriteria().list(params, criteria)
+
+            List fields = ['participante.nome', 'codigo']
+            Map labels = ['participante.nome'     : 'Nome',
+                          codigo   : 'Código']
+
+
+            log.debug("Gerando relatório de Financiador...")
+
+            Map parameters = ["column.widths": [0.5, 0.5]]
+
+            exportService.export(params.exportFormat, response.outputStream, financiadorInstanceList, fields, labels, [:], parameters)
+            return
+        }
+
+        def financiadorInstanceList = Financiador.createCriteria().list(params, criteria)
+        def financiadorInstanceCount = Financiador.createCriteria().count(criteria)
+
+        def model = [financiadorInstanceList: financiadorInstanceList, financiadorInstanceCount: financiadorInstanceCount]
+        params.each { p -> if (p.key ==~ /search.*/ && p.value) model[p.key] = p.value }
+        model
+    }
+
+    def getCriteria(pars) {
+        def criteria = {
+            if (pars.searchNome)
+                participante {
+                    or{
+                        ilike('nome', "%${pars.searchNome}%")
+                        ilike('nomeNormalizado', "%${Util.normalizar(pars.searchNome)}%")
+                    }
+                }
+            if (pars.searchCodigo)
+                eq('codigo', pars.searchCodigo)
+        }
+        return criteria
     }
 
     def show(Financiador financiadorInstance) {
@@ -22,7 +64,7 @@ class FinanciadorController {
 
     def findSolicitacoes() {
         def financiador
-        if(params.idFinanciador) {
+        if (params.idFinanciador) {
             log.debug("Financiador ID ${params.idFinanciador}")
             financiador = Financiador.get(Long.parseLong(params.idFinanciador))
             log.debug("Financiador: ${financiador}")
@@ -30,7 +72,7 @@ class FinanciadorController {
 
         def json = financiador?.responsaveis?.sort { it.participante.nome }.collect { it ->
             def numero = ""
-            if(it.participante.telefone)
+            if (it.participante.telefone)
                 numero = it.participante.telefone.ddd + it.participante.telefone.numero
             [it.participante.nome ?: '', it.participante.email ?: '', numero ?: '', it.id ?: '']
         }
@@ -49,12 +91,12 @@ class FinanciadorController {
             return
         }
 
-        if(params.participante.cnpj){
+        if (params.participante.cnpj) {
             params.participante.cnpj = Util.cnpjToRaw(params.participante.cnpj)
         }
         def participante = new PessoaJuridica(params.participante)
         participante.addToPapeis(financiadorInstance)
-        participante.save(failOnError:true, flush:true)
+        participante.save(failOnError: true, flush: true)
 
         log.debug("Antes de entrar ${params?.listaResponsaveis} - TAM ${params?.listaResponsaveis?.nome?.size()}")
 
@@ -73,16 +115,16 @@ class FinanciadorController {
                 }
 
 
-                participanteResponsavel.save(failOnError:true, flush:true)
+                participanteResponsavel.save(failOnError: true, flush: true)
                 def responsavel = new Responsavel()
                 responsavel.participante = participanteResponsavel
                 responsavel.financiador = financiadorInstance
-                responsavel.save(failOnError:true, flush:true)
+                responsavel.save(failOnError: true, flush: true)
                 log.debug(" RESP: ${responsavel.properties}")
                 participanteResponsavel.addToPapeis(responsavel)
                 financiadorInstance.addToResponsaveis(responsavel)
-                participanteResponsavel.save(failOnError:true, flush:true)
-                financiadorInstance.save(failOnError:true, flush:true)
+                participanteResponsavel.save(failOnError: true, flush: true)
+                financiadorInstance.save(failOnError: true, flush: true)
 
             }
         } else if (params?.listaResponsaveis?.nome && params?.listaResponsaveis?.email && params?.listaResponsaveis?.telefone) {
@@ -96,15 +138,15 @@ class FinanciadorController {
                 def dadosTelefone = Util.phoneToRaw(params.listaResponsaveis?.telefone)
                 participanteResponsavel.telefone = Telefone.findOrSaveByDddAndNumero(dadosTelefone['ddd'], dadosTelefone['number'])
             }
-            participanteResponsavel.save(failOnError:true, flush:true)
+            participanteResponsavel.save(failOnError: true, flush: true)
             def responsavel = new Responsavel()
             responsavel.participante = participanteResponsavel
             responsavel.financiador = financiadorInstance
-            responsavel.save(failOnError:true, flush:true)
+            responsavel.save(failOnError: true, flush: true)
             participanteResponsavel.addToPapeis(responsavel)
             financiadorInstance.addToResponsaveis(responsavel)
-            participanteResponsavel.save(failOnError:true, flush:true)
-            financiadorInstance.save(failOnError:true, flush:true)
+            participanteResponsavel.save(failOnError: true, flush: true)
+            financiadorInstance.save(failOnError: true, flush: true)
 
         }
         /*log.debug("Chegou 3")
@@ -137,21 +179,21 @@ class FinanciadorController {
             return
         }
 
-        if(params.participante.cnpj){
+        if (params.participante.cnpj) {
             params.participante.cnpj = Util.cnpjToRaw(params.participante.cnpj)
         }
 
         financiadorInstance.participante.properties = params.participante
 
         def participante = financiadorInstance.participante
-        participante.save(failOnError:true, flush:true)
+        participante.save(failOnError: true, flush: true)
 
         //financiadorInstance?.responsaveis?.clear()
         if (params?.listaResponsaveis?.nome?.class?.array && params?.listaResponsaveis?.email?.class?.array && params?.listaResponsaveis?.telefone?.class?.array) {
-            def ids = financiadorInstance?.responsaveis?.collect {it.id}
-            ids.each {id->
+            def ids = financiadorInstance?.responsaveis?.collect { it.id }
+            ids.each { id ->
 
-                if(!params?.listaResponsaveis?.id.contains(id.toString())){
+                if (!params?.listaResponsaveis?.id.contains(id.toString())) {
 
                     def responsavel = Responsavel.get(id)
                     def partic = responsavel.participante
@@ -159,23 +201,23 @@ class FinanciadorController {
                     partic.removeFromPapeis(responsavel)
                     responsavel.participante = null
                     responsavel.financiador = null
-                    responsavel.delete(flush: true, failOnError:true)
-                    partic.delete(flush: true, failOnError:true)
+                    responsavel.delete(flush: true, failOnError: true)
+                    partic.delete(flush: true, failOnError: true)
                 }
             }
             for (int i = 0; i < params?.listaResponsaveis?.nome?.size(); i++) {
 
                 def responsavel = null
-                if(params?.listaResponsaveis?.id?.class?.array && params?.listaResponsaveis?.id?.size() > i) {
+                if (params?.listaResponsaveis?.id?.class?.array && params?.listaResponsaveis?.id?.size() > i) {
                     responsavel = Responsavel.get(Long.parseLong(params.listaResponsaveis?.id[i]))
 
-                } else if(i==0){
+                } else if (i == 0) {
                     responsavel = Responsavel.get(Long.parseLong(params.listaResponsaveis?.id))
 
                 }
 
                 def participanteResponsavel
-                if(responsavel) {
+                if (responsavel) {
                     participanteResponsavel = responsavel.participante
                     log.debug("Adiciona participante existente: $participanteResponsavel")
                 } else {
@@ -193,41 +235,41 @@ class FinanciadorController {
                 }
 
 
-                participanteResponsavel.save(failOnError:true, flush:true)
+                participanteResponsavel.save(failOnError: true, flush: true)
 
                 responsavel.participante = participanteResponsavel
                 responsavel.financiador = financiadorInstance
-                responsavel.save(failOnError:true, flush:true)
+                responsavel.save(failOnError: true, flush: true)
 
-                if(!participanteResponsavel?.papeis?.contains(responsavel))
+                if (!participanteResponsavel?.papeis?.contains(responsavel))
                     participanteResponsavel.addToPapeis(responsavel)
-                if(!financiadorInstance?.responsaveis?.contains(responsavel))
+                if (!financiadorInstance?.responsaveis?.contains(responsavel))
                     financiadorInstance.addToResponsaveis(responsavel)
-                participanteResponsavel.save(failOnError:true, flush:true)
-                financiadorInstance.save(failOnError:true, flush:true)
+                participanteResponsavel.save(failOnError: true, flush: true)
+                financiadorInstance.save(failOnError: true, flush: true)
 
             }
         } else if (params?.listaResponsaveis?.nome && params?.listaResponsaveis?.email && params?.listaResponsaveis?.telefone) {
-            def ids = financiadorInstance?.responsaveis?.collect {it.id}
-            ids.each {id->
-                if(params?.listaResponsaveis?.id != id.toString()){
+            def ids = financiadorInstance?.responsaveis?.collect { it.id }
+            ids.each { id ->
+                if (params?.listaResponsaveis?.id != id.toString()) {
                     def responsavel = Responsavel.get(id)
                     def partic = responsavel.participante
                     financiadorInstance.removeFromResponsaveis(responsavel)
                     partic.removeFromPapeis(responsavel)
                     responsavel.participante = null
                     responsavel.financiador = null
-                    responsavel.delete(flush: true, failOnError:true)
-                    partic.delete(flush: true, failOnError:true)
+                    responsavel.delete(flush: true, failOnError: true)
+                    partic.delete(flush: true, failOnError: true)
                 }
             }
             def responsavel
-            if(params.listaResponsaveis?.id)
+            if (params.listaResponsaveis?.id)
                 responsavel = Responsavel.get(Long.parseLong(params.listaResponsaveis?.id))
             else
                 responsavel = null
             def participanteResponsavel
-            if(responsavel)
+            if (responsavel)
                 participanteResponsavel = responsavel.participante
             else {
                 responsavel = new Responsavel()
@@ -245,31 +287,31 @@ class FinanciadorController {
 
             responsavel.participante = participanteResponsavel
             responsavel.financiador = financiadorInstance
-            responsavel.save(failOnError:true, flush:true)
+            responsavel.save(failOnError: true, flush: true)
             log.debug(" RESP: ${responsavel.properties}")
-            if(!participanteResponsavel?.papeis?.contains(responsavel))
+            if (!participanteResponsavel?.papeis?.contains(responsavel))
                 participanteResponsavel.addToPapeis(responsavel)
-            if(!financiadorInstance?.responsaveis?.contains(responsavel))
+            if (!financiadorInstance?.responsaveis?.contains(responsavel))
                 financiadorInstance.addToResponsaveis(responsavel)
-            participanteResponsavel.save(failOnError:true, flush:true)
-            financiadorInstance.save(failOnError:true, flush:true)
+            participanteResponsavel.save(failOnError: true, flush: true)
+            financiadorInstance.save(failOnError: true, flush: true)
 
 
         }
 
         if (financiadorInstance.hasErrors()) {
-            respond financiadorInstance.errors, view:'edit'
+            respond financiadorInstance.errors, view: 'edit'
             return
         }
 
-        financiadorInstance.save flush:true
+        financiadorInstance.save flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'Financiador.label', default: 'Financiador'), financiadorInstance.id])
                 redirect financiadorInstance
             }
-            '*'{ respond financiadorInstance, [status: OK] }
+            '*' { respond financiadorInstance, [status: OK] }
         }
     }
 
@@ -281,14 +323,14 @@ class FinanciadorController {
             return
         }
 
-        financiadorInstance.delete flush:true
+        financiadorInstance.delete flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'Financiador.label', default: 'Financiador'), financiadorInstance.id])
-                redirect action:"index", method:"GET"
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+            '*' { render status: NO_CONTENT }
         }
     }
 
@@ -298,7 +340,7 @@ class FinanciadorController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'financiador.label', default: 'Financiador'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 

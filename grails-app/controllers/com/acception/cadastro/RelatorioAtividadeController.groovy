@@ -7,12 +7,40 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class RelatorioAtividadeController {
+    def exportService
     private static final okcontents = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE", uploadImage: "POST"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
+
         def criteria = getCriteria(params)
+        if(params?.exportFormat && params.exportFormat != "html"){
+            response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
+            response.setHeader("Content-disposition", "attachment; filename=RelatorioAtividade.${params.extension}")
+
+            def relatorioAtividadeInstanceList = RelatorioAtividade.createCriteria().list(params, criteria)
+
+            List fields=['atividade.nome','dateCreated','financiador.nome','centroCusto.nome']
+
+            Map labels=['atividade.nome':'Atividade',
+                        'dateCreated':'Data de Criação',
+                        'financiador.nome':'Financiador',
+                        'centroCusto.nome':'Centro Custo']
+
+
+            log.debug("Gerando relatório de atividades...")
+
+            Map parameters = ["column.widths": [0.3, 0.1, 0.3,0.3]]
+
+            Map formatters = [
+                    'financiador.nome'                                              : { d, v -> v ? (v.size()>0?v:'Não informado.'):'Não informado.'},
+                    'centroCusto.nome'                   : { d, v -> v ? (v.size()>0?v:'Não informado.'):'Não informado.'}
+            ]
+
+            exportService.export(params.exportFormat, response.outputStream,relatorioAtividadeInstanceList, fields, labels, formatters, parameters)
+            return
+        }
 
         def relatorioAtividadeInstanceList = RelatorioAtividade.createCriteria().list(params, criteria)
         def relatorioAtividadeInstanceCount = RelatorioAtividade.createCriteria().count(criteria)
