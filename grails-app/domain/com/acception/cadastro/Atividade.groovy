@@ -12,8 +12,8 @@ class Atividade {
     String nomeNormalizado
     String descricao
     StatusAtividade status = StatusAtividade.NAO_INICIADA
-    CentroCusto centroCusto
     Integer modulo
+    Double valorPlanejado
 
 
     String objetivo
@@ -27,9 +27,9 @@ class Atividade {
     Cidade municipio
     String local
 
-    static hasMany=[arquivos:Arquivo, linhas:LinhaAcao, despesas:Despesa, relatorios:RelatorioAtividade]
+    static hasMany=[arquivos:Arquivo, linhas:LinhaAcao, despesas:Despesa, relatorios:RelatorioAtividade, centroCusto:CentroCusto]
     static belongsTo = [LinhaAcao, CentroCusto]
-    static transients = ['periodo','isSubatividade']
+    static transients = ['periodo','subAtividades']
 
     static constraints = {
         nome maxSize:100
@@ -49,6 +49,7 @@ class Atividade {
         despesas nullable: true
         relatorios nullable: true
         modulo nullable: true
+        valorPlanejado nullable: true
     }
 
     def beforeUpdate() {

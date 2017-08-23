@@ -502,6 +502,10 @@ body.padTop53 {
     color: #ccc
 }
 
+#menu ul a::before {
+    content: "> ";
+}
+
 #menu .nav-header {
     padding: 3px 15px;
     font-size: 12px;
