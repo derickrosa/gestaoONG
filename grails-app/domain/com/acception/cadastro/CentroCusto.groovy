@@ -20,14 +20,14 @@ class CentroCusto {
     StatusProjeto statusProjeto
     ContaBancaria contaBancaria
 
-    static hasMany = [atividades: Atividade,
-                      arquivos: Arquivo,
-                      orcamentos: Orcamento,
+    static hasMany = [atividades : Atividade,
+                      arquivos   : Arquivo,
+                      orcamentos : Orcamento,
                       lancamentos: Lancamento]
 
     static belongsTo = [financiador: Financiador]
 
-    static transients = ['saldo']
+    static transients = ['saldo', 'saldoInicial', 'orcamentoAtual', 'orcamentoOriginal', 'despesas']
 
     static constraints = {
         dataInicio nullable: true
@@ -39,22 +39,16 @@ class CentroCusto {
         statusProjeto nullable: true
     }
 
-    def beforeInsert() {
-        fillNomeNormalizado()
-    }
-
-    def beforeUpdate() {
-        fillNomeNormalizado()
-    }
-
-    def fillNomeNormalizado() {
-        if(this.nome != null) {
+    void setNome(String nome) {
+        if (nome != null) {
+            this.nome = nome
             this.nomeNormalizado = Util.normalizar(this.nome)
         }
     }
+
     def getSaldo() {
         def despesas = 0
-        def creditos = this.lancamentos.findAll{ it.tipoLancamento == TipoLancamento.CREDITO }
+        def creditos = this.lancamentos.findAll { it.tipoLancamento == TipoLancamento.CREDITO }
 
         def valorCredito = creditos*.valor.sum() ?: 0
 
