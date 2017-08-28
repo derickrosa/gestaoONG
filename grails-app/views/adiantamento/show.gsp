@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main">
+    <meta name="layout" content="layout-restrito">
     <g:set var="entityName" value="${message(code: 'adiantamento.label', default: 'Adiantamento')}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
     <g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>

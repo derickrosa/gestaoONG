@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="layout" content="main"/>
+	<meta name="layout" content="layout-restrito"/>
 	<title>Gerência Fase</title>
 </head>
 <body>

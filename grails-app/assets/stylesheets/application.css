@@ -1,19 +1,8 @@
 /*
-* This is a manifest file that'll be compiled into application.css, which will include all the files
-* listed below.
-*
-* Any CSS file within this directory can be referenced here using a relative path.
-*
-* You're free to add application-wide styles to this file and they'll appear at the top of the
-* compiled file, but it's generally better to create a new file per style scope.
-*
-*= require /bootstrap/css/bootstrap.css
-*= require main.min.css
-*= require export.css
-*= require theme.css
-*= require MoneAdmin.css
-*= require /Font-Awesome/css/font-awesome.css
-*= require jquery.edittable.css
-*= require chosen.css
+*= require /bootstrap/css/bootstrap.min.css
+*= require /bootstrap/css/bootstrap-datepicker.min.css
+*= require /Font-Awesome/css/font-awesome.min.css
+*= require sweet-alert.css
+*= require sb-admin-2.css
+*= require metisMenu.min.css
 */
-

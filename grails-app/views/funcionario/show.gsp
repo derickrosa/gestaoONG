@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<meta name="layout" content="layout-restrito">
 		<g:set var="entityName" value="${message(code: 'funcionario.label', default: 'Funcionário')}" />
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
 	</head>
@@ -198,7 +198,6 @@
 		</div>
 	</div>
 
-	<asset:javascript src="Chart.min.js"/>
 
 	%{--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>--}%
 

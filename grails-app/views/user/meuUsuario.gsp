@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-    <meta name="layout" content="main">
+    <meta name="layout" content="layout-restrito">
     <g:set var="entityName" value="${message(code: 'user.label', default: 'User')}"/>
     <title>Meu Usuário</title>
 

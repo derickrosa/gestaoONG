@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main">
+    <meta name="layout" content="layout-restrito">
     <g:set var="entityName" value="${message(code: 'atividade.label', default: 'Atividade')}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

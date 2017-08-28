@@ -4,22 +4,21 @@
   Date: 25/08/17
   Time: 10:06
 --%>
-<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="shortcut icon" href="${assetPath(src: 'fase-icon.ico')}" type="image/x-icon">
-    <link rel="apple-touch-icon" href="${assetPath(src: 'fase-icon.ico')}">
-    <link rel="apple-touch-icon" sizes="114x114" href="${assetPath(src: 'fase-icon.ico')}">
+    <link rel="shortcut icon" href="${assetPath(src: 'fase/fase-icon.ico')}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="${assetPath(src: 'fase/fase-icon.ico')}">
+    <link rel="apple-touch-icon" sizes="114x114" href="${assetPath(src: 'fase/fase-icon.ico')}">
 
-    <link href="${assetPath(src: 'bootstrap/css/bootstrap.min.css')}" rel="stylesheet"/>
-    <link href="${assetPath(src: 'Font-Awesome/css/font-awesome.min.css')}" rel="stylesheet"/>
+    <asset:stylesheet src="bootstrap/css/bootstrap.min.css"/>
+    <asset:stylesheet src="Font-Awesome/css/font-awesome.min.css"/>
 
-    <script src="${assetPath(src: 'plugins/jquery-2.0.3.min.js')}"></script>
-    <script src="${assetPath(src: 'plugins/bootstrap/bootstrap.min.js')}"></script>
+    <asset:javascript src="plugins/jquery/jquery-2.0.3.min.js"/>
+    <asset:javascript src="plugins/bootstrap/bootstrap2.min.js"/>
 
     <style type="text/css">
         %{--TODO: SUBSTITUIR PARA UMA IMAAGEM DE BACKGROUND--}%
@@ -38,7 +37,7 @@
 
 <body>
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Gestão Fundo Dema - FASE</a>
