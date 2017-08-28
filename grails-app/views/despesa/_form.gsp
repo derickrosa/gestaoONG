@@ -20,7 +20,7 @@ input.error, select.error {
             <g:message code="despesa.centroCusto.label" default="Centro Custo"/>
 
         </label>
-        <g:select class="form-control" id="centroCusto" name="centroCusto.id" from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id" value="${centroCustoId ?: despesaInstance.centroCusto?.id}" noSelection="['': '']" required="required" data-placeholder="Selecione um centro de custo..."/>
+        <g:select class="form-control" id="centroCusto" name="centroCusto.id" from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id" value="${centroCustoId ?: despesaInstance?.centroCusto?.id}" noSelection="['': '']" required="required" data-placeholder="Selecione um centro de custo..."/>
 
     </div>
 

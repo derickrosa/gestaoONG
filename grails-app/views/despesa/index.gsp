@@ -62,7 +62,7 @@
                             <td><g:formatDate format="dd/MM/yyyy" date="${despesaInstance.data}"/></td>
 
                             <td><g:link controller="centroCusto" action="show"
-                                        id="${despesaInstance.centroCusto?.id}">${fieldValue(bean: despesaInstance, field: "centroCusto")}</g:link></td>
+                                        id="${despesaInstance?.centroCusto?.id}">${fieldValue(bean: despesaInstance, field: "centroCusto")}</g:link></td>
 
                             <td>${fieldValue(bean: despesaInstance, field: "atividade")}</td>
                         </tr>
