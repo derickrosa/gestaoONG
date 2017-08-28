@@ -1,6 +1,5 @@
 .classpath
-.idea/
-.project
-.slcache/
-.target/
-target/
+.idea/*
+.project/*
+.slcache/*
+./target/*
