@@ -21,7 +21,6 @@
     <asset:javascript src="plugins/bootstrap/bootstrap2.min.js"/>
 
     <style type="text/css">
-        %{--TODO: SUBSTITUIR PARA UMA IMAAGEM DE BACKGROUND--}%
         body {
             background: url(${assetPath(src: 'fase/background_amazonia.jpg')}) round !important;
         }
