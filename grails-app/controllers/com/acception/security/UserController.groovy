@@ -1,38 +1,12 @@
 package com.acception.security
 
-import grails.converters.JSON
-import grails.plugin.springsecurity.SpringSecurityUtils
-import org.springframework.security.access.annotation.Secured
-
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = false)
 class UserController {
     def springSecurityService
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-
-    //Isso nao é chamado em nenhum lugar!!
-    def auth() {
-        if (springSecurityService.authentication?.authorities*.authority.contains('ROLE_CA')) {
-            redirect(controller: 'consulta')
-            return
-        }
-
-        /*
-        if(SpringSecurityUtils.ifAnyGranted('ROLE_ADMINISTRADORA'))
-            session['tipoPrograma'] = springSecurityService.currentUser?.papel?.tiposPrograma[0]
-        else {
-            def programas = springSecurityService.currentUser?.papel?.programas
-            if (programas?.size() == 1) {
-                session.programa = programas[0]
-            } else if (programas?.size() > 1) {
-                chain(controller: "home", action: "index", model: [listaProgramas: programas]);
-            }
-        }
-        */
-        redirect(controller: 'home', action: 'painelInicial')
-    }
+    static allowedMethods = [save: "POST", update: "PUT", changePassword: "POST", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -88,43 +62,6 @@ class UserController {
         [userInstance: user]
     }
 
-    @Transactional
-    def save(User userInstance) {
-        if (userInstance == null) {
-            notFound()
-            return
-        }
-
-        if (userInstance.hasErrors()) {
-            respond userInstance.errors, view: 'create'
-            return
-        }
-
-
-        userInstance.password = params.initialPassword
-        userInstance.save flush: true
-
-        for (role in Role.list()) {
-            if (params["${role.authority}"]) {
-                UserRole auth = new UserRole(user: userInstance, role: role)
-                auth.save(flush: true)
-            } else {
-                def existingLink = UserRole.findByUserAndRole(userInstance, role)
-                if (existingLink) {
-                    existingLink.delete(flush: true)
-                }
-            }
-        }
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])
-                redirect userInstance
-            }
-            '*' { respond userInstance, [status: CREATED] }
-        }
-    }
-
     def edit(User userInstance) {
         return [userInstance: userInstance, authorityList: Role.list(), edit: true]
     }
@@ -165,6 +102,11 @@ class UserController {
         }
     }
 
+    def isSamePassword() {
+        def user = User.get(params.long('userID'))
+        respond([isSamePassword: springSecurityService.passwordEncoder.isPasswordValid(user.password, params.password.toString(), null)])
+    }
+
     @Transactional
     def delete(User userInstance) {
         log.debug("Removendo usuário.")
@@ -189,14 +131,6 @@ class UserController {
             }
             '*' { render status: NO_CONTENT }
         }
-    }
-
-    def isSamePassword() {
-        def user = User.get(params.userID)
-
-        print(springSecurityService.passwordEncoder.isPasswordValid(user.password, params.password, null))
-
-        render([isSamePassword: springSecurityService.passwordEncoder.isPasswordValid(user.password, params.password, null)] as JSON)
     }
 
     protected void notFound() {

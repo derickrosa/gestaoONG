@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">Gestão Fundo Dema</a>
+        <g:link controller="home" action="painelInicial" class="navbar-brand">Gestão Fundo Dema</g:link>
         <g:if env="development">
             <a class="navbar-brand" style="color: cadetblue" href="#">AMBIENTE DE DESENVOLVIMENTO</a>
         </g:if>
@@ -21,7 +21,7 @@
         <li class="nav-item">
             <button class="btn btn-link" type="button">
                 <i class="fa fa-fw fa-user"></i>
-                <strong>Bem vindo, <sec:username/></strong>
+                Bem vindo, <strong class="text-uppercase"><sec:username/></strong>
             </button>
         </li>
 

@@ -50,16 +50,14 @@
 		</table>
 
 		<g:form url="[resource:${propertyName}, action:'delete']" method="DELETE">
-			<fieldset class="buttons">
-				<g:link class="btn btn-default" action="edit" resource="\${${propertyName}}">
-					<span class="glyphicon glyphicon-edit"></span>
-					<g:message code="default.button.edit.label" default="Editar" />
-				</g:link>
-				<button type="submit" class="btn btn-default" onclick="return confirm('\${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
-					<span class="glyphicon glyphicon-floppy-remove"></span>
-					<g:message code="default.button.delete.label" default="Remover"/>
-				</button>
-			</fieldset>
+			<g:link class="btn btn-default" action="edit" resource="\${${propertyName}}">
+				<span class="glyphicon glyphicon-edit"></span>
+				<g:message code="default.button.edit.label" default="Editar" />
+			</g:link>
+			<button type="submit" class="btn btn-default" onclick="return confirm('\${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+				<span class="glyphicon glyphicon-floppy-remove"></span>
+				<g:message code="default.button.delete.label" default="Remover"/>
+			</button>
 		</g:form>
 	</body>
 </html>

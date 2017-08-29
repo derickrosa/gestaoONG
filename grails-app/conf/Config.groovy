@@ -163,8 +163,6 @@ grails.plugin.springsecurity.authority.className = 'com.acception.security.Role'
 grails.plugin.springsecurity.successHandler.alwaysUseDefault = true
 grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/home/painelInicial'
 
-def allRoles = ['ROLE_SUPORTE', 'ROLE_FINANCIADOR', 'ROLE_RESPONSAVEL', 'ROLE_FUNCIONARIO', 'ROLE_ADMINISTRADOR_SISTEMA']
-
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         '/'                             : ['permitAll'],
         '/**/js/**'                     : ['permitAll'],
