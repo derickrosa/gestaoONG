@@ -92,10 +92,10 @@ grails.enable.native2ascii = true
 // packages to include in Spring bean scanning
 grails.spring.bean.packages = []
 // whether to disable processing of multi part requests
-grails.web.disable.multipart=false
+grails.web.disable.multipart = false
 
 // request parameters to mask when logging exceptions
-grails.exceptionresolver.params.exclude = ['password','initialPassword']
+grails.exceptionresolver.params.exclude = ['password', 'initialPassword']
 
 // configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
 grails.hibernate.cache.queries = false
@@ -121,7 +121,7 @@ environments {
 
 // log4j configuration
 log4j.main = {
-    error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
+    error 'org.codehaus.groovy.grails.web.servlet',  //  controllers
             'org.codehaus.groovy.grails.web.pages', //  GSP
             'org.codehaus.groovy.grails.web.sitemesh', //  layouts
             'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
@@ -136,12 +136,12 @@ log4j.main = {
             'grails.app.taglib.org.grails.plugin.resource',
             'grails.app.resourceMappers.org.grails.plugin.resource'
 
-    debug  	'grails.app',
+    debug 'grails.app',
             'org.apache.camel.support',
             'org.apache.camel.file',
             'org.apache.commons.net',
             'com.acception'
-            'gerencia.fase'
+    'gerencia.fase'
 
     info 'org.springframework.security'
 
@@ -163,45 +163,44 @@ grails.plugin.springsecurity.authority.className = 'com.acception.security.Role'
 grails.plugin.springsecurity.successHandler.alwaysUseDefault = true
 grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/home/painelInicial'
 
-def allRoles = ['ROLE_SUPORTE','ROLE_FINANCIADOR','ROLE_RESPONSAVEL','ROLE_FUNCIONARIO','ROLE_ADMINISTRADOR_SISTEMA']
+def allRoles = ['ROLE_SUPORTE', 'ROLE_FINANCIADOR', 'ROLE_RESPONSAVEL', 'ROLE_FUNCIONARIO', 'ROLE_ADMINISTRADOR_SISTEMA']
 
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-        '/j_spring_security_switch_user'                             : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA', 'isFullyAuthenticated()'],
-        '/j_spring_security_exit_user'                               : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA', 'isFullyAuthenticated()'],
-	'/':                ['permitAll'],
-	'/index':           allRoles,
-	'/home/**':           allRoles,
-	'/centroCusto/**':           allRoles,
-	'/centroCusto/getAtividadesFromCentroCusto':           allRoles,
-	'/centroCusto/getFuncionariosAtuaisDeCentroCusto':           allRoles,
-	'/atividade/getAtividadesFromCentroCusto':           allRoles,
-	'/atividade/getItensOrcamentariosDeCentroCusto':           allRoles,
-	'/anexo/**':           allRoles,
-	'/user/**':           ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-	'/lancamento/**':           ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-    '/financiador/**':    allRoles,
-    '/financiador/findSolicitacoes': allRoles,
-    '/responsavel/**':   ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-    '/funcionario/**':   ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-    '/fornecedor/**':    allRoles,
-    '/linhaAcao/**':    ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-    '/atividade/**':    ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-    '/orcamento/**':    ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-    '/despesa/**':    ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-    '/adiantamento/**':    ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-    '/relatorioAtividade/**':    ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-    '/cidade/cidadePorEstado/**':    ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-	'/console/**':           ['ROLE_SUPORTE'],
-	'/plugins/console*/**':           ['ROLE_SUPORTE'],
-	'/role/**':           ['ROLE_SUPORTE','ROLE_ADMINISTRADOR_SISTEMA'],
-	'/layouts':           allRoles,
-	'/index.gsp':       allRoles,
-	'/assets/**':       ['permitAll'],
-	'/recuperarSenha/**':       ['permitAll'],
-	'/**/js/**':        ['permitAll'],
-	'/**/css/**':       ['permitAll'],
-	'/**/images/**':    ['permitAll'],
-	'/**/favicon.ico':  ['permitAll'],
-	'/img/**':  ['permitAll']
+        '/'                                              : ['permitAll'],
+        '/**/js/**'                                      : ['permitAll'],
+        '/**/css/**'                                     : ['permitAll'],
+        '/**/images/**'                                  : ['permitAll'],
+        '/**/favicon.ico'                                : ['permitAll'],
+        '/img/**'                                        : ['permitAll'],
+        '/j_spring_security_switch_user'                 : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA', 'isFullyAuthenticated()'],
+        '/j_spring_security_exit_user'                   : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA', 'isFullyAuthenticated()'],
+        '/assets/**'                                     : ['permitAll'],
+        '/recuperarSenha/**'                             : ['permitAll'],
+        '/console/**'                                    : ['ROLE_SUPORTE'],
+        '/plugins/console*/**'                           : ['ROLE_SUPORTE'],
+        '/role/**'                                       : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/index.gsp'                                     : ['IS_AUTHENTICATED_REMEMBERED'],
+
+        '/home/**'                                       : ['IS_AUTHENTICATED_REMEMBERED'], //qualquer role
+        '/centroCusto/**'                                : ['IS_AUTHENTICATED_REMEMBERED'],
+        '/centroCusto/getAtividadesFromCentroCusto'      : ['IS_AUTHENTICATED_REMEMBERED'],
+        '/centroCusto/getFuncionariosAtuaisDeCentroCusto': ['IS_AUTHENTICATED_REMEMBERED'],
+        '/atividade/getAtividadesFromCentroCusto'        : ['IS_AUTHENTICATED_REMEMBERED'],
+        '/atividade/getItensOrcamentariosDeCentroCusto'  : ['IS_AUTHENTICATED_REMEMBERED'],
+        '/anexo/**'                                      : ['IS_AUTHENTICATED_REMEMBERED'],
+        '/user/**'                                       : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/lancamento/**'                                 : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/financiador/**'                                : ['IS_AUTHENTICATED_REMEMBERED'],
+        '/financiador/findSolicitacoes'                  : ['IS_AUTHENTICATED_REMEMBERED'],
+        '/responsavel/**'                                : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/funcionario/**'                                : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/fornecedor/**'                                 : ['IS_AUTHENTICATED_REMEMBERED'],
+        '/linhaAcao/**'                                  : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/atividade/**'                                  : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/orcamento/**'                                  : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/despesa/**'                                    : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/adiantamento/**'                               : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/relatorioAtividade/**'                         : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/cidade/cidadePorEstado/**'                     : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA']
 ]
 

@@ -40,11 +40,9 @@ for (p in props) {
             required = (cp ? !(cp.propertyType in [boolean, Boolean]) && !cp.nullable : false)
         }
 %>
-<div class="form-group fieldcontain \${hasErrors(bean: ${propertyName}, field: '${prefix}${p.name}', 'error')} ${
-        required ? 'required' : ''}">
+<div class="form-group${required ? ' required' : ''}">
     <label for="${prefix}${p.name}">
-        <g:message code="${domainClass.propertyName}.${prefix}${p.name}.label" default="${p.naturalName}"/>
-        <% if (required) { %><span class="required-indicator">*</span><% } %>
+        <g:message code="${domainClass.propertyName}.${prefix}${p.name}.label" default="${p.naturalName}"/> <% if (required) { %><span class="required-indicator">*</span><% } %>
     </label>
     ${renderEditor(p)}
 </div>
