@@ -12,14 +12,21 @@
             <a class="navbar-brand" style="color: cadetblue" href="#">AMBIENTE DE DESENVOLVIMENTO</a>
         </g:if>
         <g:elseif env="homologation">
-            <a class="navbar-brand" style="color: cadetblue" href="#">AMBIENTE DE HOMOLOGAÇÃO</a>
+            <a class="navbar-brand" style="color: darkseagreen" href="#">AMBIENTE DE HOMOLOGAÇÃO</a>
         </g:elseif>
     </div>
     <!-- /.navbar-header -->
 
     <ul class="nav navbar-top-links navbar-right">
+        <li class="nav-item">
+            <button class="btn btn-link" type="button">
+                <i class="fa fa-fw fa-user"></i>
+                <strong>Bem vindo, <sec:username/></strong>
+            </button>
+        </li>
+
         <li class="dropdown">
-            <button class="btn btn-primary nav-link dropdown-toggle mr-lg-2" type="button" id="messagesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-primary dropdown-toggle mr-lg-2" type="button" id="messagesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-fw fa-envelope"></i>
                 %{--TODO: se tiver notificacoes--}%
                 <span class="badge">3</span>
@@ -75,7 +82,8 @@
         <!-- /.dropdown -->
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+                <i class="fa fa-bell fa-fw"></i>
+                <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-alerts">
                 <li>

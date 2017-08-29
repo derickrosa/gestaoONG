@@ -8,6 +8,7 @@
 
 //= require sweet-alert.js
 //= require chart.min.js
+//= require ajaxFormSubmition.js
 //= require metisMenu.min.js
 //= require sb-admin-2.min.js
 //= require configuracao-inputs.js

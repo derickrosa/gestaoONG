@@ -8,7 +8,6 @@ import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = false)
-@Secured('permitAll')
 class UserController {
     def springSecurityService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
@@ -52,39 +51,27 @@ class UserController {
         respond userInstance
     }
 
-    def changePassword(Long id, String password, String confirmPassword, String changePassword) {
-        def user = User.get(id)
-        if (!password) {
-            response.status = 500
-            render text: "A senha não pode ser vazia"
-            return
-        }
-        if (password != confirmPassword) {
-            response.status = 500
-            render text: "Confirmação da senha não confere com a senha informada"
-            return
-        }
-        if (user) {
-            user.password = password
-            if (changePassword) {
-                user.initialPassword = null
-            }
-            if (!user.save(flush: true)) {
-                log.debug "Erro ao salvar usuario #${id}"
-                user.errors.allErrors.each { log.debug it }
-                response.status = 500
-                render text: "Erro ao salvar usuário"
-                return
+    def changePassword() {
+        User user = User.get(params.long('id'))
+        String senha = params['senha']
+        String confirmarSenha = params['confirmarSenha']
 
-            }
-
-            def r = [success: true, message: 'Senha alterada com sucesso']
-            render r as JSON
-        } else {
-            response.status = 404
-            render text: "Usuário #${id} não encontrado"
+        if(user == null || senha?.isEmpty() || confirmarSenha?.isEmpty()){
+            response.status = NOT_ACCEPTABLE.value()
+            respond([error: "Parâmetros insuficientes."])
             return
         }
+        else if(!senha.equals(confirmarSenha)){
+            response.status = NOT_ACCEPTABLE.value()
+            respond([error: "Senhas são diferentes."])
+            return
+        }
+
+        user.password = senha
+        user.save()
+
+        response.status = OK.value()
+        respond([msg: 'Senha alterada com sucesso'])
     }
 
     def create() {
