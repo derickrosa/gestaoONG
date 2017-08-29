@@ -27,7 +27,7 @@ class CentroCusto {
 
     static belongsTo = [financiador: Financiador]
 
-    static transients = ['saldo', 'saldoInicial', 'orcamentoAtual', 'orcamentoOriginal', 'despesas']
+    static transients = ['saldo', 'saldoInicial', 'orcamentoAtual', 'orcamentoOriginal', 'despesas', 'funcionarios']
 
     static constraints = {
         dataInicio nullable: true
@@ -69,6 +69,10 @@ class CentroCusto {
 
     def getDespesas() {
         return orcamentos.itensOrcamentarios.despesas.flatten()
+    }
+
+    def getFuncionarios() {
+        return orcamentos.itensOrcamentarios.salariosFuncionarios.collect{it.funcionario}.flatten()
     }
 
     String toString() {
