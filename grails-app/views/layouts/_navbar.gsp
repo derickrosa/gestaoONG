@@ -7,19 +7,26 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">Gestão Fundo Dema</a>
+        <g:link controller="home" action="painelInicial" class="navbar-brand">Gestão Fundo Dema</g:link>
         <g:if env="development">
             <a class="navbar-brand" style="color: cadetblue" href="#">AMBIENTE DE DESENVOLVIMENTO</a>
         </g:if>
         <g:elseif env="homologation">
-            <a class="navbar-brand" style="color: cadetblue" href="#">AMBIENTE DE HOMOLOGAÇÃO</a>
+            <a class="navbar-brand" style="color: darkseagreen" href="#">AMBIENTE DE HOMOLOGAÇÃO</a>
         </g:elseif>
     </div>
     <!-- /.navbar-header -->
 
     <ul class="nav navbar-top-links navbar-right">
+        <li class="nav-item">
+            <button class="btn btn-link" type="button">
+                <i class="fa fa-fw fa-user"></i>
+                Bem vindo, <strong class="text-uppercase"><sec:username/></strong>
+            </button>
+        </li>
+
         <li class="dropdown">
-            <button class="btn btn-primary nav-link dropdown-toggle mr-lg-2" type="button" id="messagesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-primary dropdown-toggle mr-lg-2" type="button" id="messagesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-fw fa-envelope"></i>
                 %{--TODO: se tiver notificacoes--}%
                 <span class="badge">3</span>
@@ -75,7 +82,8 @@
         <!-- /.dropdown -->
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+                <i class="fa fa-bell fa-fw"></i>
+                <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-alerts">
                 <li>
@@ -153,7 +161,7 @@
                     %{--TODO: completar--}%
                     <g:form>
                         <div class="input-group custom-search-form">
-                            <input type="text" class="form-control" placeholder="Pesquisar...">
+                            <input type="text" class="form-control" placeholder="Pesquisar">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button">
                                     <i class="fa fa-search"></i>
@@ -166,6 +174,8 @@
                 <li><g:link controller="home" action="painelInicial"><i class="fa fa-dashboard fa-fw"></i> Painel Inicial</g:link></li>
 
                 <g:render template="/layouts/menu-lateral"/>
+                <li><a href="#"><i class="fa fa-question-circle fa-fw"></i> Ajuda</a></li>
+
             </ul>
         </div>
         <!-- /.sidebar-collapse -->

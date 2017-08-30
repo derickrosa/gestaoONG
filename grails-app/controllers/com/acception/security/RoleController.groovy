@@ -74,9 +74,14 @@ class RoleController {
 
     @Transactional
     def delete(Role roleInstance) {
-
         if (roleInstance == null) {
             notFound()
+            return
+        }
+
+        if(UserRole.countByRole(roleInstance) > 0){
+            flash.error = "Existem usuário adastrados com essa autoridade."
+            redirect(action: 'index', method: 'GET')
             return
         }
 

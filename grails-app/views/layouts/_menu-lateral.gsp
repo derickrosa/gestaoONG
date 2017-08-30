@@ -24,8 +24,8 @@
     <a href="#"><i class="fa fa-line-chart fa-fw"></i> Relatórios<span class="fa arrow"></span></a>
     <ul class="nav nav-second-level">
         <li><g:link controller="relatorioAtividade" action="index">Relatório de Atividade</g:link></li>
-        <li><g:link controller="relatorioAtividade" action="index">Relatório de Movimentação Financeira</g:link></li>
-        <li><g:link controller="relatorioAtividade" action="index">Relatório de Financiadores</g:link></li>
+        <li><a href="#">Relatório de Movimentação Financeira</a></li>
+        <li><a href="#">Relatório de Financiadores</a></li>
     </ul>
 </li>
 

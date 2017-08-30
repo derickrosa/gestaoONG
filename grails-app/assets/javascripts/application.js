@@ -6,8 +6,14 @@
 //= require /plugins/bootstrap/bootstrap-datepicker.min.js
 //= require /plugins/bootstrap/locales/bootstrap-datepicker.pt-BR.min.js
 
+//= require /plugins/jquery/jquery.validate.js
+
+//= require /plugins/select2/select2.min.js
+//= require /plugins/select2/locales/pt-BR.min.js
+
 //= require sweet-alert.js
 //= require chart.min.js
+//= require ajaxFormSubmition.js
 //= require metisMenu.min.js
 //= require sb-admin-2.min.js
 //= require configuracao-inputs.js
@@ -19,4 +25,5 @@
 $(document).ready(function(){
 	configurarMascaras();
 	configurarDatas();
+	configurarSelects();
 });
