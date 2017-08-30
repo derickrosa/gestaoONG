@@ -12,24 +12,23 @@ input.error, select.error {
 }
 </style>
 
-<asset:stylesheet src="bootstrap-datepicker.css"/>
 
 <div class="row">
-    <div class="col-md-6 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'centroCusto', 'error')} ">
+    <div class="form-group col-md-6">
         <label for="centroCusto">
             <g:message code="despesa.centroCusto.label" default="Centro Custo"/>
-
         </label>
-        <g:select class="form-control" id="centroCusto" name="centroCusto.id" from="${com.acception.cadastro.CentroCusto.list()}" optionKey="id" value="${centroCustoId ?: despesaInstance?.centroCusto?.id}" noSelection="['': '']" required="required" data-placeholder="Selecione um centro de custo..."/>
-
+        <g:select class="form-control select" id="centroCusto" name="centroCusto.id" from="${com.acception.cadastro.CentroCusto.list()}"
+                  optionKey="id" value="${centroCustoId ?: despesaInstance?.centroCusto?.id}"
+                  noSelection="['': 'Selecione um centro de custo...']" required=""/>
     </div>
 
-    <div class="col-md-6 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'tipoDespesa', 'error')} ">
+    <div class="form-group col-md-6">
         <label for="tipoDespesa">
             <g:message code="despesa.tipoDespesa.label" default="Tipo de Despesa"/>
 
         </label>
-        <g:select name="tipoDespesa" from="${TipoDespesa.values().nome}" class="form-control" keys="${TipoDespesa.values()*.name()}"
+        <g:select name="tipoDespesa" from="${TipoDespesa.values().nome}" class="form-control select" keys="${TipoDespesa.values()*.name()}"
                   value="${despesaInstance?.tipoDespesa?.name()}"
                   noSelection="['': 'Selecione um tipo de despesa...']" required="required"/>
 
@@ -40,7 +39,6 @@ input.error, select.error {
     <div class="col-md-12 form-group fieldcontain ${hasErrors(bean: despesaInstance, field: 'descricao', 'error')} ">
         <label for="descricao">
             <g:message code="despesa.descricao.label" default="Descrição"/>
-
         </label>
         <g:textField class="form-control" required="required" name="descricao" value="${despesaInstance?.descricao}"/>
     </div>
@@ -53,7 +51,7 @@ input.error, select.error {
         </label>
 
 
-        <select required="required" id="despesa-itemOrcamentario" name="itemOrcamentario.id" class="form-control"
+        <select required="required" id="despesa-itemOrcamentario" name="itemOrcamentario.id" class="form-control select"
                 data-no_results_placeholder="Selecione um centro de custo que possua itens orçamentários..."
                 data-with_results_placeholder="Selecione um item orçamentário..."
                 data-placeholder="Selecione um centro de custo que possua itens orçamentários..."
@@ -69,7 +67,7 @@ input.error, select.error {
 
     </label>
 
-    <select required="required" id="atividade" name="atividade.id" class="form-control"
+    <select required="required" id="atividade" name="atividade.id" class="form-control select"
             data-no_results_placeholder="Selecione um centro de custo que possua atividades primeiramente..."
             data-with_results_placeholder="Selecione uma atividade..."
             data-placeholder="Selecione um centro de custo que possua atividades primeiramente..."
@@ -84,7 +82,7 @@ input.error, select.error {
         <g:message code="despesa.fornecedor.label" default="Fornecedor"/>
     </label>
     <g:select required="required" id="fornecedor" name="papel.id" from="${com.acception.cadastro.Fornecedor.list()}"
-              optionKey="id" class="form-control"
+              optionKey="id" class="form-control select"
               data-placeholder="Selecione um fornecedor..."
               initialValue="${despesaInstance?.lancamento?.papel instanceof Fornecedor ? despesaInstance?.lancamento?.papel?.id : null}"
               noSelection="['': '']"/>
@@ -98,7 +96,7 @@ input.error, select.error {
 
     </label>
     <g:select required="required" id="funcionario" name="papel.id" from="${com.acception.cadastro.Funcionario.list()}"
-              optionKey="id" class="form-control" noSelection="['': '']"
+              optionKey="id" class="form-control select" noSelection="['': '']"
               data-no_results_placeholder="Selecione um centro de custo que possua funcionários..."
               data-with_results_placeholder="Selecione um funcionário..."
               data-placeholder="Selecione um centro de custo que possua funcionários..."
@@ -131,12 +129,6 @@ input.error, select.error {
 
 <script>
     $(function() {
-        $("#centroCusto").chosen();
-        $("#despesa-itemOrcamentario").chosen();
-        $("#fornecedor").chosen();
-        $("#atividade").chosen();
-        $("#funcionario").chosen();
-
         var makeChosenReadOnly = function (selectSelector) {
             $(selectSelector + ' option:not(:selected)').attr('disabled', true);
             $(selectSelector).trigger('chosen:updated')

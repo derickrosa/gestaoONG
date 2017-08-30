@@ -161,7 +161,7 @@
                     %{--TODO: completar--}%
                     <g:form>
                         <div class="input-group custom-search-form">
-                            <input type="text" class="form-control" placeholder="Pesquisar...">
+                            <input type="text" class="form-control" placeholder="Pesquisar">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button">
                                     <i class="fa fa-search"></i>
@@ -174,6 +174,8 @@
                 <li><g:link controller="home" action="painelInicial"><i class="fa fa-dashboard fa-fw"></i> Painel Inicial</g:link></li>
 
                 <g:render template="/layouts/menu-lateral"/>
+                <li><a href="#"><i class="fa fa-question-circle fa-fw"></i> Ajuda</a></li>
+
             </ul>
         </div>
         <!-- /.sidebar-collapse -->

@@ -20,7 +20,7 @@ class PesquisaTagLib {
         out << "<script type=\"application/javascript\">"
         out << "    function limparPesquisa() {"
         out << "        var form = event.srcElement.closest(\"form\");"
-        out << "        if (form) {form.reset(); form.submit();}"
+        out << "        if (form) {form.reset();\$(form).find(\"input\").val(\"\");form.submit();}"
         out << "    }"
         out << "</script>"
 

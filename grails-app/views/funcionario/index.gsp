@@ -15,102 +15,73 @@
         if (k ==~ /search.*/ && v) pars[k] = v
     }
 %>
-<div id="content">
-    <div class="inner" style="min-height: 700px;">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1>Listagem de Funcionários</h1>
-            </div>
-        </div>
-        <hr/>
-        <!--BLOCK SECTION -->
+<p>
+    <g:link class="btn btn-default" action="create"><span
+            class="glyphicon glyphicon-plus"></span> Novo Funcionário</g:link>
+</p>
 
-        <div class="nav" role="navigation">
-            <p>
-                <g:link class="btn btn-default" action="create"><span
-                        class="glyphicon glyphicon-plus"></span> Novo Funcionário</g:link>
-            </p>
-        </div>
+<pesquisa:painel>
+    <div class="form-group col-md-12">
+        <label class="control-label" for="searchNome">Nome:</label>
+        <g:textField class="form-control" name="searchNome" value="${searchNome}"/>
+    </div>
+</pesquisa:painel>
 
-        <div id="list-funcionario" class="body" role="main">
-            <g:if test="${flash.message}">
-                <div class="alert alert-info" role="status">
-                    ${flash.message}
-                </div>
-            </g:if>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
 
-            <div class="form-group">
-                <g:form controller="funcionario" action="index" class="search-form">
-                    <div class="form-group">
-                        <g:render template="search"/>
-                    </div>
+        <g:sortableColumn property="nome"
+                          title="${message(code: 'funcionario.nome.label', default: 'Nome')}"/>
 
-                    <div class="row">
-                        <button class="btn btn-default center-block search">Procurar <i class="icon-search"></i>
-                        </button>
-                    </div>
-                </g:form>
-            </div>
+        <th><g:message code="funcionario.telefone.label" default="Telefone"/></th>
 
+        <g:sortableColumn property="email"
+                          title="${message(code: 'funcionario.email.label', default: 'Email')}"/>
 
-            <table class="table table-bordered table-striped">
-                <thead>
-                <tr>
+        <th>Cargo</th>
+    </tr>
+    </thead>
+    <tbody>
+    <g:if test="${funcionarioInstanceCount != 0}">
+        <g:each in="${funcionarioInstanceList}" status="i" var="funcionarioInstance">
+            <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
-                    <g:sortableColumn property="nome"
-                                      title="${message(code: 'funcionario.nome.label', default: 'Nome')}"/>
+                <td><g:link action="show"
+                            id="${funcionarioInstance.id}">${fieldValue(bean: funcionarioInstance, field: "participante.nome")}</g:link></td>
 
-                    <th><g:message code="funcionario.telefone.label" default="Telefone"/></th>
+                <td>${fieldValue(bean: funcionarioInstance, field: "participante.telefone")}</td>
 
-                    <g:sortableColumn property="email"
-                                      title="${message(code: 'funcionario.email.label', default: 'Email')}"/>
-
-                    <th>Cargo</th>
-                </tr>
-                </thead>
-                <tbody>
-                <g:if test="${funcionarioInstanceCount != 0}">
-                    <g:each in="${funcionarioInstanceList}" status="i" var="funcionarioInstance">
-                        <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-
-                            <td><g:link action="show"
-                                        id="${funcionarioInstance.id}">${fieldValue(bean: funcionarioInstance, field: "participante.nome")}</g:link></td>
-
-                            <td>${fieldValue(bean: funcionarioInstance, field: "participante.telefone")}</td>
-
-                            <td>${fieldValue(bean: funcionarioInstance, field: "participante.email")}</td>
+                <td>${fieldValue(bean: funcionarioInstance, field: "participante.email")}</td>
 
 
-                            <td>${fieldValue(bean: funcionarioInstance, field: "cargo")}</td>
+                <td>${fieldValue(bean: funcionarioInstance, field: "cargo")}</td>
 
-                        </tr>
-                    </g:each>
-                </g:if>
-                <g:else>
-                    <tr>
-                        <td colspan="4" class="text-center nao-ha-registros">Não há registros de ${entityName}.</td>
-                    </tr>
-                </g:else>
-                </tbody>
-            </table>
+            </tr>
+        </g:each>
+    </g:if>
+    <g:else>
+        <tr>
+            <td colspan="4" class="text-center nao-ha-registros">Não há registros de ${entityName}.</td>
+        </tr>
+    </g:else>
+    </tbody>
+</table>
 
-            <blockquote class="relatorio">
-                <p>Geração de Relatórios</p>
-                <export:formats formats="['excel', 'pdf']" params="${params}"/>
-            </blockquote>
+<blockquote class="relatorio">
+    <p>Geração de Relatórios</p>
+    <export:formats formats="['excel', 'pdf']" params="${params}"/>
+</blockquote>
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="dataTables_info" id="dataTables-example_info" role="alert" aria-live="polite"
-                         aria-relevant="all">Exibindo 1 a 20 de ${funcionarioInstanceCount == 1 ? funcionarioInstanceCount + ' funcionário cadastrado' : funcionarioInstanceCount + ' funcionários cadastrados'}.</div>
-                </div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="dataTables_info" id="dataTables-example_info" role="alert" aria-live="polite"
+             aria-relevant="all">Exibindo 1 a 20 de ${funcionarioInstanceCount == 1 ? funcionarioInstanceCount + ' funcionário cadastrado' : funcionarioInstanceCount + ' funcionários cadastrados'}.</div>
+    </div>
 
-                <div class="col-sm-6">
-                    <div class="pagination">
-                        <g:paginate total="${funcionarioInstanceCount ?: 0}"/>
-                    </div>
-                </div>
-            </div>
+    <div class="col-sm-6">
+        <div class="pagination">
+            <g:paginate total="${funcionarioInstanceCount ?: 0}"/>
         </div>
     </div>
 </div>
