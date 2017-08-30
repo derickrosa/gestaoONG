@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="main">
+    <meta name="layout" content="layout-restrito">
     <g:set var="entityName" value="${message(code: 'linhaAcao.label')}"/>
     <title><g:message code="default.list.label" args="[entityName]"/></title>
     <export:resource/>

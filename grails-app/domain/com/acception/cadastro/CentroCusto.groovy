@@ -37,6 +37,7 @@ class CentroCusto {
         arquivos nullable: true
         responsavel nullable: true
         statusProjeto nullable: true
+        nomeNormalizado unique: true
     }
 
     void setNome(String nome) {
@@ -72,7 +73,7 @@ class CentroCusto {
     }
 
     def getFuncionarios() {
-        return orcamentos.itensOrcamentarios.salariosFuncionarios.collect{it.funcionario}.flatten()
+        return orcamentos.itensOrcamentarios.salariosFuncionarios.collect{it.funcionario}.flatten().unique()
     }
 
     String toString() {

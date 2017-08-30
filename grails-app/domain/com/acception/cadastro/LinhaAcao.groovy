@@ -10,6 +10,7 @@ class LinhaAcao {
     String nomeNormalizado
 
     static hasMany=[atividades:Atividade]
+    static transients = ['centrosCusto']
     static constraints = {
         nome nullable: true
         nomeNormalizado nullable: true
@@ -29,6 +30,10 @@ class LinhaAcao {
         if(this.nome != null) {
             this.nomeNormalizado = Util.normalizar(this.nome)
         }
+    }
+
+    def getCentrosCusto(){
+        return this.atividades.centroCusto.flatten().unique()
     }
 
     String toString() {

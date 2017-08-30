@@ -13,7 +13,7 @@
 
             <div class="panel-body">
                 <div class="thumbnail">
-                    <img src="${assetPath(src: 'logo-fase.png')}"/>
+                    <img src="${assetPath(src: 'fase/logo.png')}"/>
                 </div>
                 <g:if test="${flash?.message}">
                     <div class="alert alert-danger">${flash.message}</div>
@@ -21,7 +21,7 @@
 
                 <form action="${postUrl}" class="form-signin" method='POST' id='loginForm' autocomplete='off'>
                     <div class="form-group input-group">
-                        <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
                         <input class="form-control" type="text" placeholder="Nome do Usuário" name="j_username" id="username" autofocus>
                     </div>
 

@@ -2,11 +2,11 @@
 <html>
 <head>
 	<title><g:if env="development">Grails Runtime Exception</g:if><g:else>Error</g:else></title>
-	<meta name="layout" content="main">
+	<meta name="layout" content="layout-restrito">
 	<g:if env="development"><asset:stylesheet src="errors.css"/></g:if>
 	<!-- GLOBAL STYLES -->
 	<!-- GLOBAL STYLES -->
-	<link href="${assetPath(src: 'bootstrap/css/bootstrap.css')}" rel="stylesheet"/>
+	<link href="${assetPath(src: 'bootstrap/css/bootstrap.min.css')}" rel="stylesheet"/>
 	<link href="${assetPath(src: 'Font-Awesome/css/font-awesome.css')}" rel="stylesheet"/>
 	<!--END GLOBAL STYLES -->
 
