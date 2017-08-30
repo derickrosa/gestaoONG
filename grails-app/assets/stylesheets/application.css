@@ -3,6 +3,7 @@
 *= require /bootstrap/css/bootstrap-datepicker.min.css
 *= require /Font-Awesome/css/font-awesome.min.css
 *= require sweet-alert.css
+*= require select2.min.css
 *= require sb-admin-2.css
 *= require metisMenu.min.css
 */

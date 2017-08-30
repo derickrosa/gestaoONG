@@ -23,8 +23,13 @@ function configurarMascaras() {
 }
 
 function configurarDatas() {
-
     $('input.datepicker').datepicker({
+        language: 'pt-BR'
+    });
+}
+
+function configurarSelects() {
+    $('select.select').select2({
         language: 'pt-BR'
     });
 }
