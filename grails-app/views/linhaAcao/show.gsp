@@ -70,49 +70,28 @@
 				</g:if>
 				
 			</table>
-			<g:if test="${linhaAcaoInstance?.atividades}">
-				<div class="panel panel-success">
-            <div class="panel-heading">
-                Atividades
-            </div>
 
-            <div class="panel-body">
-			<table %{--class="table table-hover table-bordered text-center" --}%class="table table-hover text-center">
-				<thead>
-				<tr>
-					<th class="text-center" width="33%">Código</th>
-					<th class="text-center" width="33%">Nome</th>
-					<th class="text-center" width="34%"></th>
-				</tr>
-				</thead>
-				<tbody>
-				<g:each in="${linhaAcaoInstance?.atividades}" var="a">
-					<tr>
-						<td>
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#centrosCusto" data-toggle="tab" aria-expanded="false">Centros de Custo</a>
+				</li>
 
-							${a.codigo}
+				<li><a href="#atividades" data-toggle="tab" aria-expanded="true">Atividades</a>
+				</li>
+			</ul>
 
-						</td>
-						<td>${a.nome}</td>
+			<div class="tab-content">
 
-						<td>
-							<g:link controller="atividade" action="show" id="${a.id}">
-								<spam class="glyphicon glyphicon-search" />
-							</g:link>
-						</td>
-
-					</tr>
-				</g:each>
-
-
-				</tbody>
-			</table>
-			</g:if>
-			<g:else>
-				<div class="well text-center">
-					Não existem atividades nesta linha de ação.
+				<div class="tab-pane fade in active" id="centrosCusto">
+					<g:render template="centrosCusto" model="[linhaAcaoInstance: linhaAcaoInstance]"/>
 				</div>
-			</g:else>
+
+				<div class="tab-pane fade in" id="atividades">
+					<g:render template="atividades" model="[linhaAcaoInstance: linhaAcaoInstance]"/>
+				</div>
+
+			</div>
+
+
 			</div>
 			</div>
 			<br>
