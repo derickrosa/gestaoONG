@@ -16,6 +16,8 @@
 //= require ajaxFormSubmition.js
 //= require metisMenu.min.js
 //= require sb-admin-2.min.js
+//= require jquery.steps.min.js
+//= require jquery.edittable2.js
 //= require configuracao-inputs.js
 
 /**
@@ -26,4 +28,5 @@ $(document).ready(function(){
 	configurarMascaras();
 	configurarDatas();
 	configurarSelects();
+	configurarWizards();
 });

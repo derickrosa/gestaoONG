@@ -1,6 +1,4 @@
 <%@ page import="com.acception.cadastro.RelatorioAtividade" %>
-%{--
-<g:javascript src="bootstrap-filestyle.min.js"/>--}%
 
 <div class="row">
     <div class="col-lg-12">
@@ -8,8 +6,6 @@
             <h3 class="page-header control-label well text-center" id="btn-dropdowns" style="margin: 0px 0 20px;">
                 <a class="anchorjs-link "></a> Relatório de Atividade <br> <small> ${relatorioAtividadeInstance?.atividade?.nome} <br>Período: <g:formatDate date="${relatorioAtividadeInstance?.atividade?.inicio}" format="dd/MM/yyyy"/>  a <g:formatDate date="${relatorioAtividadeInstance?.atividade?.termino}" format="dd/MM/yyyy"/></small>
             </h3>
-
-
         </g:if>
         <div class="panel panel-success">
 
@@ -458,10 +454,6 @@
 <script>
     $(document).ready(function () {
         $('select').attr('disabled', 'disabled');
-
-        $("#select-comunidades-envolvidas").chosen();
-        $("#select-municipios-envolvidas").chosen();
-        $("#atividade").chosen();
 
         var numeroArquivos = "${relatorioAtividadeInstance?.arquivos?.size()}";
 

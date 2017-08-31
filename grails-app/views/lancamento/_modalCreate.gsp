@@ -1,8 +1,5 @@
 <%@ page import="com.acception.cadastro.Financiador; com.acception.cadastro.Papel; com.acception.cadastro.Funcionario; com.acception.cadastro.Fornecedor; com.acception.cadastro.enums.TipoDespesa; com.acception.cadastro.Despesa" %>
 
-<asset:stylesheet src="bootstrap-datepicker.css"/>
-<asset:javascript src="plugins/jquery/jquery.validate.js"/>
-<asset:javascript src="chosen.jquery.min.js"/>
 
 <style>
 label.error {

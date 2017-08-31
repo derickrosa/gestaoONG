@@ -23,13 +23,42 @@ function configurarMascaras() {
 }
 
 function configurarDatas() {
-    $('input.datepicker').datepicker({
-        language: 'pt-BR'
-    });
+    var config = {language: 'pt-BR'};
+
+    $('input.datepicker').datepicker(config);
+    $('div.input-daterange').datepicker(config);
 }
 
 function configurarSelects() {
     $('select.select').select2({
         language: 'pt-BR'
     });
+}
+
+function configurarWizards() {
+    var wizard = $("#wizard");
+    if (wizard) {
+        var form = wizard.closest("#form");
+        if (form == null || form === undefined || form.length == 0) form = wizard.find("#form");
+
+        form.validate({
+            errorPlacement: function errorPlacement(error, element) {
+                element.before(error);
+            }
+        });
+
+        wizard.steps({
+            headerTag: "h2",
+            bodyTag: "section",
+            transitionEffect: "slideLeft",
+            onStepChanging: function (event, currentIndex, newIndex) {
+                form.validate().settings.ignore = ":disabled,:hidden";
+                return form.valid();
+            },
+            onFinishing: function (event, currentIndex) {
+                form.validate().settings.ignore = ":disabled";
+                return form.valid();
+            }
+        });
+    }
 }

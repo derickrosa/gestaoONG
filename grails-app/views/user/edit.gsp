@@ -7,8 +7,7 @@
     <title><g:message code="default.edit.label" args="[entityName]"/></title>
 
     <asset:stylesheet src="normalize.css"/>
-    <asset:stylesheet src="wizardMain.css"/>
-    <asset:stylesheet src="jquery.steps.css"/>
+
 </head>
 
 <body>
@@ -63,8 +62,6 @@
 
 <!-- PAGE LEVEL SCRIPTS -->
 <script src="${assetPath(src: 'jquery.cookie-1.3.1.js')}"></script>
-<script src="${assetPath(src: 'jquery.steps.js')}"></script>
-<script src="${assetPath(src: 'WizardInit.js')}"></script>
 
 <!-- END PAGE LEVEL SCRIPTS -->
 </body>

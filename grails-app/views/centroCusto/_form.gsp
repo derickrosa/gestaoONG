@@ -1,17 +1,14 @@
 <%@ page import="com.acception.cadastro.enums.TipoContaBancaria; com.acception.cadastro.enums.TipoCusto; com.acception.cadastro.enums.Moeda; com.acception.cadastro.Responsavel; com.acception.cadastro.Financiador; com.acception.cadastro.enums.StatusProjeto; com.acception.cadastro.CentroCusto" %>
 
-<asset:stylesheet src="bootstrap-datepicker.css"/>
-<asset:javascript src="plugins/bootstrap/bootstrap-datepicker.min.js"/>
-<asset:javascript src="plugins/bootstrap/bootstrap-datepicker.pt-BR.js"/>
 
-<asset:stylesheet src="fileinput.min.css"/>
 <asset:javascript src="plugins/fileinput/fileinput.min.js"/>
 <asset:javascript src="plugins/fileinput/locales/pt-BR.js"/>
 
-<asset:javascript src="plugins/jquery/jquery.maskMoney.min.js"/>
-<asset:javascript src="plugins/jquery/jquery.validate.js"/>
 
-<asset:javascript src="jquery.edittable2.js"/>
+<asset:javascript src="jquery.cookie-1.3.1.js"/>
+
+<asset:stylesheet src="fileinput.min.css"/>
+
 
 <style>
     .addFuncionarios {
@@ -347,9 +344,7 @@
 </script>
 
 <!-- PAGE LEVEL SCRIPTS -->
-<script src="${assetPath(src: 'jquery.cookie-1.3.1.js')}"></script>
-<script src="${assetPath(src: 'jquery.steps.js')}"></script>
-<script src="${assetPath(src: 'WizardInitCentroCusto.js')}"></script>
+
 
 <script>
     var initializeDatepicker = function () {

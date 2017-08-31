@@ -1,15 +1,10 @@
 <%@ page import="com.acception.cadastro.enums.TipoAtividade; com.acception.cadastro.Atividade" %>
 
-<asset:stylesheet src="bootstrap-datepicker.css"/>
-<asset:javascript src="plugins/bootstrap/bootstrap-datepicker.min.js"/>
-<asset:javascript src="plugins/bootstrap/bootstrap-datepicker.pt-BR.js"/>
-
 <asset:stylesheet src="fileinput.min.css"/>
 <asset:javascript src="plugins/fileinput/fileinput.min.js"/>
 <asset:javascript src="plugins/fileinput/locales/pt-BR.js"/>
 
-<asset:javascript src="plugins/jquery/jquery.maskMoney.min.js"/>
-<asset:javascript src="plugins/jquery/jquery.validate.js"/>
+
 
 <style>
 #itensOrcamentarios td {
@@ -306,11 +301,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
 
 </section>
 <script src="${assetPath(src: 'jquery.cookie-1.3.1.js')}"></script>
-<script src="${assetPath(src: 'jquery.steps.js')}"></script>
-<script src="${assetPath(src: 'WizardInitCentroCusto.js')}"></script>
 <script>
-
-
     var initializeMoneyMask = function () {
         $(".currency").maskMoney({
             prefix: 'R$ ',

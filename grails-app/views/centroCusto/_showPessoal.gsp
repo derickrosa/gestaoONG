@@ -5,7 +5,6 @@
 <asset:javascript src="jquery.dataTables.min.js"/>
 <asset:javascript src="dataTables.bootstrap.min.js"/>
 
-<asset:stylesheet src="jquery.steps.css"/>
 
 <style>
     .dataTables_info {

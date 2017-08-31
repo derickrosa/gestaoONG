@@ -1,6 +1,5 @@
 <%@ page import="com.acception.cadastro.enums.Moeda; com.acception.cadastro.Orcamento" %>
 
-<asset:javascript src="jquery.edittable2.js"/>
 
 <style>
 .addFuncionarios {

@@ -1,14 +1,12 @@
 <%@ page import="com.acception.cadastro.Funcionario; com.acception.cadastro.CentroCusto" %>
 
-<asset:stylesheet src="bootstrap-datepicker.css"/>
-
 <div class="row">
     <div class="col-md-6 form-group fieldcontain">
         <label for="centroCusto">
             <g:message code="despesa.centroCusto.label" default="Centro Custo"/>
 
         </label>
-        <g:select class="form-control" id="centroCusto-PA" name="centroCusto.id"
+        <g:select class="form-control select" id="centroCusto-PA" name="centroCusto.id"
                   from="${CentroCusto.list()}" optionKey="id" value="${centroCustoId ?: adiantamentoInstance?.centroCusto?.id}" noSelection="['': '']" required="required" data-placeholder="Selecione um centro de custo..."/>
 
     </div>
@@ -30,7 +28,7 @@
 
     </label>
     <g:select required="required" id="funcionario-PA" name="papel.id" from="${Funcionario.list()}"
-              optionKey="id" class="form-control" noSelection="['': '']" data-placeholder="Selecione um funcionário..."
+              optionKey="id" class="form-control select" noSelection="['': '']" data-placeholder="Selecione um funcionário..."
               value="${adiantamentoInstance?.lancamentoOriginal?.papel?.id}"/>
 </div>
 
@@ -56,10 +54,3 @@
 
     </div>
 </div>
-
-<script>
-    $(function () {
-        $("#centroCusto-PA").chosen();
-        $("#funcionario-PA").chosen();
-    })
-</script>

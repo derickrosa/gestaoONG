@@ -184,9 +184,7 @@
     </div>
 </div>
 
-<asset:javascript src="plugins/jquery/jquery.validate.js"/>
 <script src="${assetPath(src: 'jquery.cookie-1.3.1.js')}"></script>
-<script src="${assetPath(src: 'jquery.steps.js')}"></script>
 
 <script>
 
