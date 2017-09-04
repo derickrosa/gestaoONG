@@ -31,11 +31,11 @@ class AtividadeController {
             }
             if (pesquisa.containsKey('dataInicio')) {
                 Date dataInicio = Date.parse("dd/MM/yyyy", pesquisa.dataInicio).clearTime()
-                gt('inicio', dataInicio)
+                ge('inicio', dataInicio)
             }
             if (pesquisa.containsKey('dataFinal')) {
                 Date dataFinal = Date.parse("dd/MM/yyyy", pesquisa.dataFinal).clearTime() + 1
-                lt('termino', dataFinal)
+                le('termino', dataFinal)
             }
 
             if (pesquisa.containsKey('status')) eq('status', StatusAtividade.valueOf(pesquisa.status))

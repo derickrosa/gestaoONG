@@ -13,14 +13,22 @@
 </p>
 
 <pesquisa:painel>
-    <div class="form-group col-md-2">
-        <label for="pesquisa.dataCriacao">Data Criação</label>
-        <g:textField name="pesquisa.dataCriacao" class="form-control datepicker" value="${pesquisa.dataCriacao}"/>
+    <div class="form-group col-md-4">
+        <label>Período de Emissão</label>
+        <div class="input-group input-daterange">
+            <g:textField class="form-control" placeholder="Data Inicial" name="pesquisa.dataEmissaoInicio" value="${pesquisa.dataEmissaoInicio}"/>
+            <div class="input-group-addon">até</div>
+            <g:textField class="form-control" placeholder="Data Final" name="pesquisa.dataEmissaoFinal" value="${pesquisa.dataEmissaoFinal}"/>
+        </div>
     </div>
 
-    <div class="form-group col-md-2">
-        <label for="pesquisa.dataPagamento">Data Pagamento</label>
-        <g:textField name="pesquisa.dataPagamento" class="form-control datepicker" value="${pesquisa.dataPagamento}"/>
+    <div class="form-group col-md-4">
+        <label>Período de Pagamento</label>
+        <div class="input-group input-daterange">
+            <g:textField class="form-control" placeholder="Data Inicial" name="pesquisa.dataPagamentoInicio" value="${pesquisa.dataPagamentoInicio}"/>
+            <div class="input-group-addon">até</div>
+            <g:textField class="form-control" placeholder="Data Final" name="pesquisa.dataPagamentoFinal" value="${pesquisa.dataPagamentoFinal}"/>
+        </div>
     </div>
 
     <div class="form-group col-md-2">
@@ -40,9 +48,8 @@
         <thead>
         <tr>
             <g:sortableColumn params="${pesquisa}" property="id" title="Identificador"/>
-            <g:sortableColumn params="${pesquisa}" property="dateCreated" title="${message(code: 'lancamento.dateCreated.label', default: 'Criação')}"/>
-            <g:sortableColumn params="${pesquisa}" property="dataPagamento" title="${message(code: 'lancamento.dataPagamento.label', default: 'Data Pagamento')}"/>
-            <g:sortableColumn params="${pesquisa}" property="dataCancelamento" title="${message(code: 'lancamento.dataCancelamento.label', default: 'Data Cancelamento')}"/>
+            <g:sortableColumn params="${pesquisa}" property="dataEmissao" title="${message(code: 'lancamento.dataEmissao.label', default: 'Dt. Emissão')}"/>
+            <g:sortableColumn params="${pesquisa}" property="dataPagamento" title="${message(code: 'lancamento.dataPagamento.label', default: 'Dt. Pagamento')}"/>
             <g:sortableColumn params="${pesquisa}" property="parcela" title="${message(code: 'lancamento.parcela.label', default: 'Parcelas')}"/>
             <g:sortableColumn params="${pesquisa}" property="codigoLancamento" title="${message(code: 'lancamento.codigoLancamento.label', default: 'Código')}"/>
             <th><g:message code="lancamento.tipoLancamento.label" default="Tipo"/></th>
@@ -53,9 +60,8 @@
         <g:each in="${lancamentoInstanceList}" var="lancamentoInstance">
             <tr>
                 <td><g:link action="show" id="${lancamentoInstance.id}">${fieldValue(bean: lancamentoInstance, field: "id")}</g:link></td>
-                <td><g:formatDate date="${lancamentoInstance.dateCreated}" format="dd/MM/yyyy"/> </td>
-                <td>${fieldValue(bean: lancamentoInstance, field: "dataPagamento")}</td>
-                <td><g:formatDate date="${lancamentoInstance.dataCancelamento}"/></td>
+                <td><g:formatDate date="${lancamentoInstance.dataEmissao}" format="dd/MM/yyyy"/></td>
+                <td><g:formatDate date="${lancamentoInstance.dataPagamento}" format="dd/MM/yyyy"/></td>
                 <td>${fieldValue(bean: lancamentoInstance, field: "parcela")}</td>
                 <td>${fieldValue(bean: lancamentoInstance, field: "codigoLancamento")}</td>
                 <td>${fieldValue(bean: lancamentoInstance, field: "tipoLancamento.nome")}</td>
