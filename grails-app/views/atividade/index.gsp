@@ -1,4 +1,3 @@
-<%@ page import="com.acception.cadastro.Atividade" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,91 +8,94 @@
 </head>
 
 <body>
-<%
-    def pars = [:]
-    pageScope.variables.each { k, v ->
-        if (k ==~ /search.*/ && v) pars[k] = v
-    }
-%>
-
 <pesquisa:painel>
-    <div class="form-group col-md-6">
-        <label class="control-label" for="searchCodigo">Código:</label>
-        <g:textField class="form-control" name="searchCodigo" value="${searchCodigo}"/>
+    <div class="form-group col-md-2">
+        <label for="pesquisa.codigo">Código:</label>
+        <g:textField class="form-control" name="pesquisa.codigo" value="${pesquisa?.codigo}"/>
     </div>
 
-    <div class="form-group col-md-6">
-        <label class="control-label" for="searchNome">Nome:</label>
-        <g:textField class="form-control" name="searchNome" value="${searchNome}"/>
-    </div>
-</pesquisa:painel>
-
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-
-        <g:sortableColumn property="nome"
-                          title="${message(code: 'atividade.nome.label', default: 'Nome')}"/>
-
-        <g:sortableColumn property="descricao"
-                          title="${message(code: 'atividade.descricao.label', default: 'Descrição')}"/>
-
-        <th><g:message code="atividade.atividade.label" default="Atividade"/></th>
-
-        <th><g:message code="atividade.centroCusto.label" default="Centro de Custo"/></th>
-
-        <g:sortableColumn property="inicio"
-                          title="${message(code: 'atividade.inicio.label', default: 'Início')}"/>
-
-        <g:sortableColumn property="local"
-                          title="${message(code: 'atividade.local.label', default: 'Local')}"/>
-
-    </tr>
-    </thead>
-    <tbody>
-    <g:if test="${atividadeInstanceCount != 0}">
-        <g:each in="${atividadeInstanceList}" status="i" var="atividadeInstance">
-            <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-
-                <td><g:link action="show"
-                            id="${atividadeInstance.id}">${fieldValue(bean: atividadeInstance, field: "nome")}</g:link></td>
-
-                <td>${fieldValue(bean: atividadeInstance, field: "descricao")}</td>
-
-                <td>${fieldValue(bean: atividadeInstance, field: "atividade")}</td>
-
-                <td>${fieldValue(bean: atividadeInstance, field: "centroCusto")}</td>
-
-                <td><g:formatDate date="${atividadeInstance.inicio}" format="dd/MM/yyyy"/></td>
-
-                <td>${fieldValue(bean: atividadeInstance, field: "local")}</td>
-
-            </tr>
-        </g:each>
-    </g:if>
-    <g:else>
-        <tr><td colspan="6" class="text-center nao-ha-registros">Não há registros de ${entityName}.</td>
-        </tr>
-    </g:else>
-    </tbody>
-</table>
-
-<blockquote class="relatorio">
-    <p>Geração de Relatórios</p>
-    <export:formats formats="['excel', 'pdf']" params="${params}"/>
-</blockquote>
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="dataTables_info" id="dataTables-example_info" role="alert" aria-live="polite"
-             aria-relevant="all">Exibindo 1 a 20 de ${atividadeInstanceCount == 1 ? atividadeInstanceCount + ' atividade cadastrada' : atividadeInstanceCount + ' atividades cadastradas'}.</div>
+    <div class="form-group col-md-4">
+        <label for="pesquisa.nome">Nome:</label>
+        <g:textField class="form-control" name="pesquisa.nome" value="${pesquisa?.nome}"/>
     </div>
 
-    <div class="col-sm-6">
-        <div class="pagination">
-            <g:paginate total="${atividadeInstanceCount ?: 0}"/>
+    <div class="form-group col-md-2">
+        <label for="pesquisa.centroCusto">Centro de Custo:</label>
+        <g:select name="pesquisa.centroCusto" from="${com.acception.cadastro.CentroCusto.list()}"
+                  class="form-control select" optionKey="id" optionValue="nome"
+                  noSelection="['': 'Todos']" value="${pesquisa?.centroCusto}"/>
+    </div>
+
+    <div class="form-group col-md-4">
+        <label>Período:</label>
+        <div class="input-group input-daterange">
+            <input type="text" class="form-control" name="pesquisa.dataInicio" id="pesquisa.dataInicio" value="${pesquisa.dataInicio}">
+            <div class="input-group-addon">até</div>
+            <input type="text" class="form-control" name="pesquisa.dataFinal" id="pesquisa.dataFinal" value="${pesquisa.dataFinal}">
         </div>
     </div>
-</div>
+
+    <div class="form-group col-md-2">
+        <label for="pesquisa.status">Status:</label>
+        <g:select name="pesquisa.status" from="${com.acception.cadastro.enums.StatusAtividade.values()}"
+                  class="form-control" optionKey="key"
+                  noSelection="['': 'Todos']" value="${pesquisa?.status}"/>
+    </div>
+
+    <div class="form-group col-md-2">
+        <label for="pesquisa.tipo">Tipo:</label>
+        <g:select name="pesquisa.tipo" from="${com.acception.cadastro.enums.TipoAtividade.values()}"
+                  class="form-control" optionKey="key"
+                  noSelection="['': 'Todos']" value="${pesquisa?.tipo}"/>
+    </div>
+
+    <div class="form-group col-md-2">
+        <label for="pesquisa.estado">Estado:</label>
+        <g:select name="pesquisa.estado" from="${com.acception.cadastro.Estado.list()}"
+                  class="form-control select" optionKey="id" optionValue="nome"
+                  noSelection="['': 'Todos']" value="${pesquisa?.estado}"/>
+    </div>
+
+</pesquisa:painel>
+
+<g:if test="${atividadeInstanceCount != 0}">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <g:sortableColumn params="${pesquisa}" property="nome" title="${message(code: 'atividade.nome.label', default: 'Nome')}"/>
+            <g:sortableColumn params="${pesquisa}" property="codigo" title="${message(code: 'atividade.codigo.label', default: 'Código')}"/>
+            <th><g:message code="atividade.atividade.label" default="Atividade"/></th>
+            <th><g:message code="atividade.centroCusto.label" default="Centro de Custo"/></th>
+            <th>Período</th>
+            <g:sortableColumn params="${pesquisa}" property="local" title="${message(code: 'atividade.local.label', default: 'Local')}"/>
+            <g:sortableColumn params="${pesquisa}" property="status" title="${message(code: 'atividade.status.label', default: 'Status')}"/>
+        </tr>
+        </thead>
+        <tbody>
+        <g:each in="${atividadeInstanceList}" var="atividadeInstance">
+            <tr>
+                <td><g:link action="show"
+                            id="${atividadeInstance.id}">${fieldValue(bean: atividadeInstance, field: "nome")}</g:link></td>
+                <td>${fieldValue(bean: atividadeInstance, field: "codigo")}</td>
+                <td>${fieldValue(bean: atividadeInstance, field: "atividade")}</td>
+                <td>${atividadeInstance.centroCusto*.nome.join(', ')}</td>
+                <td><g:formatDate date="${atividadeInstance.inicio}" format="dd/MM/yyyy"/> - <g:formatDate date="${atividadeInstance.termino}" format="dd/MM/yyyy"/></td>
+                <td>${fieldValue(bean: atividadeInstance, field: "local")}</td>
+                <td>${fieldValue(bean: atividadeInstance, field: "status")}</td>
+            </tr>
+        </g:each>
+        </tbody>
+    </table>
+    <g:paginate total="${atividadeInstanceCount ?: 0}"/>
+
+    <blockquote>
+        <p>Exportar Relatório</p>
+        <export:formats formats="['excel', 'pdf']" params="${pesquisa}"/>
+    </blockquote>
+
+</g:if>
+<g:else>
+    <pesquisa:dadosNaoEncontrados/>
+</g:else>
 </body>
 </html>

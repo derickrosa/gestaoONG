@@ -17,7 +17,7 @@ class Telefone {
         "${ddd ? '(' + ddd + ') ' : ''}${numero ?: ''}${ramal ? ' - ' + ramal : ''}"
     }
 
-    String toRaw(){
+    String toRaw() {
         "${ddd ? '(' + ddd + ') ' : ''}${numero ?: ''}${ramal ? ' - ' + ramal : ''}"
     }
 

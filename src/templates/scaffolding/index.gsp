@@ -69,7 +69,7 @@
         </div>
     </g:if>
     <g:else>
-        <div class="well text-center"><strong>SEM REGISTROS</strong></div>
+        <pesquisa:dadosNaoEncontrados/>
     </g:else>
 </body>
 </html>

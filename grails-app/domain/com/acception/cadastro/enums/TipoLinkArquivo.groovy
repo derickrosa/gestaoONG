@@ -11,4 +11,8 @@ enum TipoLinkArquivo {
     TipoLinkArquivo() {
 
     }
+
+    String getKey(){
+        name()
+    }
 }

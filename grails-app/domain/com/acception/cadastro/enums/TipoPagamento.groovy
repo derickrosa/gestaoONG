@@ -18,4 +18,8 @@ public enum TipoPagamento {
     static def list() {
         [DOC, TED, CHEQUE]
     }
+
+    String getKey(){
+        name()
+    }
 }

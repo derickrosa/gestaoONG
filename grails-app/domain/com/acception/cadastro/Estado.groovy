@@ -16,5 +16,6 @@ class Estado {
 
     static mapping = {
         id generator: 'sequence', params: [sequence: 'estado_seq']
+        sort: "nome"
     }
 }

@@ -49,7 +49,7 @@ class ModalTagLib {
         boolean closeButton = attrs.containsKey('closeButton') ?: true
 
         out << "<div class=\"modal fade\" id=\"${id}\" tabindex=\"-1\" role=\"dialog\">"
-        out << "    <div class=\"modal-dialog\" role=\"document\" style=\"z-index: 6000\">"
+        out << "    <div class=\"modal-dialog\" role=\"document\">"
         out << "        <div class=\"modal-content\">"
         out << "            <div class=\"modal-header\">"
         if (closeButton) out << "                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>"

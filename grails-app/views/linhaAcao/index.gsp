@@ -9,12 +9,6 @@
 </head>
 
 <body>
-<%
-    def pars = [:]
-    pageScope.variables.each { k, v ->
-        if (k ==~ /search.*/ && v) pars[k] = v
-    }
-%>
 
 <p>
     <g:link class="btn btn-default" action="create"><span
@@ -23,70 +17,45 @@
 
 <pesquisa:painel>
     <div class="form-group col-md-6">
-        <label class="control-label" for="searchCodigo">Código:</label>
-        <g:textField class="form-control" name="searchCodigo" value="${searchCodigo}"/>
+        <label class="control-label" for="pesquisa.codigo">Código:</label>
+        <g:textField class="form-control" name="pesquisa.codigo" value="${pesquisa?.codigo}"/>
     </div>
 
     <div class="form-group col-md-6">
-        <label class="control-label" for="searchNome">Nome:</label>
-        <g:textField class="form-control" name="searchNome" value="${searchNome}"/>
+        <label class="control-label" for="pesquisa.nome">Nome:</label>
+        <g:textField class="form-control" name="pesquisa.nome" value="${pesquisa?.nome}"/>
     </div>
 </pesquisa:painel>
 
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-
-        <g:sortableColumn property="nome"
-                          title="${message(code: 'linhaAcao.nome.label', default: 'Nome')}"/>
-
-        <g:sortableColumn property="codigo"
-                          title="${message(code: 'linhaAcao.codigo.label', default: 'Código')}"/>
-
-        <g:sortableColumn property="descricao"
-                          title="${message(code: 'linhaAcao.descricao.label', default: 'Descrição')}"/>
-
-    </tr>
-    </thead>
-    <tbody>
-    <g:if test="${linhaAcaoInstanceCount != 0}">
-        <g:each in="${linhaAcaoInstanceList}" status="i" var="linhaAcaoInstance">
-            <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-
-                <td><g:link action="show"
-                            id="${linhaAcaoInstance.id}">${fieldValue(bean: linhaAcaoInstance, field: "nome")}</g:link></td>
-
+<g:if test="${linhaAcaoInstanceCount != 0}">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <g:sortableColumn params="${pesquisa}" property="nome" title="${message(code: 'linhaAcao.nome.label', default: 'Nome')}"/>
+            <g:sortableColumn params="${pesquisa}" property="codigo" title="${message(code: 'linhaAcao.codigo.label', default: 'Código')}"/>
+            <th><g:message code="linhaAcao.descricao.label" default="Descrição"/></th>
+        </tr>
+        </thead>
+        <tbody>
+        <g:each in="${linhaAcaoInstanceList}" var="linhaAcaoInstance">
+            <tr>
+                <td><g:link action="show" id="${linhaAcaoInstance.id}">${fieldValue(bean: linhaAcaoInstance, field: "nome")}</g:link></td>
                 <td>${fieldValue(bean: linhaAcaoInstance, field: "codigo")}</td>
-
                 <td>${fieldValue(bean: linhaAcaoInstance, field: "descricao")}</td>
-
             </tr>
         </g:each>
-    </g:if>
-    <g:else>
-        <tr><td colspan="3" class="text-center nao-ha-registros">Não há registros de ${entityName}.</td></tr>
-    </g:else>
-    </tbody>
-</table>
 
-<blockquote class="relatorio">
-    <p>Geração de Relatórios</p>
-    <export:formats formats="['excel', 'pdf']" params="${params}"/>
-</blockquote>
+        </tbody>
+    </table>
+    <g:paginate total="${relatorioAtividadeInstanceCount ?: 0}"/>
 
-<div class="row">
-    <div class="col-sm-6">
-        <div class="dataTables_info" id="dataTables-example_info" role="alert" aria-live="polite"
-             aria-relevant="all">Exibindo 1 a 20 de ${linhaAcaoInstanceCount == 1?linhaAcaoInstanceCount + ' linha de ação cadastrada':linhaAcaoInstanceCount + ' linhas de ação cadastradas' }.</div>
-    </div>
-
-    <div class="col-sm-6">
-        <div class="pagination">
-            <g:paginate total="${relatorioAtividadeInstanceCount ?: 0}"/>
-            linhaAcaoInstanceCount
-        </div>
-    </div>
-</div>
-
+    <blockquote>
+        <p>Exportar Relatório</p>
+        <export:formats formats="['excel', 'pdf']" params="${pesquisa}"/>
+    </blockquote>
+</g:if>
+<g:else>
+    <pesquisa:dadosNaoEncontrados/>
+</g:else>
 </body>
 </html>

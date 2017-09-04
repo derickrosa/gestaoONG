@@ -20,5 +20,7 @@ enum StatusAdiantamento {
         this.nome=nome
     }
 
-
+    String getKey(){
+        name()
+    }
 }

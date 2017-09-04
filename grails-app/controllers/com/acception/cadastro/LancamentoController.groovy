@@ -1,7 +1,5 @@
 package com.acception.cadastro
 
-import com.acception.cadastro.enums.StatusLancamento
-import com.acception.cadastro.enums.TipoDespesa
 import com.acception.cadastro.enums.TipoLancamento
 import com.acception.util.Util
 import grails.converters.JSON
@@ -13,10 +11,49 @@ import grails.transaction.Transactional
 class LancamentoController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    def exportService
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Lancamento.list(params), model: [lancamentoInstanceCount: Lancamento.count()]
+    def index() {
+        params?.remove('max')
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['dataCriacao', 'dataPagamento', 'tipo', 'classe', 'codigo'])
+        pesquisa = Util.trimMap(pesquisa)
+
+        def criteria = {
+            if (pesquisa.containsKey('dataCriacao')) {
+                Date dataCriacao = Date.parse("dd/MM/yyyy", pesquisa.dataCriacao).clearTime()
+                gt('dateCreated', dataCriacao)
+                lt('dateCreated', dataCriacao + 1)
+            }
+            if (pesquisa.containsKey('dataPagamento')) {
+                Date dataPagamento = Date.parse("dd/MM/yyyy", pesquisa.dataPagamento).clearTime()
+                gt('dataPagamento', dataPagamento)
+                lt('dataPagamento', dataPagamento + 1)
+            }
+            if (pesquisa.containsKey('tipo')) eq('tipoLancamento', TipoLancamento.valueOf(pesquisa.tipo))
+            if (pesquisa.containsKey('codigo')) eq('codigoLancamento', pesquisa.codigo)
+        }
+
+        if (params?.exportFormat && params.exportFormat != "html") {
+            response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
+            response.setHeader("Content-disposition", "attachment; filename=Relatório de Lançamentos.${params.extension}")
+
+            def lancamentoInstanceList = Lancamento.createCriteria().list(params, criteria)
+
+            List fields = ['id', 'dateCreated', 'dataPagamento', 'dataCancelamento', 'parcela', 'tipoLancamento', 'descricao']
+            Map labels = ['id'     : 'Identificador', 'dateCreated': 'Data Criação', 'dataPagamento': 'Data Pagamento', 'dataCancelamento': 'Data Cancelamento',
+                          'parcela': 'Parcelas', 'tipoLancamento': 'Tipo', 'descricao': 'Descrição']
+            Map parameters = ["column.widths": [0.1, 0.2, 0.2, 0.2, 0.1, 0.2, 0.6]]
+
+            exportService.export(params.exportFormat, response.outputStream, lancamentoInstanceList, fields, labels, null, parameters)
+            return
+        }
+
+
+        params.max = Math.min(params.max ?: 10, 100)
+
+        [lancamentoInstanceList : Lancamento.createCriteria().list(params, criteria),
+         lancamentoInstanceCount: Lancamento.createCriteria().count(criteria),
+         pesquisa               : pesquisa]
     }
 
     def show(Lancamento lancamentoInstance) {
@@ -35,19 +72,19 @@ class LancamentoController {
         lancamento.valor = Util.parse(params.valorCredito)
         lancamento.tipoLancamento = TipoLancamento.CREDITO
         lancamento.numeroTitulo = 0
-        lancamento.dataEmissao = Date.parse('dd/MM/yyyy',params.dataCredito)
+        lancamento.dataEmissao = Date.parse('dd/MM/yyyy', params.dataCredito)
         lancamento.descricao = params.descricaoCredito
         lancamento.centroCusto = CentroCusto.get(params.centroCustoCredito as Long)
         lancamento.papel = Papel.get(params.papelCredito as Long)
-        lancamento.save(flush: true, failOnError:true)
+        lancamento.save(flush: true, failOnError: true)
 
-        render(['success': true, 'credito': ['id': lancamento.id,
-                                             'tipo': lancamento.tipoLancamento,
-                                             'descricao': lancamento.descricao,
-                                             'valor':  lancamento.valor,
-                                             'data': lancamento.dataEmissao.format('dd/MM/yyyy'),
+        render(['success': true, 'credito': ['id'         : lancamento.id,
+                                             'tipo'       : lancamento.tipoLancamento,
+                                             'descricao'  : lancamento.descricao,
+                                             'valor'      : lancamento.valor,
+                                             'data'       : lancamento.dataEmissao.format('dd/MM/yyyy'),
                                              'centroCusto': ['nome': lancamento.centroCusto.toString(), 'id': lancamento.centroCusto.id],
-                                             'papel': lancamento.papel ? lancamento.papel.toString() : '']] as JSON)
+                                             'papel'      : lancamento.papel ? lancamento.papel.toString() : '']] as JSON)
     }
 
     @Transactional

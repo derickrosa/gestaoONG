@@ -22,4 +22,8 @@ enum TipoContaBancaria {
         this.ativo=ativo
         this.tipoContaFornecedor=tipoContaFornecedor
     }
+
+    String getKey(){
+        name()
+    }
 }

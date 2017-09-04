@@ -25,26 +25,26 @@ class Pagamento {
 
 
     static constraints = {
-        numeroPagamento nullable:true
-        tipoPagamento nullable:true
-        contaBancaria nullable:true
+        numeroPagamento nullable: true
+        tipoPagamento nullable: true
+        contaBancaria nullable: true
         dataPagamento nullable: true
         notaFiscal nullable: true
     }
     static mapping = {
-        id generator:'sequence', params:[sequence:'pagamento_seq']
+        id generator: 'sequence', params: [sequence: 'pagamento_seq']
     }
-    static transients = ['lancamentos','lancamentosPagos']
+    static transients = ['lancamentos', 'lancamentosPagos']
 
 
     String toString() {
-        def df=new java.text.DecimalFormat('#,##0.00')
+        def df = new java.text.DecimalFormat('#,##0.00')
         "$contaBancaria Val: ${df.format(valor)} [${statusPagamento.nome}]".toString()
     }
 
     def getLancamentosPagos() {
         Lancamento.createCriteria().list {
-            eq('pagamento',this)
+            eq('pagamento', this)
         }
     }
 }

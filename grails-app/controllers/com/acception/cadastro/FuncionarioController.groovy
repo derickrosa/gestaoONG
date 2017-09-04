@@ -1,5 +1,6 @@
 package com.acception.cadastro
 
+import com.acception.cadastro.enums.RamoFuncionario
 import com.acception.util.Util
 import grails.converters.JSON
 
@@ -9,56 +10,49 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class FuncionarioController {
     def exportService
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE",
-                             getSalariosFuncionarioFromCentroCusto: "POST", criarFuncionario: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE", getSalariosFuncionarioFromCentroCusto: "POST", criarFuncionario: "POST"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+    def index() {
+        params?.remove('max')
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'cargo', 'setor', 'centroCusto'])
+        pesquisa = Util.trimMap(pesquisa)
 
-        def criteria = getCriteria(params)
+        def criteria = {
+            if (pesquisa.containsKey('nome')) {
+                participante {
+                    ilike('nomeNormalizado', "%${Util.normalizar(pesquisa.nome)}%")
+                }
+            }
+            if (pesquisa.containsKey('cargo')) ilike('cargo', "%${pesquisa.cargo}%")
+            if (pesquisa.containsKey('setor')) eq('setor', RamoFuncionario.valueOf(pesquisa.setor))
+        }
 
         if (params?.exportFormat && params.exportFormat != "html") {
             response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
-            response.setHeader("Content-disposition", "attachment; filename=Funcionario.${params.extension}")
+            response.setHeader("Content-disposition", "attachment; filename=Relatório de Funcionarios.${params.extension}")
 
             def funcionarioInstanceList = Funcionario.createCriteria().list(params, criteria)
 
-            List fields = ['participante.nome','participante.telefone','participante.email','cargo']
+            List fields = ['participante.nome', 'participante.telefone', 'participante.email', 'cargo']
 
-            Map labels = ['participante.nome':'Nome',
-                          'participante.telefone':'Telefone',
-                          'participante.email':'E-mail',
-                          'cargo':'Cargo']
-
-
-            log.debug("Gerando relatório de Funcionario...")
-
-            Map parameters = ["column.widths": [0.3, 0.2,0.2,0.3]]
+            Map labels = ['participante.nome'    : 'Nome',
+                          'participante.telefone': 'Telefone',
+                          'participante.email'   : 'E-mail',
+                          'cargo'                : 'Cargo']
+            Map parameters = ["column.widths": [0.3, 0.2, 0.2, 0.3]]
 
             exportService.export(params.exportFormat, response.outputStream, funcionarioInstanceList, fields, labels, [:], parameters)
             return
         }
 
-        def funcionarioInstanceList = Funcionario.createCriteria().list(params, criteria)
-        def funcionarioInstanceCount = Funcionario.createCriteria().count(criteria)
+        params.max = Math.min(params.max ?: 10, 100)
 
-        def model = [funcionarioInstanceList: funcionarioInstanceList, funcionarioInstanceCount: funcionarioInstanceCount]
-        params.each { p -> if (p.key ==~ /search.*/ && p.value) model[p.key] = p.value }
-        model
+        [funcionarioInstanceList : Funcionario.createCriteria().list(params, criteria),
+         funcionarioInstanceCount: Funcionario.createCriteria().count(criteria),
+         pesquisa                : pesquisa]
+
     }
 
-    def getCriteria(pars) {
-        def criteria = {
-            if (pars.searchNome)
-                participante {
-                    or {
-                        ilike('nome', "%${pars.searchNome}%")
-                        ilike('nomeNormalizado', "%${Util.normalizar(pars.searchNome)}%")
-                    }
-                }
-        }
-        return criteria
-    }
     def show(Funcionario funcionarioInstance) {
         respond funcionarioInstance
     }
@@ -182,9 +176,9 @@ class FuncionarioController {
             }
         }
 
-        render(['success': true, 'funcionario': ['nome': funcionario.toString(),
-                                                 'setor': funcionario.setor.descricao,
-                                                 'salarioTotal': Util.moneyMask(funcionario.salario),
+        render(['success': true, 'funcionario': ['nome'              : funcionario.toString(),
+                                                 'setor'             : funcionario.setor.descricao,
+                                                 'salarioTotal'      : Util.moneyMask(funcionario.salario),
                                                  'salarioCentroCusto': Util.moneyMask(salarioCentroCusto?.valor)]] as JSON)
     }
 

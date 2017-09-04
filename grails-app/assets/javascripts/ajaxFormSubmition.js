@@ -91,6 +91,10 @@ function submitFormByAjax(form, delay, dataType, onSuccess, onError) {
                         erroAlertComponent.html(request.responseJSON.error);
                         erroAlertComponent.show();
                     }
+                    else if (request.responseText) {
+                        erroAlertComponent.html(request.responseText);
+                        erroAlertComponent.show();
+                    }
 
                     if (onError && typeof onError == 'function') {
                         onError(request, form)

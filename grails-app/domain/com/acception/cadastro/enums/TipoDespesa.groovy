@@ -20,4 +20,7 @@ enum TipoDespesa {
         [ATIVIDADE, PESSOAL, ADIANTAMENTO, CUSTO_ADMINISTRATIVO]
     }
 
+    String getKey(){
+        name()
+    }
 }

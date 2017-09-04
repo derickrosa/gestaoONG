@@ -7,8 +7,8 @@ class Papel {
     Date dateCreated
     Date lastUpdated
 
-    static belongsTo = [participante:Participante]
+    static belongsTo = [participante: Participante]
     static constraints = {
-        codigo nullable:true, maxSize:20
+        codigo nullable: true, maxSize: 20
     }
 }

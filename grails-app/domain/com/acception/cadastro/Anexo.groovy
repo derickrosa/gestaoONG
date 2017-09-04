@@ -24,6 +24,10 @@ class Anexo {
         filedata blank: true, nullable:true, maxSize:1073741824
     }
 
+    static mapping = {
+        sort "nome"
+    }
+
     String toString(){
         "Anexo | ${nome}"
     }

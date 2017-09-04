@@ -4,9 +4,7 @@ package com.acception.cadastro
 import com.acception.cadastro.enums.StatusLancamento
 import com.acception.cadastro.enums.TipoLancamento
 
-
 class Lancamento {
-
     Date dateCreated
     Date lastUpdated
 

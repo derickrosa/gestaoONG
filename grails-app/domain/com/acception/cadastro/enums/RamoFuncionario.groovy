@@ -13,4 +13,8 @@ enum RamoFuncionario {
     String toString() {
         descricao
     }
+
+    String getKey(){
+        name()
+    }
 }

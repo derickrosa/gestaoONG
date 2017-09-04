@@ -32,4 +32,8 @@ enum TipoCusto {
 
         tiposCusto as JSON
     }
+
+    String getKey(){
+        name()
+    }
 }

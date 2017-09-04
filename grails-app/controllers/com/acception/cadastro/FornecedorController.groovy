@@ -1,5 +1,6 @@
 package com.acception.cadastro
 
+import com.acception.cadastro.enums.Setor
 import com.acception.util.Util
 import grails.converters.JSON
 
@@ -11,56 +12,48 @@ class FornecedorController {
     def exportService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE", criarFornecedor: "POST"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+    def index() {
+        params?.remove('max')
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'codigo', 'cnpj', 'cpf', 'ramo', 'setor'])
+        pesquisa = Util.trimMap(pesquisa)
 
-        def criteria = getCriteria(params)
+        def criteria = {
+            participante {
+                if (pesquisa.containsKey('nome')) ilike('nomeNormalizado', "%${Util.normalizar(pesquisa.nome)}%")
+                if (pesquisa.containsKey('cnpj')) eq('cnpj', "${Util.cnpjToRaw(pesquisa.cnpj)}")
+                if (pesquisa.containsKey('cpf')) eq('cpf', "${Util.cpfToRaw(pesquisa.cpf)}")
+            }
+            if (pesquisa.containsKey('codigo')) eq('codigo', pesquisa.codigo)
+            if (pesquisa.containsKey('ramo')) ilike('ramo', "%${pesquisa.ramo}%")
+            if (pesquisa.containsKey('setor')) eq('setor', Setor.valueOf(pesquisa.setor))
+        }
 
         if (params?.exportFormat && params.exportFormat != "html") {
             response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
-            response.setHeader("Content-disposition", "attachment; filename=Fornecedor.${params.extension}")
+            response.setHeader("Content-disposition", "attachment; filename=Relatório de Fornecedores.${params.extension}")
 
             def fornecedorInstanceList = Fornecedor.createCriteria().list(params, criteria)
 
-            List fields = ['participante.nome','participante.telefone','participante.email','setor']
-
-            Map labels = ['participante.nome':'Nome',
-                          'participante.telefone':'Telefone',
-                          'participante.email':'E-mail',
-                          'setor':'Setor']
-
+            List fields = ['participante.nome', 'participante.telefone', 'participante.email', 'Documento', 'setor', 'codigo', 'ramo']
+            Map labels = ['participante.nome'    : 'Nome',
+                          'participante.telefone': 'Telefone',
+                          'participante.email'   : 'E-mail', 'setor': 'Setor', 'codigo': 'Código', 'ramo': 'Ramo']
+            Map parameters = ["column.widths": [0.3, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]]
             Map formatters = [
-                    'financiador.nome'                                              : { d, v -> v ? v.descricao : 'Não informado.'}
+                    Documento: { fornecedor, value ->
+                        if (fornecedor.participante instanceof PessoaFisica) return Util.rawToCpf(fornecedor.participante.cpf)
+                        else return Util.rawToCnpj(fornecedor.participante.cnpj)
+                    }
             ]
-
-
-            log.debug("Gerando relatório de Fornecedor...")
-
-            Map parameters = ["column.widths": [0.3, 0.2,0.2,0.3]]
 
             exportService.export(params.exportFormat, response.outputStream, fornecedorInstanceList, fields, labels, formatters, parameters)
             return
         }
+        params.max = Math.min(params.max ?: 10, 100)
 
-        def fornecedorInstanceList = Fornecedor.createCriteria().list(params, criteria)
-        def fornecedorInstanceCount = Fornecedor.createCriteria().count(criteria)
-
-        def model = [fornecedorInstanceList: fornecedorInstanceList, fornecedorInstanceCount: fornecedorInstanceCount]
-        params.each { p -> if (p.key ==~ /search.*/ && p.value) model[p.key] = p.value }
-        model
-    }
-
-    def getCriteria(pars) {
-        def criteria = {
-            if (pars.searchNome)
-                participante {
-                    or {
-                        ilike('nome', "%${pars.searchNome}%")
-                        ilike('nomeNormalizado', "%${Util.normalizar(pars.searchNome)}%")
-                    }
-                }
-        }
-        return criteria
+        [fornecedorInstanceList : Fornecedor.createCriteria().list(params, criteria),
+         fornecedorInstanceCount: Fornecedor.createCriteria().count(criteria),
+         pesquisa               : pesquisa]
     }
 
     def show(Fornecedor fornecedorInstance) {
@@ -74,7 +67,7 @@ class FornecedorController {
     @Transactional
     def save(Fornecedor fornecedorInstance) {
         def p = null
-        if(params.tipoPessoa == "true")
+        if (params.tipoPessoa == "true")
             p = new PessoaFisica(params.participante)
         else
             p = new PessoaJuridica(params.participante)
@@ -98,11 +91,11 @@ class FornecedorController {
         }
 
         if (fornecedorInstance.hasErrors()) {
-            respond fornecedorInstance.errors, view:'create'
+            respond fornecedorInstance.errors, view: 'create'
             return
         }
 
-        fornecedorInstance.save flush:true
+        fornecedorInstance.save flush: true
 
         request.withFormat {
             form multipartForm {
@@ -137,18 +130,18 @@ class FornecedorController {
         }
 
         if (fornecedorInstance.hasErrors()) {
-            respond fornecedorInstance.errors, view:'edit'
+            respond fornecedorInstance.errors, view: 'edit'
             return
         }
 
-        fornecedorInstance.participante.save flush:true
+        fornecedorInstance.participante.save flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'Fornecedor.label', default: 'Fornecedor'), fornecedorInstance.id])
                 redirect fornecedorInstance
             }
-            '*'{ respond fornecedorInstance, [status: OK] }
+            '*' { respond fornecedorInstance, [status: OK] }
         }
     }
 
@@ -160,14 +153,14 @@ class FornecedorController {
             return
         }
 
-        fornecedorInstance.delete flush:true
+        fornecedorInstance.delete flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'Fornecedor.label', default: 'Fornecedor'), fornecedorInstance.id])
-                redirect action:"index", method:"GET"
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+            '*' { render status: NO_CONTENT }
         }
     }
 
@@ -209,7 +202,7 @@ class FornecedorController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'fornecedor.label', default: 'Fornecedor'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 }

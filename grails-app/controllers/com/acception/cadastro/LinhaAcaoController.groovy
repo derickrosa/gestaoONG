@@ -1,6 +1,5 @@
 package com.acception.cadastro
 
-import com.acception.cadastro.enums.TipoAtividade
 import com.acception.util.Util
 
 import static org.springframework.http.HttpStatus.*
@@ -11,37 +10,38 @@ class LinhaAcaoController {
     def exportService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 20, 100)
+    def index() {
+        params?.remove('max')
 
-        def criteria = getCriteria(params)
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'codigo'])
+        pesquisa = Util.trimMap(pesquisa)
 
-        if(params?.exportFormat && params.exportFormat != "html"){
+        def criteria = {
+            if (pesquisa?.containsKey('nome'))
+                ilike('nomeNormalizado', "%${Util.normalizar(pesquisa.nome)}%")
+            if (pesquisa?.containsKey('codigo'))
+                eq('codigo', pesquisa.codigo)
+        }
+
+        if (params?.exportFormat && params.exportFormat != "html") {
             response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
-            response.setHeader("Content-disposition", "attachment; filename=LinhaAcao.${params.extension}")
+            response.setHeader("Content-disposition", "attachment; filename=Relatório das Linhas de Ação.${params.extension}")
 
             def linhaAcaoList = LinhaAcao.createCriteria().list(params, criteria)
 
-            List fields=['nome','codigo','descricao']
-            Map labels=[nome:'Nome',
-                        codigo:'Código',
-                        descricao:'Descrição']
-
-
-            log.debug("Gerando relatório de Linha de Acao...")
-
+            List fields = ['nome', 'codigo', 'descricao']
+            Map labels = [nome: 'Nome', codigo: 'Código', descricao: 'Descrição']
             Map parameters = ["column.widths": [0.3, 0.2, 0.5]]
 
-            exportService.export(params.exportFormat, response.outputStream,linhaAcaoList, fields, labels, [:], parameters)
+            exportService.export(params.exportFormat, response.outputStream, linhaAcaoList, fields, labels, [:], parameters)
             return
         }
 
-        def linhaAcaoInstanceList = LinhaAcao.createCriteria().list(params, criteria)
-        def linhaAcaoInstanceCount = LinhaAcao.createCriteria().count(criteria)
+        params.max = Math.min(params.max ?: 10, 100)
 
-        def model = [linhaAcaoInstanceList: linhaAcaoInstanceList, linhaAcaoInstanceCount: linhaAcaoInstanceCount]
-        params.each { p -> if (p.key ==~ /search.*/ && p.value) model[p.key] = p.value }
-        model
+        [linhaAcaoInstanceList : LinhaAcao.createCriteria().list(params, criteria),
+         linhaAcaoInstanceCount: LinhaAcao.createCriteria().count(criteria),
+         pesquisa              : pesquisa]
     }
 
     def show(LinhaAcao linhaAcaoInstance) {
@@ -52,19 +52,6 @@ class LinhaAcaoController {
         respond new LinhaAcao(params)
     }
 
-    def getCriteria(pars){
-        def criteria = {
-            if (pars.searchNome)
-                or{
-                ilike('nome', "%${pars.searchNome}%")
-                ilike('nomeNormalizado', "%${Util.normalizar(pars.searchNome)}%")
-                }
-            if (pars.searchCodigo)
-                eq('codigo', pars.searchCodigo)
-        }
-        return criteria
-    }
-
     @Transactional
     def save(LinhaAcao linhaAcaoInstance) {
         if (linhaAcaoInstance == null) {
@@ -73,11 +60,11 @@ class LinhaAcaoController {
         }
 
         if (linhaAcaoInstance.hasErrors()) {
-            respond linhaAcaoInstance.errors, view:'create'
+            respond linhaAcaoInstance.errors, view: 'create'
             return
         }
 
-        linhaAcaoInstance.save flush:true
+        linhaAcaoInstance.save flush: true
 
         request.withFormat {
             form multipartForm {
@@ -100,18 +87,18 @@ class LinhaAcaoController {
         }
 
         if (linhaAcaoInstance.hasErrors()) {
-            respond linhaAcaoInstance.errors, view:'edit'
+            respond linhaAcaoInstance.errors, view: 'edit'
             return
         }
 
-        linhaAcaoInstance.save flush:true
+        linhaAcaoInstance.save flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'LinhaAcao.label', default: 'LinhaAcao'), linhaAcaoInstance.id])
                 redirect linhaAcaoInstance
             }
-            '*'{ respond linhaAcaoInstance, [status: OK] }
+            '*' { respond linhaAcaoInstance, [status: OK] }
         }
     }
 
@@ -123,14 +110,14 @@ class LinhaAcaoController {
             return
         }
 
-        linhaAcaoInstance.delete flush:true
+        linhaAcaoInstance.delete flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'LinhaAcao.label', default: 'LinhaAcao'), linhaAcaoInstance.id])
-                redirect action:"index", method:"GET"
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+            '*' { render status: NO_CONTENT }
         }
     }
 
@@ -140,7 +127,7 @@ class LinhaAcaoController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'linhaAcao.label', default: 'LinhaAcao'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 }

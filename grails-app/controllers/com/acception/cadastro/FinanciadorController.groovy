@@ -1,5 +1,6 @@
 package com.acception.cadastro
 
+import com.acception.cadastro.enums.Setor
 import com.acception.util.Util
 import grails.converters.JSON
 
@@ -9,53 +10,44 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class FinanciadorController {
     def exportService
-    /*static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]*/
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+    def index() {
+        params?.remove('max')
 
-        def criteria = getCriteria(params)
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'codigo', 'cnpj', 'sigla', 'setor'])
+        pesquisa = Util.trimMap(pesquisa)
+
+        def criteria = {
+            participante {
+                if (pesquisa.containsKey('nome')) ilike('nomeNormalizado', "%${Util.normalizar(pesquisa.nome)}%")
+                if (pesquisa.containsKey('cnpj')) eq('cnpj', Util.cnpjToRaw(pesquisa.cnpj))
+            }
+            if (pesquisa.containsKey('codigo')) eq('codigo', pesquisa.codigo)
+            if (pesquisa.containsKey('sigla')) ilike('sigla', pesquisa.sigla)
+            if (pesquisa.containsKey('setor')) eq('setor', Setor.valueOf(pesquisa.setor))
+        }
 
         if (params?.exportFormat && params.exportFormat != "html") {
             response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
-            response.setHeader("Content-disposition", "attachment; filename=Financiador.${params.extension}")
+            response.setHeader("Content-disposition", "attachment; filename=Relatorio de Financiadores.${params.extension}")
 
             def financiadorInstanceList = Financiador.createCriteria().list(params, criteria)
 
-            List fields = ['participante.nome', 'codigo']
-            Map labels = ['participante.nome'     : 'Nome',
-                          codigo   : 'Código']
-
-
-            log.debug("Gerando relatório de Financiador...")
-
-            Map parameters = ["column.widths": [0.5, 0.5]]
+            List fields = ['participante.nome', 'codigo', 'participante.cnpj', 'sigla', 'setor', 'dateCreated']
+            Map labels = ['participante.nome': 'Nome', 'codigo': 'Código', 'participante.cnpj': 'CNPJ',
+                          'sigla'            : 'Sigla', 'setor': 'Setor', 'dateCreated': 'Data Cadastro']
+            Map parameters = ["column.widths": [0.4, 0.2, 0.3, 0.2, 0.2, 0.2]]
 
             exportService.export(params.exportFormat, response.outputStream, financiadorInstanceList, fields, labels, [:], parameters)
             return
         }
 
-        def financiadorInstanceList = Financiador.createCriteria().list(params, criteria)
-        def financiadorInstanceCount = Financiador.createCriteria().count(criteria)
+        params.max = Math.min(params.max ?: 10, 100)
 
-        def model = [financiadorInstanceList: financiadorInstanceList, financiadorInstanceCount: financiadorInstanceCount]
-        params.each { p -> if (p.key ==~ /search.*/ && p.value) model[p.key] = p.value }
-        model
-    }
-
-    def getCriteria(pars) {
-        def criteria = {
-            if (pars.searchNome)
-                participante {
-                    or{
-                        ilike('nome', "%${pars.searchNome}%")
-                        ilike('nomeNormalizado', "%${Util.normalizar(pars.searchNome)}%")
-                    }
-                }
-            if (pars.searchCodigo)
-                eq('codigo', pars.searchCodigo)
-        }
-        return criteria
+        [financiadorInstanceList : Financiador.createCriteria().list(params, criteria),
+         financiadorInstanceCount: Financiador.createCriteria().count(criteria),
+         pesquisa                : pesquisa]
     }
 
     def show(Financiador financiadorInstance) {

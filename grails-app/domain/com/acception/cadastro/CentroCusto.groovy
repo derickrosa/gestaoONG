@@ -40,6 +40,10 @@ class CentroCusto {
         nomeNormalizado unique: true
     }
 
+    static mapping = {
+        sort "nome"
+    }
+
     void setNome(String nome) {
         if (nome != null) {
             this.nome = nome

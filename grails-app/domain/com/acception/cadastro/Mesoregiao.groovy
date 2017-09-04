@@ -11,4 +11,8 @@ class Mesoregiao {
         descricao nullable: true
         nome nullable: true
     }
+
+    static mapping = {
+        sort "nome"
+    }
 }

@@ -18,14 +18,15 @@ class Util {
         return format.parse(amount.replaceAll("[^\\d.,]", "")).doubleValue();
     }
 
-    static Date truncDate(d){
-        Calendar cal=new GregorianCalendar()
-        cal.setTime(d)
-        cal.set(Calendar.HOUR_OF_DAY,0)
-        cal.set(Calendar.MINUTE,0)
-        cal.set(Calendar.SECOND,0)
-        cal.set(Calendar.MILLISECOND,0)
-        cal.getTime()
+    static Date truncDate(Date d) {
+        d.clearTime()
+//        Calendar cal = new GregorianCalendar()
+//        cal.setTime(d)
+//        cal.set(Calendar.HOUR_OF_DAY, 0)
+//        cal.set(Calendar.MINUTE, 0)
+//        cal.set(Calendar.SECOND, 0)
+//        cal.set(Calendar.MILLISECOND, 0)
+//        cal.getTime()
     }
 
     static def phoneToRaw(String fullphone) {
@@ -128,7 +129,7 @@ class Util {
         raw
     }
 
-    static String cnpjToRaw(cnpj) {
+    static String cnpjToRaw(String cnpj) {
         def raw = cnpj
         if (raw) {
             raw = raw.replace('.', '')
@@ -168,8 +169,8 @@ class Util {
         r
     }
 
-    static String cpfToRaw(cpf) {
-        def raw = cpf
+    static String cpfToRaw(String cpf) {
+        String raw = cpf
         if (raw) {
             raw = raw.replace('.', '')
             raw = raw.replace('-', '')
@@ -229,7 +230,7 @@ class Util {
             def attributesToSendBack = attributes.split(',')
 
             for (String attr in attributesToSendBack) {
-                def value = attr.split( /\./ ).inject( createdObject ) { obj, prop -> obj?."$prop" }
+                def value = attr.split(/\./).inject(createdObject) { obj, prop -> obj?."$prop" }
 
                 if (value instanceof Date) {
                     value = value.format('dd/MM/yyyy')
@@ -238,5 +239,14 @@ class Util {
                 response[attr] = value?.toString()
             }
         }
+    }
+
+    static Map trimMap(Map map) {
+        Map finalMap = map?.clone() ?: new HashMap<String, String>()
+        map.each { key, value ->
+            if (value.toString().isEmpty()) finalMap.remove(key)
+        }
+
+        finalMap
     }
 }

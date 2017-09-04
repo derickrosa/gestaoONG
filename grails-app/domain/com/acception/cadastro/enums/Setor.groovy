@@ -13,4 +13,8 @@ enum Setor {
     String toString() {
         descricao
     }
+
+    String getKey(){
+        name()
+    }
 }

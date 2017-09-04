@@ -2,12 +2,12 @@ package com.acception.cadastro
 
 import com.acception.util.Util
 
-class PessoaJuridica extends Participante{
+class PessoaJuridica extends Participante {
     String cnpj
     String razaoSocial
 
-    String toString(){
-        return "${nome} ${this.cnpj?' ('+this.cnpj+')':''}"
+    String toString() {
+        return "${nome} ${this.cnpj ? ' (' + this.cnpj + ')' : ''}"
     }
 
     def setCnpj(cnpj) {
@@ -15,6 +15,6 @@ class PessoaJuridica extends Participante{
     }
 
     static constraints = {
-        cnpj nullable: true, maxSize:14
+        cnpj nullable: true, maxSize: 14
     }
 }

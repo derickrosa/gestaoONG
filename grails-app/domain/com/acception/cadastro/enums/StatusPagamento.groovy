@@ -22,4 +22,7 @@ enum StatusPagamento {
         this.nome=nome
     }
 
+    String getKey(){
+        name()
+    }
 }

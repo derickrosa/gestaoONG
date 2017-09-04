@@ -23,4 +23,7 @@ public enum StatusLancamento {
         [CANCELADO,SUSPENSO]
     }
 
+    String getKey(){
+        name()
+    }
 }

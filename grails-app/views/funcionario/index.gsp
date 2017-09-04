@@ -1,4 +1,3 @@
-<%@ page import="com.acception.cadastro.Funcionario" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,81 +8,62 @@
 </head>
 
 <body>
-<%
-    def pars = [:]
-    pageScope.variables.each { k, v ->
-        if (k ==~ /search.*/ && v) pars[k] = v
-    }
-%>
+
 <p>
-    <g:link class="btn btn-default" action="create"><span
-            class="glyphicon glyphicon-plus"></span> Novo Funcionário</g:link>
+    <g:link class="btn btn-default" action="create">
+        <span class="glyphicon glyphicon-plus"></span> Novo Funcionário
+    </g:link>
 </p>
 
 <pesquisa:painel>
-    <div class="form-group col-md-12">
-        <label class="control-label" for="searchNome">Nome:</label>
-        <g:textField class="form-control" name="searchNome" value="${searchNome}"/>
+    <div class="form-group col-md-4">
+        <label class="control-label" for="pesquisa.nome">Nome:</label>
+        <g:textField class="form-control" name="pesquisa.nome" value="${pesquisa?.nome}"/>
+    </div>
+
+    <div class="form-group col-md-4">
+        <label class="control-label" for="pesquisa.cargo">Cargo:</label>
+        <g:textField class="form-control" name="pesquisa.cargo" value="${pesquisa?.cargo}"/>
+    </div>
+
+    <div class="form-group col-md-2">
+        <label class="control-label" for="pesquisa.setor">Setor:</label>
+        <g:select name="pesquisa.setor" from="${com.acception.cadastro.enums.RamoFuncionario.values()}"
+        class="form-control" optionKey="key" value="${pesquisa?.setor}" noSelection="['': 'Todos']"/>
     </div>
 </pesquisa:painel>
 
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-
-        <g:sortableColumn property="nome"
-                          title="${message(code: 'funcionario.nome.label', default: 'Nome')}"/>
-
-        <th><g:message code="funcionario.telefone.label" default="Telefone"/></th>
-
-        <g:sortableColumn property="email"
-                          title="${message(code: 'funcionario.email.label', default: 'Email')}"/>
-
-        <th>Cargo</th>
-    </tr>
-    </thead>
-    <tbody>
-    <g:if test="${funcionarioInstanceCount != 0}">
-        <g:each in="${funcionarioInstanceList}" status="i" var="funcionarioInstance">
-            <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-
-                <td><g:link action="show"
-                            id="${funcionarioInstance.id}">${fieldValue(bean: funcionarioInstance, field: "participante.nome")}</g:link></td>
-
+<g:if test="${funcionarioInstanceCount != 0}">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <g:sortableColumn params="${pesquisa}" property="nome" title="${message(code: 'funcionario.nome.label', default: 'Nome')}"/>
+            <th><g:message code="funcionario.telefone.label" default="Telefone"/></th>
+            <g:sortableColumn params="${pesquisa}" property="email" title="${message(code: 'funcionario.email.label', default: 'Email')}"/>
+            <th>Cargo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <g:each in="${funcionarioInstanceList}" var="funcionarioInstance">
+            <tr>
+                <td><g:link action="show" id="${funcionarioInstance.id}">${fieldValue(bean: funcionarioInstance, field: "participante.nome")}</g:link></td>
                 <td>${fieldValue(bean: funcionarioInstance, field: "participante.telefone")}</td>
-
                 <td>${fieldValue(bean: funcionarioInstance, field: "participante.email")}</td>
-
-
                 <td>${fieldValue(bean: funcionarioInstance, field: "cargo")}</td>
-
             </tr>
         </g:each>
-    </g:if>
-    <g:else>
-        <tr>
-            <td colspan="4" class="text-center nao-ha-registros">Não há registros de ${entityName}.</td>
-        </tr>
-    </g:else>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+    <g:paginate total="${funcionarioInstanceCount ?: 0}"/>
 
-<blockquote class="relatorio">
-    <p>Geração de Relatórios</p>
-    <export:formats formats="['excel', 'pdf']" params="${params}"/>
-</blockquote>
 
-<div class="row">
-    <div class="col-sm-6">
-        <div class="dataTables_info" id="dataTables-example_info" role="alert" aria-live="polite"
-             aria-relevant="all">Exibindo 1 a 20 de ${funcionarioInstanceCount == 1 ? funcionarioInstanceCount + ' funcionário cadastrado' : funcionarioInstanceCount + ' funcionários cadastrados'}.</div>
-    </div>
-
-    <div class="col-sm-6">
-        <div class="pagination">
-            <g:paginate total="${funcionarioInstanceCount ?: 0}"/>
-        </div>
-    </div>
-</div>
+    <blockquote>
+        <p>Exportar Relatório</p>
+        <export:formats formats="['excel', 'pdf']" params="${pesquisa}"/>
+    </blockquote>
+</g:if>
+<g:else>
+    <pesquisa:dadosNaoEncontrados/>
+</g:else>
 </body>
 </html>

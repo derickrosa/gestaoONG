@@ -9,11 +9,11 @@ class TipoAjuste {
     String descricao
 
     static constraints = {
-        descricao nullable:true
+        descricao nullable: true
     }
     static mapping = {
         id generator: 'assigned', type: 'string'
-        descricao type:'text'
+        descricao type: 'text'
     }
 
     String toString() {
@@ -24,6 +24,7 @@ class TipoAjuste {
     static TipoAjuste getAJUSTE_DEBITO() {
         TipoAjuste.get('AJUSTE_DEBITO')
     }
+
     static TipoAjuste getAJUSTE_CREDITO() {
         TipoAjuste.get('AJUSTE_CREDITO')
     }

@@ -20,7 +20,7 @@ class PesquisaTagLib {
         out << "<script type=\"application/javascript\">"
         out << "    function limparPesquisa() {"
         out << "        var form = event.srcElement.closest(\"form\");"
-        out << "        if (form) {form.reset();\$(form).find(\"input\").val(\"\");form.submit();}"
+        out << "        if (form) {form.reset();\$(form).find(\"input\").val(\"\");\$(form).find(\"select\").val(\"\");form.submit();}"
         out << "    }"
         out << "</script>"
 
@@ -41,5 +41,9 @@ class PesquisaTagLib {
 
         out << form(formParams, insideForm)
         out << "<hr/>"
+    }
+
+    Closure dadosNaoEncontrados = {
+        out << "<div class=\"well text-center\"><strong>SEM REGISTROS</strong></div>"
     }
 }

@@ -52,19 +52,15 @@ class Atividade {
         valorPlanejado nullable: true
     }
 
-    def beforeUpdate() {
-        fillNomeNormalizado()
-    }
-
-    def fillNomeNormalizado() {
-        if(this.nome != null) {
-            this.nomeNormalizado = Util.normalizar(this.nome)
-        }
+    void setNome(String nome) {
+        this.nome = nome
+        this.nomeNormalizado = Util.normalizar(this.nome)
     }
 
     static mapping = {
         objetivo type: 'text'
         descricao type: 'text'
+        sort: "nome"
     }
 
     List<Atividade> getSubAtividades() {

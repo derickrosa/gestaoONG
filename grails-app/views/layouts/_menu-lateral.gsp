@@ -33,7 +33,7 @@
     <li>
         <a href="#"><i class="fa fa-cogs fa-fw"></i> Sistema<span class="fa arrow"></span></a>
         <ul class="nav nav-second-level">
-            <li><g:link controller="console" target="Console">Console</g:link></li>
+            <li><g:link controller="console" target="_console">Console</g:link></li>
         </ul>
     </li>
 </sec:ifAnyGranted>

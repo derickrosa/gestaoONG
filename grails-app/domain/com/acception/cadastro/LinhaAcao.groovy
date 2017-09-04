@@ -9,7 +9,7 @@ class LinhaAcao {
     String nome
     String nomeNormalizado
 
-    static hasMany=[atividades:Atividade]
+    static hasMany = [atividades: Atividade]
     static transients = ['centrosCusto']
     static constraints = {
         nome nullable: true
@@ -18,21 +18,16 @@ class LinhaAcao {
         descricao nullable: true
     }
 
-    def beforeInsert() {
-        fillNomeNormalizado()
+    static mapping = {
+        sort "nome"
     }
 
-    def beforeUpdate() {
-        fillNomeNormalizado()
+    void setNome(String nome) {
+        this.nome = nome
+        this.nomeNormalizado = Util.normalizar(this.nome)
     }
 
-    def fillNomeNormalizado() {
-        if(this.nome != null) {
-            this.nomeNormalizado = Util.normalizar(this.nome)
-        }
-    }
-
-    def getCentrosCusto(){
+    def getCentrosCusto() {
         return this.atividades.centroCusto.flatten().unique()
     }
 

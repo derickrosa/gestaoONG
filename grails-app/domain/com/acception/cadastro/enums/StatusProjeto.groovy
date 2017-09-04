@@ -11,6 +11,10 @@ enum StatusProjeto {
 
     String descricao
 
+    String getKey(){
+        name()
+    }
+
     @Override
     String toString() {
         descricao

@@ -6,18 +6,60 @@ import com.acception.util.Util
 import grails.converters.JSON
 
 import java.text.DecimalFormat
+import java.text.NumberFormat
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class OrcamentoController {
-
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE", getItensOrcamentarios: "POST"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Orcamento.list(params), model: [orcamentoInstanceCount: Orcamento.count()]
+    def exportService
+
+    def index() {
+        params?.remove('max')
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['centroCusto', 'financiador', 'ano', 'moeda'])
+        pesquisa = Util.trimMap(pesquisa)
+
+        def criteria = {
+            if (pesquisa.containsKey('centroCusto')) {
+                centroCusto {
+                    idEq(pesquisa.centroCusto as Long)
+                }
+            }
+            if (pesquisa.containsKey('ano')) eq('ano', pesquisa.ano as Integer)
+            if (pesquisa.containsKey('moeda')) eq('moeda', Moeda.valueOf(pesquisa.moeda))
+        }
+
+        if (params?.exportFormat && params.exportFormat != "html") {
+            response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
+            response.setHeader("Content-disposition", "attachment; filename=Relatório de Orçamentos.${params.extension}")
+
+            def orcamentoInstanceList = Orcamento.createCriteria().list(params, criteria)
+
+            Closure imprimeMoeda = { domain, value ->
+                Currency currency = Currency.getInstance(domain.moeda.code.toString())
+                NumberFormat nf = NumberFormat.getCurrencyInstance()
+                nf.setCurrency(currency)
+                return nf.format(value)
+            }
+
+            List fields = ['id', 'dateCreated', 'ano', 'centroCusto', 'valorTotal', 'valorCambial']
+            Map labels = ['id': 'Identificador', 'dateCreated': 'Data Cadastro', 'ano': 'Ano', 'centroCusto': 'Centro de Custo', 'valorTotal': 'Valor', 'valorCambial': 'Valor Cambial (R$)']
+            Map formatters = ['valorTotal': imprimeMoeda]
+            Map parameters = ["column.widths": [0.1, 0.2, 0.2, 0.4, 0.2, 0.2]]
+
+
+            exportService.export(params.exportFormat, response.outputStream, orcamentoInstanceList, fields, labels, formatters, parameters)
+            return
+        }
+        params.max = Math.min(params.max ?: 10, 100)
+
+
+        [orcamentoInstanceList : Orcamento.createCriteria().list(params, criteria),
+         orcamentoInstanceCount: Orcamento.createCriteria().count(criteria),
+         pesquisa              : pesquisa]
     }
 
     def show(Orcamento orcamentoInstance) {
@@ -131,7 +173,7 @@ class OrcamentoController {
 
     def deletarItensOrcamentariosPassados(itensOrcamentariosAtuais, itensOrcamentariosPassados) {
         for (pastItemOrcamentario in itensOrcamentariosPassados) {
-            if (! itensOrcamentariosAtuais.contains(pastItemOrcamentario)) {
+            if (!itensOrcamentariosAtuais.contains(pastItemOrcamentario)) {
                 pastItemOrcamentario.delete()
             }
         }
@@ -139,7 +181,7 @@ class OrcamentoController {
 
     def createUpdateItemOrcamentario(itensOrcamentarios, codigo, nome, valor, tipoCusto, orcamento, id, params) {
         if (codigo) {
-            ItemOrcamentario item = itensOrcamentarios?.find { it.codigo == codigo}
+            ItemOrcamentario item = itensOrcamentarios?.find { it.codigo == codigo }
 
             println "---------------"
             println "ITEM PASSADO: ${item}"
@@ -149,7 +191,7 @@ class OrcamentoController {
             println "VALOR: ${valor}"
             println "TIPO: ${tipoCusto}"
 
-            if (! item) {
+            if (!item) {
                 item = new ItemOrcamentario(codigo: codigo)
             }
 
@@ -183,9 +225,11 @@ class OrcamentoController {
             if (funcionarios) {
                 funcionarios.eachWithIndex { funcionarioId, i ->
                     if (funcionarioId && salarioFuncionarios[i]) {
-                        def salarioFuncionario = listaAntigaSalariosFuncionarios.find { it.funcionario.id == funcionarioId.toInteger()}
+                        def salarioFuncionario = listaAntigaSalariosFuncionarios.find {
+                            it.funcionario.id == funcionarioId.toInteger()
+                        }
 
-                        if (! salarioFuncionario) {
+                        if (!salarioFuncionario) {
                             salarioFuncionario = new SalarioFuncionario(itemOrcamentario: item,
                                     funcionario: Funcionario.get(funcionarioId))
                         }
@@ -200,7 +244,7 @@ class OrcamentoController {
         }
 
         for (salarioFuncionario in listaAntigaSalariosFuncionarios) {
-            if (! item.salariosFuncionarios.contains(salarioFuncionario)) {
+            if (!item.salariosFuncionarios.contains(salarioFuncionario)) {
                 log.debug("SF ${salarioFuncionario} deletado!")
                 salarioFuncionario.delete()
             }
@@ -226,7 +270,7 @@ class OrcamentoController {
         }
     }
 
-    def getItensOrcamentarios(){
+    def getItensOrcamentarios() {
         def df = new DecimalFormat('###,##0.00')
 
         def orcamento

@@ -5,7 +5,7 @@ import com.acception.util.Util
 class PessoaFisica extends Participante {
     String cpf
     static constraints = {
-        cpf nullable: true, maxSize:11
+        cpf nullable: true, maxSize: 11
     }
 
     def setCpf(cpf) {
@@ -14,6 +14,6 @@ class PessoaFisica extends Participante {
 
     @Override
     String toString() {
-        return "${this.nome}${this.cpf?' ('+this.cpf+')':''}"
+        return "${this.nome}${this.cpf ? ' (' + this.cpf + ')' : ''}"
     }
 }

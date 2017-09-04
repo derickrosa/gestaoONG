@@ -1,5 +1,7 @@
 package com.acception.cadastro
 
+import com.acception.cadastro.enums.StatusAtividade
+import com.acception.cadastro.enums.TipoAtividade
 import com.acception.util.Util
 import grails.converters.JSON
 
@@ -12,52 +14,59 @@ class AtividadeController {
     private static final okcontents = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 20, 100)
+    def index() {
+        params?.remove('max')
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'codigo', 'centroCusto', 'dataInicio', 'dataFinal', 'status', 'tipo', 'estado'])
+        pesquisa = Util.trimMap(pesquisa)
 
-        def criteria = getCriteria(params)
+        println("pesquisa: ${pesquisa}")
 
-        if(params?.exportFormat && params.exportFormat != "html"){
+        def criteria = {
+            if (pesquisa.containsKey('nome')) ilike('nomeNormalizado', "%${Util.normalizar(pesquisa.nome)}%")
+            if (pesquisa.containsKey('codigo')) eq('codigo', pesquisa.codigo)
+            if (pesquisa.containsKey('centroCusto')) {
+                centroCusto {
+                    idEq(pesquisa.centroCusto as Long)
+                }
+            }
+            if (pesquisa.containsKey('dataInicio')) {
+                Date dataInicio = Date.parse("dd/MM/yyyy", pesquisa.dataInicio).clearTime()
+                gt('inicio', dataInicio)
+            }
+            if (pesquisa.containsKey('dataFinal')) {
+                Date dataFinal = Date.parse("dd/MM/yyyy", pesquisa.dataFinal).clearTime() + 1
+                lt('termino', dataFinal)
+            }
+
+            if (pesquisa.containsKey('status')) eq('status', StatusAtividade.valueOf(pesquisa.status))
+            if (pesquisa.containsKey('tipo')) eq('tipo', TipoAtividade.valueOf(pesquisa.tipo))
+            if (pesquisa.containsKey('estado')) {
+                estado {
+                    idEq(pesquisa.estado as Long)
+                }
+            }
+        }
+
+        if (params?.exportFormat && params.exportFormat != "html") {
             response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
-            response.setHeader("Content-disposition", "attachment; filename=Atividade.${params.extension}")
+            response.setHeader("Content-disposition", "attachment; filename=Relatório de Atividades.${params.extension}")
 
             def atividadeInstanceList = Atividade.createCriteria().list(params, criteria)
 
-            List fields=['nome','codigo','descricao','status']
-            Map labels=[nome:'Nome',
-                        codigo:'Código',
-                        descricao:'Descrição',
-            status:'Status']
+            List fields = ['nome', 'codigo', 'atividade', 'centroCusto', 'inicio', 'termino', 'estado', 'municipio', 'local', 'status', 'tipo', 'descricao']
+            Map labels = ['nome'  : 'Nome', 'codigo': 'Código', 'atividade': 'Atividade', 'centroCusto': 'Centro de Custo', 'inicio': 'Início', 'termino': 'Término',
+                          'estado': 'Estado', 'municipio': 'Município', 'local': 'Local', 'status': 'Status', 'tipo': 'Tipo de Atividade', 'descricao': 'Descrição']
+            Map parameters = ["column.widths": [0.3, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.9]]
 
-
-            log.debug("Gerando relatório de Atividade...")
-
-            Map parameters = ["column.widths": [0.3, 0.2, 0.4,0.1]]
-
-            exportService.export(params.exportFormat, response.outputStream,atividadeInstanceList, fields, labels, [:], parameters)
+            exportService.export(params.exportFormat, response.outputStream, atividadeInstanceList, fields, labels, [:], parameters)
             return
         }
-
-        def atividadeInstanceList = Atividade.createCriteria().list(params, criteria)
-        def atividadeInstanceCount = Atividade.createCriteria().count(criteria)
-
-        def model = [atividadeInstanceList: atividadeInstanceList, atividadeInstanceCount: atividadeInstanceCount]
-        params.each { p -> if (p.key ==~ /search.*/ && p.value) model[p.key] = p.value }
-        model
-    }
+        params.max = Math.min(params.max ?: 10, 100)
 
 
-    def getCriteria(pars){
-        def criteria = {
-            if (pars.searchNome)
-                or{
-                    ilike('nome', "%${pars.searchNome}%")
-                    ilike('nomeNormalizado', "%${Util.normalizar(pars.searchNome)}%")
-                }
-            if (pars.searchCodigo)
-                eq('codigo', pars.searchCodigo)
-        }
-        return criteria
+        [atividadeInstanceList : Atividade.createCriteria().list(params, criteria),
+         atividadeInstanceCount: Atividade.createCriteria().count(criteria),
+         pesquisa              : pesquisa]
     }
 
 
@@ -69,21 +78,20 @@ class AtividadeController {
         log.debug("Ct Custo: ${params.centroCustoInstance}")
         def centroCustoInstance
         def atividadeInstance
-        if(params.atividade)
+        if (params.atividade)
             atividadeInstance = Atividade.get(params.atividade.toLong())
-        if (params.atividade){
+        if (params.atividade) {
             centroCustoInstance = atividadeInstance.centroCusto
         } else {
             centroCustoInstance = CentroCusto.get(params.centroCustoInstance.toLong())
         }
 
-        if(params.atividade)
+        if (params.atividade)
             [atividadeInstance: new Atividade(params), atividade: atividadeInstance, centroCustoInstance: centroCustoInstance]
-        else if (params.centroCustoInstance){
+        else if (params.centroCustoInstance) {
             log.debug("Enviando CC")
             [atividadeInstance: new Atividade(params), centroCustoInstance: centroCustoInstance]
-        }
-        else
+        } else
             respond new Atividade(params)
     }
 
@@ -131,10 +139,10 @@ class AtividadeController {
 
         atividadeInstance.save flush: true, failOnError: true
 
-        if(atividadeInstance.atividade){
-            redirect(controller:"atividade", action: "show", id: atividadeInstance.atividade.id)
+        if (atividadeInstance.atividade) {
+            redirect(controller: "atividade", action: "show", id: atividadeInstance.atividade.id)
         } else {
-            redirect(controller:"centroCusto", action: "show", id: atividadeInstance.centroCusto.id)
+            redirect(controller: "centroCusto", action: "show", id: atividadeInstance.centroCusto.id)
         }
 
         /*request.withFormat {
@@ -151,7 +159,7 @@ class AtividadeController {
     }
 
     def atualizarAnexo(atividade, numFilesUploaded, planoDeTrabalhoAtual, planoDeTrabalhoAnterior) {
-        if(numFilesUploaded) {
+        if (numFilesUploaded) {
             if (numFilesUploaded.toInteger() == 0) {
                 atividade.anexos = null
             } else {
@@ -266,10 +274,10 @@ class AtividadeController {
             arquivoInstance.contentType = f.contentType
             arquivoInstance.size = f.size
             arquivoInstance.fileName = f.originalFilename
-            arquivoInstance.save(flush:true)
+            arquivoInstance.save(flush: true)
             atividadeInstance.addToArquivos(arquivoInstance)
             atividadeInstance.save(flush: true)
-            fileName.add([id:arquivoInstance.id])
+            fileName.add([id: arquivoInstance.id])
         }
         render(fileName as JSON)
     }
@@ -280,15 +288,15 @@ class AtividadeController {
         Arquivo arquivoInstance = Arquivo.get(params.idArquivo as Long)
         atividadeInstance.removeFromArquivos(arquivoInstance)
         atividadeInstance.save(flush: true)
-        arquivoInstance.delete(flush:true)
-        render([success:'ok'] as JSON)
+        arquivoInstance.delete(flush: true)
+        render([success: 'ok'] as JSON)
     }
 
     def baixarArquivo() {
         Arquivo arquivoInstance = Arquivo.get(params.idArquivo as Long)
-        if ( arquivoInstance == null) {
+        if (arquivoInstance == null) {
             flash.message = "Document not found."
-            redirect (action:'show')
+            redirect(action: 'show')
         } else {
             response.setContentType("APPLICATION/OCTET-STREAM")
             response.setHeader("Content-Disposition", "Attachment;Filename=\"${arquivoInstance.fileName}\"")
@@ -302,7 +310,7 @@ class AtividadeController {
     def getFiles(Long id) {
         def atividade = Atividade.get(params.id as Long)
         def arquivos = []
-        atividade?.arquivos?.sort{-it?.fileName?.size()}.each { arquivoInstance ->
+        atividade?.arquivos?.sort { -it?.fileName?.size() }.each { arquivoInstance ->
             if (okcontents.contains(arquivoInstance.contentType)) {
                 arquivos.add([name: arquivoInstance.fileName, path: createLink(action: 'imagem', id: arquivoInstance.id), size: arquivoInstance.size, id: arquivoInstance.id])
             } else {

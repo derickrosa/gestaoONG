@@ -8,6 +8,6 @@ class NotaFiscal {
     //static belongsTo = [pagamento: Pagamento]
 
     static constraints = {
-        anexo nullable:true
+        anexo nullable: true
     }
 }

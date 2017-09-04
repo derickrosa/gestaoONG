@@ -3,7 +3,6 @@ package com.acception.cadastro
 import com.acception.cadastro.enums.TipoCusto
 
 class ItemOrcamentario {
-
     String codigo
     String nome
     Double valor
@@ -15,6 +14,10 @@ class ItemOrcamentario {
     static hasMany = [salariosFuncionarios: SalarioFuncionario, despesas: Despesa]
 
     static constraints = {
+    }
+
+    static mapping = {
+        sort "nome"
     }
 
     String toString() {

@@ -1,8 +1,8 @@
 package com.acception.cadastro
 
-class Responsavel extends Papel{
+class Responsavel extends Papel {
 
-    static belongsTo = [financiador:Financiador]
+    static belongsTo = [financiador: Financiador]
 
     static constraints = {
     }

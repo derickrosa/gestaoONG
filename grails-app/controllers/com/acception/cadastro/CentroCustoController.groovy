@@ -2,6 +2,7 @@ package com.acception.cadastro
 
 import com.acception.cadastro.enums.Moeda
 import com.acception.cadastro.enums.StatusLancamento
+import com.acception.cadastro.enums.StatusProjeto
 import com.acception.cadastro.enums.TipoContaBancaria
 import com.acception.cadastro.enums.TipoCusto
 import com.acception.cadastro.enums.TipoLancamento
@@ -17,50 +18,42 @@ class CentroCustoController {
     private static final okcontents = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']
     static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+    def index() {
+        params?.remove('max')
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'codigo', 'ano', 'financiador', 'status'])
+        pesquisa = Util.trimMap(pesquisa)
 
-        def criteria = getCriteria(params)
+        def criteria = {
+            if (pesquisa.containsKey('nome')) ilike('nomeNormalizado', "%${Util.normalizar(pesquisa.nome)}%")
+            if (pesquisa.containsKey('codigo')) eq('codigo', pesquisa.codigo)
+            if (pesquisa.containsKey('ano')) eq('ano', pesquisa.ano as Integer)
+            if (pesquisa.containsKey('financiador')) {
+                financiador {
+                    idEq(pesquisa.financiador as Long)
+                }
+            }
+            if (pesquisa.containsKey('status')) eq('statusProjeto', StatusProjeto.valueOf(pesquisa.status))
+        }
 
         if (params?.exportFormat && params.exportFormat != "html") {
             response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
-            response.setHeader("Content-disposition", "attachment; filename=CentroCusto.${params.extension}")
+            response.setHeader("Content-disposition", "attachment; filename=Relatório de Centro de Custos.${params.extension}")
 
             def centroCustoInstanceList = CentroCusto.createCriteria().list(params, criteria)
 
-            List fields = ['nome', 'codigo']
-            Map labels = ['nome'     : 'Nome',
-                          codigo   : 'Código']
-
-
-            log.debug("Gerando relatório de Centro de Custo...")
-
-            Map parameters = ["column.widths": [0.5, 0.5]]
+            List fields = ['nome', 'codigo', 'ano', 'dataInicio', 'dataFinal', 'statusProjeto', 'descricao']
+            Map labels = ['nome': 'Nome', codigo: 'Código', 'ano': 'Ano', 'dataInicio': 'Data Início', 'dataFinal': 'Data Final', 'statusProjeto': 'Status do Projeto', 'descricao': 'Descrição']
+            Map parameters = ["column.widths": [0.5, 0.1, 0.1, 0.1, 0.1, 0.3, 0.9]]
 
             exportService.export(params.exportFormat, response.outputStream, centroCustoInstanceList, fields, labels, [:], parameters)
             return
         }
 
-        def centroCustoInstanceList = CentroCusto.createCriteria().list(params, criteria)
-        def  centroCustoInstanceCount = CentroCusto.createCriteria().count(criteria)
+        params.max = Math.min(params.max ?: 10, 100)
 
-        def model = [centroCustoInstanceList: centroCustoInstanceList, centroCustoInstanceCount: centroCustoInstanceCount]
-        params.each { p -> if (p.key ==~ /search.*/ && p.value) model[p.key] = p.value }
-        model
-    }
-
-
-    def getCriteria(pars) {
-        def criteria = {
-            if (pars.searchNome)
-                or{
-                    ilike('nome', "%${pars.searchNome}%")
-                    ilike('nomeNormalizado', "%${Util.normalizar(pars.searchNome)}%")
-                }
-            if (pars.searchCodigo)
-                eq('codigo', pars.searchCodigo)
-        }
-        return criteria
+        [centroCustoInstanceList : CentroCusto.createCriteria().list(params, criteria),
+         centroCustoInstanceCount: CentroCusto.createCriteria().count(criteria),
+         pesquisa                : pesquisa]
     }
 
     def show(CentroCusto centroCustoInstance) {
@@ -214,7 +207,7 @@ class CentroCustoController {
 
     def removerItensOrcamentarios(Orcamento orcamento) {
         orcamento?.itensOrcamentarios?.collect()?.each {
-             orcamento.removeFromItensOrcamentarios(it)
+            orcamento.removeFromItensOrcamentarios(it)
         }
     }
 
@@ -238,13 +231,13 @@ class CentroCustoController {
 
     def deletarItensOrcamentariosPassados(itensOrcamentariosAtuais, itensOrcamentariosPassados) {
         for (pastItemOrcamentario in itensOrcamentariosPassados) {
-            if (! itensOrcamentariosAtuais.contains(pastItemOrcamentario)) {
+            if (!itensOrcamentariosAtuais.contains(pastItemOrcamentario)) {
                 pastItemOrcamentario.delete()
             }
         }
     }
 
-    def getItensOrcamentarios(){
+    def getItensOrcamentarios() {
         def df = new DecimalFormat('###,##0.00')
 
         def orcamento
@@ -279,9 +272,11 @@ class CentroCustoController {
             if (funcionarios) {
                 funcionarios.eachWithIndex { funcionarioId, i ->
                     if (funcionarioId && salarioFuncionarios[i]) {
-                        def salarioFuncionario = listaAntigaSalariosFuncionarios.find { it.funcionario.id == funcionarioId.toInteger()}
+                        def salarioFuncionario = listaAntigaSalariosFuncionarios.find {
+                            it.funcionario.id == funcionarioId.toInteger()
+                        }
 
-                        if (! salarioFuncionario) {
+                        if (!salarioFuncionario) {
                             salarioFuncionario = new SalarioFuncionario(itemOrcamentario: item,
                                     funcionario: Funcionario.get(funcionarioId))
                         }
@@ -296,7 +291,7 @@ class CentroCustoController {
         }
 
         for (salarioFuncionario in listaAntigaSalariosFuncionarios) {
-            if (! item.salariosFuncionarios.contains(salarioFuncionario)) {
+            if (!item.salariosFuncionarios.contains(salarioFuncionario)) {
                 log.debug("SF ${salarioFuncionario} deletado!")
                 salarioFuncionario.delete()
             }
@@ -305,7 +300,7 @@ class CentroCustoController {
 
     def createUpdateItemOrcamentario(itensOrcamentarios, codigo, nome, valor, tipoCusto, orcamento, id, params) {
         if (codigo) {
-            ItemOrcamentario item = itensOrcamentarios?.find { it.codigo == codigo}
+            ItemOrcamentario item = itensOrcamentarios?.find { it.codigo == codigo }
 
             println "---------------"
             println "ITEM PASSADO: ${item}"
@@ -315,7 +310,7 @@ class CentroCustoController {
             println "VALOR: ${valor}"
             println "TIPO: ${tipoCusto}"
 
-            if (! item) {
+            if (!item) {
                 item = new ItemOrcamentario(codigo: codigo)
             }
 
@@ -343,10 +338,10 @@ class CentroCustoController {
             arquivoInstance.contentType = f.contentType
             arquivoInstance.size = f.size
             arquivoInstance.fileName = f.originalFilename
-            arquivoInstance.save(flush:true)
+            arquivoInstance.save(flush: true)
             centroCustoInstance.addToArquivos(arquivoInstance)
             centroCustoInstance.save(flush: true)
-            fileName.add([id:arquivoInstance.id])
+            fileName.add([id: arquivoInstance.id])
         }
         render(fileName as JSON)
     }
@@ -357,15 +352,15 @@ class CentroCustoController {
         Arquivo arquivoInstance = Arquivo.get(params.idArquivo as Long)
         centroCustoInstance.removeFromArquivos(arquivoInstance)
         centroCustoInstance.save(flush: true)
-        arquivoInstance.delete(flush:true)
-        render([success:'ok'] as JSON)
+        arquivoInstance.delete(flush: true)
+        render([success: 'ok'] as JSON)
     }
 
     def baixarArquivo() {
         Arquivo arquivoInstance = Arquivo.get(params.idArquivo as Long)
-        if ( arquivoInstance == null) {
+        if (arquivoInstance == null) {
             flash.message = "Document not found."
-            redirect (action:'show')
+            redirect(action: 'show')
         } else {
             response.setContentType("APPLICATION/OCTET-STREAM")
             response.setHeader("Content-Disposition", "Attachment;Filename=\"${arquivoInstance.fileName}\"")
@@ -379,7 +374,7 @@ class CentroCustoController {
     def getFiles(Long id) {
         def centroCusto = CentroCusto.get(params.id as Long)
         def arquivos = []
-        centroCusto?.arquivos?.sort{-it?.fileName?.size()}.each { arquivoInstance ->
+        centroCusto?.arquivos?.sort { -it?.fileName?.size() }.each { arquivoInstance ->
             if (okcontents.contains(arquivoInstance.contentType)) {
                 arquivos.add([name: arquivoInstance.fileName, path: createLink(action: 'imagem', id: arquivoInstance.id), size: arquivoInstance.size, id: arquivoInstance.id])
             } else {
@@ -408,7 +403,7 @@ class CentroCustoController {
             def centroCusto = CentroCusto.get(centroCustoId)
 
             if (centroCusto) {
-                def listaAtividades = centroCusto.atividades.collect { ['id': it.id, 'label': it.toString()]}
+                def listaAtividades = centroCusto.atividades.collect { ['id': it.id, 'label': it.toString()] }
 
                 render(['success': true, objects: listaAtividades] as JSON)
             } else {
@@ -429,7 +424,7 @@ class CentroCustoController {
             if (listaFuncionarios) {
                 listaFuncionarios = listaFuncionarios.flatten()
 
-                dadosFuncionarios = listaFuncionarios.collect {['id': it.id, 'label': it.participante.nome]}
+                dadosFuncionarios = listaFuncionarios.collect { ['id': it.id, 'label': it.participante.nome] }
             }
 
             render(['success': true, objects: dadosFuncionarios] as JSON)
@@ -442,8 +437,10 @@ class CentroCustoController {
         def centroCusto = CentroCusto.get(centroCustoId)
 
         if (centroCusto) {
-            def itensOrcamentarios = centroCusto.orcamentoAtual?.itensOrcamentarios?.collect {['id': it.id,
-                                                                                               'label': it.toString()]}
+            def itensOrcamentarios = centroCusto.orcamentoAtual?.itensOrcamentarios?.collect {
+                ['id'   : it.id,
+                 'label': it.toString()]
+            }
 
             render(['success': true, objects: itensOrcamentarios] as JSON)
         } else {

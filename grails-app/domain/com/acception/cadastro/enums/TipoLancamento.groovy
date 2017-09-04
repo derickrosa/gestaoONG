@@ -19,4 +19,7 @@ public enum TipoLancamento {
         [DEBITO, CREDITO, PAGAMENTO_ADIANTADO]
     }
 
+    String getKey(){
+        name()
+    }
 }

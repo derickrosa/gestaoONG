@@ -3,59 +3,130 @@
 <head>
 	<title><g:if env="development">Grails Runtime Exception</g:if><g:else>Error</g:else></title>
 	<meta name="layout" content="layout-restrito">
-	<g:if env="development"><asset:stylesheet src="errors.css"/></g:if>
-	<!-- GLOBAL STYLES -->
-	<!-- GLOBAL STYLES -->
-	<link href="${assetPath(src: 'bootstrap/css/bootstrap.min.css')}" rel="stylesheet"/>
-	<link href="${assetPath(src: 'Font-Awesome/css/font-awesome.css')}" rel="stylesheet"/>
-	<!--END GLOBAL STYLES -->
+	<style type="text/css">
+	h1, h2 {
+		margin: 10px 25px 5px;
+	}
 
-	<!-- PAGE LEVEL STYLES -->
-	<link href="${assetPath(src: 'error.css')}" rel="stylesheet"/>
-	<link href="${assetPath(src: 'magic.css')}" rel="stylesheet"/>
-	<!--END PAGE LEVEL STYLES -->
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+	h2 {
+		font-size: 1.1em;
+	}
 
+	.filename {
+		font-style: italic;
+	}
+
+	.exceptionMessage {
+		margin: 10px;
+		border: 1px solid #000;
+		padding: 5px;
+		background-color: #E9E9E9;
+	}
+
+	.stack,
+	.snippet {
+		margin: 0 25px 10px;
+	}
+
+	.stack,
+	.snippet {
+		border: 1px solid #ccc;
+		-mox-box-shadow: 0 0 2px rgba(0,0,0,0.2);
+		-webkit-box-shadow: 0 0 2px rgba(0,0,0,0.2);
+		box-shadow: 0 0 2px rgba(0,0,0,0.2);
+	}
+
+	/* error details */
+	.error-details {
+		border-top: 1px solid #FFAAAA;
+		-mox-box-shadow: 0 0 2px rgba(0,0,0,0.2);
+		-webkit-box-shadow: 0 0 2px rgba(0,0,0,0.2);
+		box-shadow: 0 0 2px rgba(0,0,0,0.2);
+		border-bottom: 1px solid #FFAAAA;
+		-mox-box-shadow: 0 0 2px rgba(0,0,0,0.2);
+		-webkit-box-shadow: 0 0 2px rgba(0,0,0,0.2);
+		box-shadow: 0 0 2px rgba(0,0,0,0.2);
+		background-color:#FFF3F3;
+		line-height: 1.5;
+		overflow: hidden;
+		padding: 5px;
+		padding-left:25px;
+	}
+
+	.error-details dt {
+		clear: left;
+		float: left;
+		font-weight: bold;
+		margin-right: 5px;
+	}
+
+	.error-details dt:after {
+		content: ":";
+	}
+
+	.error-details dd {
+		display: block;
+	}
+
+	/* stack trace */
+	.stack {
+		padding: 5px;
+		overflow: auto;
+		height: 150px;
+	}
+
+	/* code snippet */
+	.snippet {
+		background-color: #fff;
+		font-family: monospace;
+	}
+
+	.snippet .line {
+		display: block;
+	}
+
+	.snippet .lineNumber {
+		background-color: #ddd;
+		color: #999;
+		display: inline-block;
+		margin-right: 5px;
+		padding: 0 3px;
+		text-align: right;
+		width: 3em;
+	}
+
+	.snippet .error {
+		background-color: #fff3f3;
+		font-weight: bold;
+	}
+
+	.snippet .error .lineNumber {
+		background-color: #faa;
+		color: #333;
+		font-weight: bold;
+	}
+
+	.snippet .line:first-child .lineNumber {
+		padding-top: 5px;
+	}
+
+	.snippet .line:last-child .lineNumber {
+		padding-bottom: 5px;
+	}
+	</style>
 </head>
 
 <body>
-
-<!--  PAGE CONTENT -->
-<div class="container">
-
-
-
-	<div class="col-lg-8 col-lg-offset-2 text-center">
-		<div class="logo">
-			<g:if env="development">
-				<g:renderException exception="${exception}" />
-			</g:if>
-			<g:else>
-
-				<h1>Um erro ocorreu!</h1>
-			</g:else>
-
-		</div>
-		<p class="lead text-muted">Comunique o suporte sobre este erro para que ele seja solucionado.</p>
-		<div class="clearfix"></div>
-		<div class="clearfix"></div>
-		<br />
-		<div class="col-lg-6  col-lg-offset-3">
-			<div class="btn-group btn-group-justified">
-				<a href="${createLink(action: 'painelInicial',controller: 'home')}" class="btn btn-primary">Voltar ao Painel Inicial</a>
-			</div>
-
-		</div>
+<g:if env="development">
+	<g:renderException exception="${exception}" />
+</g:if>
+<g:else>
+	<div class="alert alert-danger" role="alert">
+		<strong>Um erro ocorreu!</strong>
+		Por favor comunique o suporte sobre este erro para que ele seja solucionado.
 	</div>
 
-
-</div>
-<!-- END PAGE CONTENT -->
-
-
+	<g:link controller="home" action="index" class="btn btn-primary btn-lg">Voltar a Home</g:link>
+</g:else>
 </body>
 </html>
