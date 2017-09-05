@@ -177,11 +177,11 @@ input.error, select.error {
     }
 
     $(function() {
-        $("#centroCusto").chosen();
-        $("#fornecedor").chosen();
-        $("#atividade").chosen();
-        $("#funcionario").chosen();
-        $("#funcionarioCredito").chosen();
+//        $("#centroCusto").chosen();
+//        $("#fornecedor").chosen();
+//        $("#atividade").chosen();
+//        $("#funcionario").chosen();
+//        $("#funcionarioCredito").chosen();
 
         $("#centroCusto").on('change', function () {
             atualizarSelectAtividades($(this).val());

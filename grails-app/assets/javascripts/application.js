@@ -6,6 +6,7 @@
 //= require /plugins/bootstrap/bootstrap-datepicker.min.js
 //= require /plugins/bootstrap/locales/bootstrap-datepicker.pt-BR.min.js
 
+
 //= require /plugins/jquery/jquery.validate.js
 
 //= require /plugins/select2/select2.min.js

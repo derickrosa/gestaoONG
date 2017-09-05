@@ -378,7 +378,7 @@ class CentroCustoController {
             if (okcontents.contains(arquivoInstance.contentType)) {
                 arquivos.add([name: arquivoInstance.fileName, path: createLink(action: 'imagem', id: arquivoInstance.id), size: arquivoInstance.size, id: arquivoInstance.id])
             } else {
-                arquivos.add([name: arquivoInstance.fileName, path: resource(file: 'images/document.png'), size: arquivoInstance.size, id: arquivoInstance.id])
+                arquivos.add([name: arquivoInstance.fileName, path: assetPath([src: 'fileinput/document.png', absolute: true]), size: arquivoInstance.size, id: arquivoInstance.id])
             }
         }
         render(arquivos as JSON)

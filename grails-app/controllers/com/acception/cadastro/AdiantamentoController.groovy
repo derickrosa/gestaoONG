@@ -12,10 +12,48 @@ import grails.transaction.Transactional
 class AdiantamentoController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    def exportService
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Adiantamento.list(params), model: [adiantamentoInstanceCount: Adiantamento.count()]
+    def index() {
+        params?.remove('max')
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['dataInicio', 'dataFinal', 'centroCusto'])
+        pesquisa = Util.trimMap(pesquisa)
+
+        Closure criteria = {
+            if (pesquisa.containsKey('dataInicio')) {
+                Date inicio = Date.parse('dd/MM/yyyy', pesquisa.dataInicio).clearTime()
+                ge('data', inicio)
+            }
+            if (pesquisa.containsKey('dataFinal')) {
+                Date fim = Date.parse('dd/MM/yyyy', pesquisa.dataFinal).clearTime() + 1
+                le('data', fim)
+            }
+            if (pesquisa.containsKey('centroCusto')) {
+                centroCusto {
+                    idEq(pesquisa.centroCusto as Long)
+                }
+            }
+        }
+
+        if (params?.exportFormat && params.exportFormat != "html") {
+            response.contentType = grailsApplication.config.grails.mime.types[params.exportFormat]
+            response.setHeader("Content-disposition", "attachment; filename=Relatório de Adiantamentos.${params.extension}")
+
+            def adiantamentoInstanceList = Adiantamento.createCriteria().list(params, criteria)
+
+            List fields = ['id', 'data', 'centroCusto', 'descricao']
+            Map labels = ['id': 'Identificador', 'data': 'Data', 'centroCusto': 'Centro de Custo', 'descricao': 'Descrição']
+            Map parameters = ["column.widths": [0.1, 0.1, 0.2, 0.6]]
+
+            exportService.export(params.exportFormat, response.outputStream, adiantamentoInstanceList, fields, labels, null, parameters)
+            return
+        }
+
+        params.max = Math.min(params.max ?: 10, 100)
+
+        [adiantamentoInstanceList : Adiantamento.createCriteria().list(params, criteria),
+         adiantamentoInstanceCount: Adiantamento.createCriteria().count(criteria),
+         pesquisa                 : pesquisa]
     }
 
     def show(Adiantamento adiantamentoInstance) {

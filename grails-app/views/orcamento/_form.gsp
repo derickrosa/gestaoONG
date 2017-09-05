@@ -305,8 +305,6 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
         $('#myModal').modal('show');
 
         tableFuncionarios.loadData(tableData);
-
-        $('[name=funcionario]').chosen();
     };
 
     var salvarAlteracoesListaFuncionariosItemOrcamentario = function() {
@@ -335,7 +333,7 @@ table.inputtable.wh tbody tr:nth-child(1), table.inputtable.wh tbody tr:nth-chil
     var tableFuncionarios;
 
     var initializeTableFuncionarios = function () {
-        var html = `<g:select class='form-control' from='${com.acception.cadastro.Funcionario.list()}'
+        var html = `<g:select class='form-control select' from='${com.acception.cadastro.Funcionario.list()}'
                     name='funcionario' optionKey="id" data-placeholder='Selecione um funcionário...' noSelection="['': '']"/>`
 
         var tableElement = $("#listaFuncionariosTable");
