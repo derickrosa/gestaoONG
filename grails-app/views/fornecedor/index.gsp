@@ -18,13 +18,13 @@
 
 <pesquisa:painel>
     <div class="form-group col-md-2">
-        <label class="control-label" for="pesquisa.nome">Nome:</label>
-        <g:textField class="form-control" name="pesquisa.nome" value="${pesquisa?.nome}"/>
+        <label class="control-label" for="pesquisa.codigo">Código:</label>
+        <g:textField class="form-control" name="pesquisa.codigo" value="${pesquisa?.codigo}"/>
     </div>
 
     <div class="form-group col-md-2">
-        <label class="control-label" for="pesquisa.codigo">Código:</label>
-        <g:textField class="form-control" name="pesquisa.codigo" value="${pesquisa?.codigo}"/>
+        <label class="control-label" for="pesquisa.nome">Nome:</label>
+        <g:textField class="form-control" name="pesquisa.nome" value="${pesquisa?.nome}"/>
     </div>
 
     <div class="form-group col-md-2">
@@ -53,8 +53,8 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <g:sortableColumn params="${pesquisa}" property="nome" title="${message(code: 'fornecedor.codigo.label', default: 'Nome')}"/>
             <g:sortableColumn params="${pesquisa}" property="codigo" title="${message(code: 'fornecedor.codigo.label', default: 'Codigo')}"/>
+            <g:sortableColumn params="${pesquisa}" property="nome" title="${message(code: 'fornecedor.codigo.label', default: 'Nome')}"/>
             <th>Documento</th>
             <g:sortableColumn params="${pesquisa}" property="ramo" title="${message(code: 'fornecedor.ramo.label', default: 'Ramo')}"/>
             <g:sortableColumn params="${pesquisa}" property="setor" title="${message(code: 'fornecedor.setor.label', default: 'Setor')}"/>
@@ -63,8 +63,8 @@
         <tbody>
         <g:each in="${fornecedorInstanceList}" var="fornecedorInstance">
             <tr>
-                <td><g:link action="show" id="${fornecedorInstance.id}">${fieldValue(bean: fornecedorInstance, field: "participante.nome")}</g:link></td>
                 <td><g:link action="show" id="${fornecedorInstance.id}">${fieldValue(bean: fornecedorInstance, field: "codigo")}</g:link></td>
+                <td>${fieldValue(bean: fornecedorInstance, field: "participante.nome")}</td>
                 <td>
                     <g:if test="${fornecedorInstance.participante instanceof PessoaFisica}">
                         CPF: <g:formatCpf cpf="${fornecedorInstance.participante?.cpf}"/>

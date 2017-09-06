@@ -14,7 +14,7 @@ class Orcamento {
 
     static hasMany = [itensOrcamentarios: ItemOrcamentario]
     static belongsTo = [centroCusto: CentroCusto]
-    static transients = ['valor']
+    static transients = ['valor', 'status']
 
     static constraints = {
         dateCreated nullable: true
@@ -23,5 +23,14 @@ class Orcamento {
 
     String getValor() {
         return "${moeda.representacao} ${new DecimalFormat("#.00").format(valorTotal)}"
+    }
+
+    String getStatus(){
+        def st
+        if(this.orcamentoReplanejado)
+           st = "Replanejado"
+        else
+           st = "Vigente"
+        st
     }
 }

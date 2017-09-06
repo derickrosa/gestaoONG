@@ -57,7 +57,8 @@
             <g:sortableColumn params="${pesquisa}" property="ano" title="${message(code: 'centroCusto.ano.label', default: 'Ano')}"/>
             <g:sortableColumn params="${pesquisa}" property="dataInicio" title="${message(code: 'centroCusto.dataInicio.label', default: 'Data Início')}"/>
             <g:sortableColumn params="${pesquisa}" property="dataFinal" title="${message(code: 'centroCusto.dataFinal.label', default: 'Data Final')}"/>
-            <th><g:message code="centroCusto.planoDeTrabalho.label" default="Plano De Trabalho"/></th>
+            <g:sortableColumn params="${pesquisa}" property="financiador" title="${message(code: 'centroCusto.financiador.label', default: 'Financiador')}"/>
+            %{--<th><g:message code="centroCusto.planoDeTrabalho.label" default="Financiador"/></th>--}%
             <g:sortableColumn params="${pesquisa}" property="statusProjeto" title="${message(code: 'centroCusto.statusProjeto.label', default: 'Status Projeto')}"/>
         </tr>
         </thead>
@@ -69,7 +70,7 @@
                 <td><g:formatNumber number="${centroCustoInstance.ano}" format="##0"/></td>
                 <td><g:formatDate format="dd/MM/yyyy" date="${centroCustoInstance.dataInicio}"/></td>
                 <td><g:formatDate format="dd/MM/yyyy" date="${centroCustoInstance.dataFinal}"/></td>
-                <td><g:link controller="anexo" action="show" id="${centroCustoInstance?.planoDeTrabalho?.id}">${centroCustoInstance?.planoDeTrabalho}</g:link></td>
+                <td><g:link controller="financiador" action="show" id="${centroCustoInstance?.financiador?.id}">${centroCustoInstance?.financiador}</g:link></td>
                 <td>${fieldValue(bean: centroCustoInstance, field: "statusProjeto")}</td>
             </tr>
         </g:each>

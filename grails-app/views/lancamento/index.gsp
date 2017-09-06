@@ -48,24 +48,24 @@
         <thead>
         <tr>
             <g:sortableColumn params="${pesquisa}" property="id" title="Identificador"/>
-            <g:sortableColumn params="${pesquisa}" property="dataEmissao" title="${message(code: 'lancamento.dataEmissao.label', default: 'Dt. Emissão')}"/>
-            <g:sortableColumn params="${pesquisa}" property="dataPagamento" title="${message(code: 'lancamento.dataPagamento.label', default: 'Dt. Pagamento')}"/>
-            <g:sortableColumn params="${pesquisa}" property="parcela" title="${message(code: 'lancamento.parcela.label', default: 'Parcelas')}"/>
-            <g:sortableColumn params="${pesquisa}" property="codigoLancamento" title="${message(code: 'lancamento.codigoLancamento.label', default: 'Código')}"/>
-            <th><g:message code="lancamento.tipoLancamento.label" default="Tipo"/></th>
-            <th><g:message code="lancamento.descricao.label" default="Descrição"/></th>
+            <g:sortableColumn params="${pesquisa}" property="papel" title="${message(code: 'lancamento.dateCreated.label', default: 'Origem')}"/>
+            <g:sortableColumn params="${pesquisa}" property="dataEmissao" title="${message(code: 'lancamento.dateCreated.label', default: 'Data de Emissão')}"/>
+            <g:sortableColumn params="${pesquisa}" property="dataPagamento" title="${message(code: 'lancamento.dataPagamento.label', default: 'Data Pagamento')}"/>
+            <g:sortableColumn params="${pesquisa}" property="tipoLancamento" title="${message(code: 'lancamento.parcela.label', default: 'Tipo de Lançamento')}"/>
+            <g:sortableColumn params="${pesquisa}" property="valor" title="${message(code: 'lancamento.codigoLancamento.label', default: 'Valor')}"/>
         </tr>
         </thead>
         <tbody>
         <g:each in="${lancamentoInstanceList}" var="lancamentoInstance">
             <tr>
                 <td><g:link action="show" id="${lancamentoInstance.id}">${fieldValue(bean: lancamentoInstance, field: "id")}</g:link></td>
-                <td><g:formatDate date="${lancamentoInstance.dataEmissao}" format="dd/MM/yyyy"/></td>
+                <td>${fieldValue(bean: lancamentoInstance, field: "papel.participante.nome")}</td>
+                <td><g:formatDate date="${lancamentoInstance.dataEmissao}" format="dd/MM/yyyy"/> </td>
                 <td><g:formatDate date="${lancamentoInstance.dataPagamento}" format="dd/MM/yyyy"/></td>
-                <td>${fieldValue(bean: lancamentoInstance, field: "parcela")}</td>
-                <td>${fieldValue(bean: lancamentoInstance, field: "codigoLancamento")}</td>
                 <td>${fieldValue(bean: lancamentoInstance, field: "tipoLancamento.nome")}</td>
-                <td>${fieldValue(bean: lancamentoInstance, field: "descricao")}</td>
+                %{--<td>${fieldValue(bean: lancamentoInstance, field: "codigoLancamento")}</td>--}%
+                <td>${fieldValue(bean: lancamentoInstance, field: "valor")}</td>
+                %{--<td>${fieldValue(bean: lancamentoInstance, field: "descricao")}</td>--}%
             </tr>
         </g:each>
         </tbody>

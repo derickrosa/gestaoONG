@@ -3,12 +3,14 @@ package com.acception.cadastro
 
 import com.acception.cadastro.enums.StatusLancamento
 import com.acception.cadastro.enums.TipoLancamento
+import com.acception.cadastro.enums.TipoPagamento
 
 class Lancamento {
     Date dateCreated
     Date lastUpdated
 
     Double valor
+    //String numeroDocumento
     String numeroTitulo
     Date dataEmissao
     TipoLancamento tipoLancamento
@@ -16,12 +18,12 @@ class Lancamento {
     String descricao
     Date dataPagamento
     Date dataCancelamento
-    String codigoLancamento
     Anexo documento
     Papel papel
     Integer parcela
 
     TipoAjuste tipoAjuste
+    //TipoPagamento tipoPagamento
 
     EventoFinanceiro eventoFinanceiro
 
@@ -39,7 +41,6 @@ class Lancamento {
         parcela nullable: true
         tipoAjuste nullable: true
         descricao nullable: true
-        codigoLancamento nullable: true
         numeroTitulo nullable: false
         eventoFinanceiro nullable: true
         documento nullable: true

@@ -38,22 +38,22 @@
         <thead>
         <tr>
             <th>Identificador</th>
-            <g:sortableColumn params="${pesquisa}" property="dateCreated" title="${message(code: 'orcamento.dateCreated.label', default: 'Data Cadastro')}"/>
-            <g:sortableColumn params="${pesquisa}" property="ano" title="${message(code: 'orcamento.ano.label', default: 'Ano')}"/>
             <th><g:message params="${pesquisa}" code="orcamento.centroCusto.label" default="Centro Custo"/></th>
+            <g:sortableColumn params="${pesquisa}" property="ano" title="${message(code: 'orcamento.ano.label', default: 'Ano')}"/>
             <g:sortableColumn params="${pesquisa}" property="valorTotal" title="${message(code: 'orcamento.valorTotal.label', default: 'Valor')}"/>
-            <g:sortableColumn params="${pesquisa}" property="valorCambial" title="${message(code: 'orcamento.valorCambial.label', default: 'Valor Cambial')}"/>
+            <g:sortableColumn params="${pesquisa}" property="dateCreated" title="${message(code: 'orcamento.dateCreated.label', default: 'Data Cadastro')}"/>
+            <g:sortableColumn property="status" title="${message(code: 'orcamento.status.label', default: 'Status')}"/>
         </tr>
         </thead>
         <tbody>
         <g:each in="${orcamentoInstanceList}" var="orcamentoInstance">
             <tr>
-                <td><g:link action="show" id="${orcamentoInstance.id}">${fieldValue(bean: orcamentoInstance, field: "id")}</g:link></td>
-                <td><g:formatDate date="${orcamentoInstance.dateCreated}" format="dd/MM/yyyy"/></td>
-                <td>${orcamentoInstance.ano}</td>
+                <td><g:link action="show" id="${orcamentoInstance?.id}">${fieldValue(bean: orcamentoInstance, field: "id")}</g:link></td>
                 <td>${fieldValue(bean: orcamentoInstance, field: "centroCusto")}</td>
-                <td><g:formatNumber number="${orcamentoInstance.valorTotal}" type="currency" currencyCode="${orcamentoInstance?.moeda?.code}"/></td>
-                <td><g:formatNumber number="${orcamentoInstance.valorCambial}" type="currency" currencyCode="${com.acception.cadastro.enums.Moeda.REAL.code}"/></td>
+                <td>${orcamentoInstance?.ano}</td>
+                <td><g:formatNumber number="${orcamentoInstance?.valorTotal}" type="currency" currencyCode="${orcamentoInstance?.moeda?.code}"/></td>
+                <td><g:formatDate date="${orcamentoInstance?.dateCreated}" format="dd/MM/yyyy"/></td>
+                <td>${orcamentoInstance?.status}</td>
             </tr>
         </g:each>
         </tbody>
