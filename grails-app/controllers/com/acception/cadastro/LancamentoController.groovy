@@ -15,19 +15,25 @@ class LancamentoController {
 
     def index() {
         params?.remove('max')
-        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['dataCriacao', 'dataPagamento', 'tipo', 'classe', 'codigo'])
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['dataEmissaoInicio', 'dataEmissaoFinal', 'dataPagamentoInicio', 'dataPagamentoFinal', 'tipo', 'classe', 'codigo'])
         pesquisa = Util.trimMap(pesquisa)
 
         def criteria = {
-            if (pesquisa.containsKey('dataCriacao')) {
-                Date dataCriacao = Date.parse("dd/MM/yyyy", pesquisa.dataCriacao).clearTime()
-                gt('dateCreated', dataCriacao)
-                lt('dateCreated', dataCriacao + 1)
+            if (pesquisa.containsKey('dataEmissaoInicio')) {
+                Date inicio = Date.parse("dd/MM/yyyy", pesquisa.dataEmissaoInicio).clearTime()
+                ge('dataEmissao', inicio)
             }
-            if (pesquisa.containsKey('dataPagamento')) {
-                Date dataPagamento = Date.parse("dd/MM/yyyy", pesquisa.dataPagamento).clearTime()
-                gt('dataPagamento', dataPagamento)
-                lt('dataPagamento', dataPagamento + 1)
+            if (pesquisa.containsKey('dataEmissaoFinal')) {
+                Date fim = Date.parse("dd/MM/yyyy", pesquisa.dataEmissaoFinal).clearTime() + 1
+                le('dataEmissao', fim)
+            }
+            if (pesquisa.containsKey('dataPagamentoInicio')) {
+                Date inicio = Date.parse("dd/MM/yyyy", pesquisa.dataPagamentoInicio).clearTime()
+                ge('dataPagamento', inicio)
+            }
+            if (pesquisa.containsKey('dataPagamentoFinal')) {
+                Date fim = Date.parse("dd/MM/yyyy", pesquisa.dataPagamentoFinal).clearTime() + 1
+                le('dataPagamento', fim)
             }
             if (pesquisa.containsKey('tipo')) eq('tipoLancamento', TipoLancamento.valueOf(pesquisa.tipo))
             if (pesquisa.containsKey('codigo')) eq('codigoLancamento', pesquisa.codigo)
@@ -39,8 +45,8 @@ class LancamentoController {
 
             def lancamentoInstanceList = Lancamento.createCriteria().list(params, criteria)
 
-            List fields = ['id', 'dateCreated', 'dataPagamento', 'dataCancelamento', 'parcela', 'tipoLancamento', 'descricao']
-            Map labels = ['id'     : 'Identificador', 'dateCreated': 'Data Criação', 'dataPagamento': 'Data Pagamento', 'dataCancelamento': 'Data Cancelamento',
+            List fields = ['id', 'dateEmissao', 'dataPagamento', 'dataCancelamento', 'parcela', 'tipoLancamento', 'descricao']
+            Map labels = ['id'     : 'Identificador', 'dateEmissao': 'Data Emissão', 'dataPagamento': 'Data Pagamento', 'dataCancelamento': 'Data Cancelamento',
                           'parcela': 'Parcelas', 'tipoLancamento': 'Tipo', 'descricao': 'Descrição']
             Map parameters = ["column.widths": [0.1, 0.2, 0.2, 0.2, 0.1, 0.2, 0.6]]
 

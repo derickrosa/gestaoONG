@@ -50,6 +50,9 @@
 
 <g:render template="/despesa/modalCreate" model="[centroCustoId: centroCustoInstance.id]"/>
 
+<asset:javascript src="plugins/jquery/jquery.dataTables.min.js"/>
+<asset:assetPath src="jquery.dataTables.min.css"/>
+
 <script>
     var table = $("#tabelaDespesas").DataTable({
         "columns": [
@@ -62,10 +65,10 @@
                 data: "name",
                 "orderable": false,
                 render: function (data, type, full, meta) {
-                    console.log(data);
-                    console.log(type);
-                    console.log(full);
-                    console.log(meta);
+//                    console.log(data);
+//                    console.log(type);
+//                    console.log(full);
+//                    console.log(meta);
 
                     var render = '<g:link controller="despesa" action="show" id="toReplace">' + full.name + '</g:link>';
 
@@ -76,9 +79,7 @@
             {data: "tipo", "orderable": false},
             {data: "data", "orderable": false},
             {data: "destino"}
-        ],
-
-        "language": languagePtBr
+        ]
     });
 
     document.getElementById("formCriacaoDespesa").addEventListener("despesaCriada", function (e) {

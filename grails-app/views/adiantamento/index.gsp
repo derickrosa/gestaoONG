@@ -1,11 +1,10 @@
-
-<%@ page import="com.acception.cadastro.Adiantamento" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="layout" content="layout-restrito">
     <g:set var="entityName" value="${message(code: 'adiantamento.label', default: 'Adiantamento')}"/>
     <title><g:message code="default.list.label" args="[entityName]"/></title>
+    <export:resource/>
 </head>
 
 <body>
@@ -13,57 +12,58 @@
     <g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="[entityName]" /></g:link>
 </p>
 
+<pesquisa:painel>
+    <div class="form-group col-md-4">
+        <label>Período</label>
+        <div class="input-group input-daterange">
+            <g:textField class="form-control" placeholder="Data Inicial" name="pesquisa.dataInicio" value="${pesquisa.dataInicio}"/>
+            <div class="input-group-addon">até</div>
+            <g:textField class="form-control" placeholder="Data Final" name="pesquisa.dataFinal" value="${pesquisa.dataFinal}"/>
+        </div>
+    </div>
+
+    <div class="form-group col-md-2">
+        <label for="pesquisa.centroCusto">Centro de Custo</label>
+        <g:select name="pesquisa.centroCusto" from="${com.acception.cadastro.CentroCusto.list()}"
+                  class="form-control select" noSelection="['': 'Todos']" optionKey="id"
+                  value="${pesquisa?.centroCusto}"/>
+    </div>
+
+</pesquisa:painel>
+
 <g:if test="${adiantamentoInstanceCount > 0}">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-
-            <g:sortableColumn property="descricao"
-                              title="${message(code: 'adiantamento.descricao.label', default: 'Descricao')}"/>
-
+            <g:sortableColumn params="${pesquisa}" property="id" title="Identificador"/>
+            <g:sortableColumn params="${pesquisa}" property="data" title="${message(code: 'adiantamento.data.label', default: 'Data')}"/>
             <th><g:message code="adiantamento.lancamentoOriginal.label" default="Lancamento Original"/></th>
-
             <th><g:message code="adiantamento.centroCusto.label" default="Centro Custo"/></th>
-
-            <g:sortableColumn property="data"
-                              title="${message(code: 'adiantamento.data.label', default: 'Data')}"/>
-
-            <g:sortableColumn property="dateCreated"
-                              title="${message(code: 'adiantamento.dateCreated.label', default: 'Date Created')}"/>
-
-            <g:sortableColumn property="lastUpdated"
-                              title="${message(code: 'adiantamento.lastUpdated.label', default: 'Last Updated')}"/>
-
+            <th><g:message code="adiantamento.descricao.label" default="Descrição"/></th>
         </tr>
         </thead>
         <tbody>
-        <g:each in="${adiantamentoInstanceList}" status="i" var="adiantamentoInstance">
-            <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-
-                <td><g:link action="show"
-                            id="${adiantamentoInstance.id}">${fieldValue(bean: adiantamentoInstance, field: "descricao")}</g:link></td>
-
-                <td>${fieldValue(bean: adiantamentoInstance, field: "lancamentoOriginal")}</td>
-
-                <td>${fieldValue(bean: adiantamentoInstance, field: "centroCusto")}</td>
-
-                <td><g:formatDate date="${adiantamentoInstance.data}"/></td>
-
-                <td><g:formatDate date="${adiantamentoInstance.dateCreated}"/></td>
-
-                <td><g:formatDate date="${adiantamentoInstance.lastUpdated}"/></td>
-
+        <g:each in="${adiantamentoInstanceList}" var="adiantamentoInstance">
+            <tr>
+                <td><g:link action="show" id="${adiantamentoInstance.id}">${adiantamentoInstance.id}</g:link></td>
+                <td><g:formatDate date="${adiantamentoInstance.data}" format="dd/MM/yyyy"/></td>
+                <td><g:link controller="lancamento" action="show" id="${adiantamentoInstance?.lancamentoOriginal?.id}">${fieldValue(bean: adiantamentoInstance, field: "lancamentoOriginal")}</g:link></td>
+                <td><g:link controller="centroCusto" action="show" id="${adiantamentoInstance?.centroCusto?.id}">${fieldValue(bean: adiantamentoInstance, field: "centroCusto")}</g:link></td>
+                <td><g:fieldValue field="descricao" bean="${adiantamentoInstance}"/></td>
             </tr>
         </g:each>
         </tbody>
     </table>
 
-    <div class="pagination">
-        <g:paginate total="${adiantamentoInstanceCount ?: 0}"/>
-    </div>
+    <g:paginate total="${adiantamentoInstanceCount ?: 0}"/>
+
+    <blockquote>
+        <p>Exportar Relatório</p>
+        <export:formats formats="['excel', 'pdf']" params="${pesquisa}"/>
+    </blockquote>
 </g:if>
 <g:else>
-    <div class="well text-center"><strong>SEM REGISTROS</strong></div>
+    <pesquisa:dadosNaoEncontrados/>
 </g:else>
 </body>
 </html>

@@ -13,14 +13,22 @@
 </p>
 
 <pesquisa:painel>
-    <div class="form-group col-md-2">
-        <label for="pesquisa.dataCriacao">Data Criação</label>
-        <g:textField name="pesquisa.dataCriacao" class="form-control datepicker" value="${pesquisa.dataCriacao}"/>
+    <div class="form-group col-md-4">
+        <label>Período de Emissão</label>
+        <div class="input-group input-daterange">
+            <g:textField class="form-control" placeholder="Data Inicial" name="pesquisa.dataEmissaoInicio" value="${pesquisa.dataEmissaoInicio}"/>
+            <div class="input-group-addon">até</div>
+            <g:textField class="form-control" placeholder="Data Final" name="pesquisa.dataEmissaoFinal" value="${pesquisa.dataEmissaoFinal}"/>
+        </div>
     </div>
 
-    <div class="form-group col-md-2">
-        <label for="pesquisa.dataPagamento">Data Pagamento</label>
-        <g:textField name="pesquisa.dataPagamento" class="form-control datepicker" value="${pesquisa.dataPagamento}"/>
+    <div class="form-group col-md-4">
+        <label>Período de Pagamento</label>
+        <div class="input-group input-daterange">
+            <g:textField class="form-control" placeholder="Data Inicial" name="pesquisa.dataPagamentoInicio" value="${pesquisa.dataPagamentoInicio}"/>
+            <div class="input-group-addon">até</div>
+            <g:textField class="form-control" placeholder="Data Final" name="pesquisa.dataPagamentoFinal" value="${pesquisa.dataPagamentoFinal}"/>
+        </div>
     </div>
 
     <div class="form-group col-md-2">

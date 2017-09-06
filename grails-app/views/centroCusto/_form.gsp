@@ -574,8 +574,6 @@
         $('#myModal').modal('show');
 
         tableFuncionarios.loadData(tableData);
-
-        $('[name=funcionario]').chosen();
     };
 
     var salvarAlteracoesListaFuncionariosItemOrcamentario = function() {
@@ -604,7 +602,7 @@
     var tableFuncionarios;
 
     var initializeTableFuncionarios = function () {
-        var html = `<g:select class='form-control' from='${com.acception.cadastro.Funcionario.list()}'
+        var html = `<g:select class='form-control select' from='${com.acception.cadastro.Funcionario.list()}'
                     name='funcionario' optionKey="id" data-placeholder='Selecione um funcionário...' noSelection="['': '']"/>`
 
         var tableElement = $("#listaFuncionariosTable");

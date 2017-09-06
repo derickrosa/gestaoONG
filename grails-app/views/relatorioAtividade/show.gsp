@@ -6,7 +6,7 @@
     <g:set var="entityName" value="${message(code: 'relatorioAtividade.label', default: 'RelatorioAtividade')}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <asset:stylesheet src="uploadfile.css"/>
+    <asset:stylesheet src="jquery.uploadfile.css"/>
     <asset:javascript src="jquery.uploadfile.min.js"/>
 </head>
 

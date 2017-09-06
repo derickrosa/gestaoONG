@@ -6,69 +6,52 @@
     <meta name="layout" content="layout-restrito">
     <g:set var="entityName" value="${message(code: 'atividade.label', default: 'Atividade')}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <asset:stylesheet src="uploadfile.css"/>
+    <asset:stylesheet src="jquery.uploadfile.css"/>
     <asset:javascript src="jquery.uploadfile.min.js"/>
 </head>
 
 <body>
-<div id="content">
-    <div class="inner" style="min-height: 700px;">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1><g:message code="default.show.label" args="[entityName]"/></h1>
-            </div>
-        </div>
-        <hr/>
-        <!--BLOCK SECTION -->
-        <div class="nav" role="navigation">
-            <p>
-                <g:link class="btn btn-default" action="index"><span class="glyphicon glyphicon-list"></span> <g:message
-                        code="default.list.label" args="[entityName]"/></g:link>
-            %{--<g:link class="btn btn-default" action="create"><span
-                    class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label"
-                                                                        args="[entityName]"/></g:link>--}%
-            </p>
-        </div>
+<p>
+    <g:link class="btn btn-default" action="index"><span class="glyphicon glyphicon-list"></span> <g:message
+            code="default.list.label" args="[entityName]"/></g:link>
+</p>
 
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#dadosBasicos" data-toggle="tab" aria-expanded="false">Dados Básicos</a>
-            </li>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#dadosBasicos" data-toggle="tab" aria-expanded="false">Dados Básicos</a>
+    </li>
 
-            <g:if test="${!atividadeInstance.isSubatividade()}">
+    <g:if test="${!atividadeInstance.isSubatividade()}">
 
-                <li><a href="#subatividades " data-toggle="tab" aria-expanded="true">Subatividades / Módulos</a>
-                </li>
-            </g:if>
+        <li><a href="#subatividades " data-toggle="tab" aria-expanded="true">Subatividades / Módulos</a>
+        </li>
+    </g:if>
 
-            <li><a href="#relatorios" data-toggle="tab" aria-expanded="true">Relatórios</a>
-            </li>
+    <li><a href="#relatorios" data-toggle="tab" aria-expanded="true">Relatórios</a>
+    </li>
 
-            <li><a href="#despesas" data-toggle="tab" aria-expanded="true">Despesas</a></li>
-        </ul>
+    <li><a href="#despesas" data-toggle="tab" aria-expanded="true">Despesas</a></li>
+</ul>
 
-        <div class="tab-content">
-            <div class="tab-pane fade in active" id="dadosBasicos">
-                <g:render template="showAtividade" model="[atividadeInstance: atividadeInstance]"/>
-            </div>
-            <g:if test="${!atividadeInstance.isSubatividade()}">
-                <div class="tab-pane fade in" id="subatividades">
-                    <g:render template="showSubatividades" model="[atividadeInstance: atividadeInstance]"/>
-                </div>
-            </g:if>
-
-            <div class="tab-pane fade in" id="relatorios">
-                <g:render template="showRelatorios" model="[atividadeInstance: atividadeInstance]"/>
-            </div>
-
-            <div class="tab-pane fade in" id="despesas">
-                <g:render template="showDespesas" model="[atividadeInstance: atividadeInstance]"/>
-            </div>
-
-        </div><br/>
-
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="dadosBasicos">
+        <g:render template="showAtividade" model="[atividadeInstance: atividadeInstance]"/>
     </div>
-</div>
+    <g:if test="${!atividadeInstance.isSubatividade()}">
+        <div class="tab-pane fade in" id="subatividades">
+            <g:render template="showSubatividades" model="[atividadeInstance: atividadeInstance]"/>
+        </div>
+    </g:if>
+
+    <div class="tab-pane fade in" id="relatorios">
+        <g:render template="showRelatorios" model="[atividadeInstance: atividadeInstance]"/>
+    </div>
+
+    <div class="tab-pane fade in" id="despesas">
+        <g:render template="showDespesas" model="[atividadeInstance: atividadeInstance]"/>
+    </div>
+
+</div><br/>
+
 <script>
     $(document).ready(function () {
         $("#fileuploader").uploadFile({
@@ -104,7 +87,7 @@
                         console.log('Documento removido...')
                     }
                 });
-            },
+            }
         });
     });
 </script>

@@ -23,7 +23,7 @@ function configurarMascaras() {
 }
 
 function configurarDatas() {
-    var config = {language: 'pt-BR'};
+    var config = {language: 'pt-BR', autoclose: true};
 
     $('input.datepicker').datepicker(config);
     $('div.input-daterange').datepicker(config);
