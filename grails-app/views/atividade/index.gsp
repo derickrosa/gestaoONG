@@ -62,9 +62,9 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <g:sortableColumn params="${pesquisa}" property="nome" title="${message(code: 'atividade.nome.label', default: 'Nome')}"/>
             <g:sortableColumn params="${pesquisa}" property="codigo" title="${message(code: 'atividade.codigo.label', default: 'Código')}"/>
-            <th><g:message code="atividade.atividade.label" default="Atividade"/></th>
+            <g:sortableColumn params="${pesquisa}" property="nome" title="${message(code: 'atividade.nome.label', default: 'Nome')}"/>
+            <th><g:message code="atividade.atividade.label" default="Tipo"/></th>
             <th><g:message code="atividade.centroCusto.label" default="Centro de Custo"/></th>
             <th>Período</th>
             <g:sortableColumn params="${pesquisa}" property="local" title="${message(code: 'atividade.local.label', default: 'Local')}"/>
@@ -75,9 +75,9 @@
         <g:each in="${atividadeInstanceList}" var="atividadeInstance">
             <tr>
                 <td><g:link action="show"
-                            id="${atividadeInstance.id}">${fieldValue(bean: atividadeInstance, field: "nome")}</g:link></td>
-                <td>${fieldValue(bean: atividadeInstance, field: "codigo")}</td>
-                <td>${fieldValue(bean: atividadeInstance, field: "atividade")}</td>
+                            id="${atividadeInstance.id}">${fieldValue(bean: atividadeInstance, field: "codigo")}</g:link></td>
+                <td>${fieldValue(bean: atividadeInstance, field: "nome")}</td>
+                <td>${fieldValue(bean: atividadeInstance, field: "tipo")}</td>
                 <td>${atividadeInstance.centroCusto*.nome.join(', ')}</td>
                 <td><g:formatDate date="${atividadeInstance.inicio}" format="dd/MM/yyyy"/> - <g:formatDate date="${atividadeInstance.termino}" format="dd/MM/yyyy"/></td>
                 <td>${fieldValue(bean: atividadeInstance, field: "local")}</td>

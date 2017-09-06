@@ -29,7 +29,7 @@
     <tbody>
         <g:each in="${codigosItensOrcamentarios.sort()}" var="codigo">
             <tr>
-                <td><strong>Item | ${codigo}</strong></td>
+                <td align="left"><strong>${codigo} - ${listaOrcamentos.itensOrcamentarios.flatten().find{ it.codigo == codigo}.nome}</strong></td>
 
                 <g:each in="${listaOrcamentos}" var="orcamento">
                     <g:set var="itemOrcamentario" value="${orcamento.itensOrcamentarios.find { it.codigo == codigo}}"/>

@@ -31,16 +31,16 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <g:sortableColumn params="${pesquisa}" property="nome" title="${message(code: 'linhaAcao.nome.label', default: 'Nome')}"/>
             <g:sortableColumn params="${pesquisa}" property="codigo" title="${message(code: 'linhaAcao.codigo.label', default: 'Código')}"/>
+            <g:sortableColumn params="${pesquisa}" property="nome" title="${message(code: 'linhaAcao.nome.label', default: 'Nome')}"/>
             <th><g:message code="linhaAcao.descricao.label" default="Descrição"/></th>
         </tr>
         </thead>
         <tbody>
         <g:each in="${linhaAcaoInstanceList}" var="linhaAcaoInstance">
             <tr>
-                <td><g:link action="show" id="${linhaAcaoInstance.id}">${fieldValue(bean: linhaAcaoInstance, field: "nome")}</g:link></td>
-                <td>${fieldValue(bean: linhaAcaoInstance, field: "codigo")}</td>
+                <td><g:link action="show" id="${linhaAcaoInstance.id}">${fieldValue(bean: linhaAcaoInstance, field: "codigo")}</g:link></td>
+                <td>${fieldValue(bean: linhaAcaoInstance, field: "nome")}</td>
                 <td>${fieldValue(bean: linhaAcaoInstance, field: "descricao")}</td>
             </tr>
         </g:each>
