@@ -10,7 +10,6 @@
 
 <body>
 
-
 <p>
     <g:link class="btn btn-default" action="index"><span class="glyphicon glyphicon-list"></span> <g:message
             code="default.list.label" args="[entityName]"/></g:link>

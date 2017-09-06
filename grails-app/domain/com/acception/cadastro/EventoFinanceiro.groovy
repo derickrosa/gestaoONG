@@ -1,13 +1,12 @@
 package com.acception.cadastro
 
-class EventoFinanceiro {
-
-    Date dateCreated
-    Date lastUpdated
-
+abstract class EventoFinanceiro {
     Date data
     String descricao
     Double valor
+
+    Date dateCreated
+    Date lastUpdated
 
     List<Lancamento> lancamentos
 
@@ -16,6 +15,10 @@ class EventoFinanceiro {
     static transients = ['lancamentos']
 
     static constraints = {
-        descricao nullable: true
+        data nullable: false
+        descricao nullable: true, blank: true
+        valor nullable: false, min: 0D
+        dateCreated nullable: false
+        lastUpdated nullable: false
     }
 }

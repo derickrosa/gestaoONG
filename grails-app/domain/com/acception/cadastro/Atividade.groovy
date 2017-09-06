@@ -27,12 +27,12 @@ class Atividade {
     Cidade municipio
     String local
 
-    static hasMany=[arquivos:Arquivo, linhas:LinhaAcao, despesas:Despesa, relatorios:RelatorioAtividade, centroCusto:CentroCusto]
+    static hasMany = [arquivos: Arquivo, linhas: LinhaAcao, despesas: Despesa, relatorios: RelatorioAtividade, centroCusto: CentroCusto]
     static belongsTo = [LinhaAcao, CentroCusto]
-    static transients = ['periodo','subAtividades']
+    static transients = ['periodo', 'subAtividades']
 
     static constraints = {
-        nome maxSize:100
+        nome maxSize: 100
         nomeNormalizado nullable: true
         arquivos nullable: true
         descricao nullable: true
@@ -67,7 +67,7 @@ class Atividade {
         Atividade.findAllByAtividade(this)
     }
 
-    def getPeriodo(){
+    def getPeriodo() {
         def periodo
 
         def date1 = Util.truncDate(this.inicio)
@@ -81,8 +81,6 @@ class Atividade {
     }
 
     def beforeInsert() {
-        fillNomeNormalizado()
-
         if (!inicio) {
             inicio = new Date()
         }
@@ -92,11 +90,11 @@ class Atividade {
     }
 
     String toString() {
-        "${nome + ' [' + status+']'}"
+        "${nome + ' [' + status + ']'}"
     }
 
-    def isSubatividade(){
-        if(this.atividade)
+    def isSubatividade() {
+        if (this.atividade)
             true
         else
             false

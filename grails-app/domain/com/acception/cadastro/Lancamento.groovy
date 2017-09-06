@@ -28,16 +28,16 @@ class Lancamento {
     static belongsTo = [centroCusto: CentroCusto]
 
     static constraints = {
-        valor nullable:true
-        descricao nullable:true
-        tipoLancamento nullable:true
-        papel nullable:true
-        statusLancamento nullable:true
-        dataEmissao nullable:true
-        dataPagamento nullable:true
+        valor nullable: true, min: 0D
+        descricao nullable: true, blank: true
+        tipoLancamento nullable: true
+        papel nullable: true
+        statusLancamento nullable: true
+        dataEmissao nullable: true
+        dataPagamento nullable: true
         dataCancelamento nullable: true
-        parcela nullable:true
-        tipoAjuste nullable:true
+        parcela nullable: true
+        tipoAjuste nullable: true
         descricao nullable: true
         codigoLancamento nullable: true
         numeroTitulo nullable: false
@@ -53,11 +53,7 @@ class Lancamento {
     }
 
     String toString() {
-        def df=new java.text.SimpleDateFormat('dd/MM/yyyy')
+        def df = new java.text.SimpleDateFormat('dd/MM/yyyy')
         "${this.tipoLancamento} #${this.id} ST: ${this.statusLancamento} VL: ${this.valor} DE: ${df.format(this.dataEmissao)}"
     }
-
-
-
-
 }
