@@ -19,7 +19,6 @@ class Lancamento {
     Anexo documento
     Papel papel
     Integer parcela
-
     TipoAjuste tipoAjuste
     //TipoPagamento tipoPagamento
 
@@ -28,7 +27,7 @@ class Lancamento {
     static belongsTo = [centroCusto: CentroCusto]
 
     static constraints = {
-        valor nullable: true, min: 0D
+        valor nullable: true
         descricao nullable: true, blank: true
         tipoLancamento nullable: true
         papel nullable: true

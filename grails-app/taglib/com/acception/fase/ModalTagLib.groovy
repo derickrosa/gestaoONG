@@ -48,7 +48,7 @@ class ModalTagLib {
         String modalTitle = attrs.remove('modalTitle') ?: "Título Modal"
         boolean closeButton = attrs.containsKey('closeButton') ?: true
 
-        out << "<div class=\"modal fade\" id=\"${id}\" tabindex=\"-1\" role=\"dialog\">"
+        out << "<div class=\"modal fade\" id=\"${id}\" role=\"dialog\">"
         out << "    <div class=\"modal-dialog\" role=\"document\">"
         out << "        <div class=\"modal-content\">"
         out << "            <div class=\"modal-header\">"

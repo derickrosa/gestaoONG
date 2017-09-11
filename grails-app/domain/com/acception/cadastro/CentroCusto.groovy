@@ -1,5 +1,6 @@
 package com.acception.cadastro
 
+import com.acception.cadastro.enums.StatusLancamento
 import com.acception.cadastro.enums.StatusProjeto
 import com.acception.cadastro.enums.TipoLancamento
 import com.acception.util.Util
@@ -52,12 +53,10 @@ class CentroCusto {
     }
 
     def getSaldo() {
-        def despesas = 0
-        def creditos = this.lancamentos.findAll { it.tipoLancamento == TipoLancamento.CREDITO }
+        def despesas = Math.abs(this.valorTotalDespesas)
+        def entradas = this.valorTotalEntradas
 
-        def valorCredito = creditos*.valor.sum() ?: 0
-
-        return valorCredito - despesas
+        return entradas - despesas
     }
 
     def getSaldoInicial() {
@@ -78,6 +77,30 @@ class CentroCusto {
 
     def getFuncionarios() {
         return orcamentos.itensOrcamentarios.salariosFuncionarios.collect{it.funcionario}.flatten().unique()
+    }
+
+    def getValorTotalDespesas() {
+        return Lancamento.createCriteria().list {
+            eq('centroCusto', this)
+            eq('statusLancamento', StatusLancamento.BAIXADO)
+            eq('tipoLancamento', TipoLancamento.DEBITO)
+
+            projections {
+                sum "valor"
+            }
+        }[0]
+    }
+
+    def getValorTotalEntradas() {
+        return Lancamento.createCriteria().list {
+            eq('centroCusto', this)
+            eq('statusLancamento', StatusLancamento.BAIXADO)
+            eq('tipoLancamento', TipoLancamento.CREDITO)
+
+            projections {
+                sum "valor"
+            }
+        }[0]
     }
 
     String toString() {

@@ -175,7 +175,9 @@ class FornecedorController {
         } else if (params.tipoPessoa == "JURIDICA") {
             p = new PessoaJuridica(params.participante)
         } else {
-            render(['success': false, 'error': 'Escolha um tipo de fornecedor válido!'] as JSON)
+            response.status = NOT_ACCEPTABLE.value()
+            respond([error: "Escolha um tipo de fornecedor válido!"])
+            return
         }
 
         if (params.telefoneRaw) {
@@ -193,7 +195,11 @@ class FornecedorController {
         p.save(flush: true, failOnError: true)
         fornecedor.save(flush: true, failOnError: true)
 
-        render(['success': true, 'fornecedor': ['id': fornecedor.id, 'nome': fornecedor.toString()]] as JSON)
+        response.status = OK.value()
+        respond(['msg': 'Fornecedor criado com sucesso!',
+                 'fornecedor':
+                         ['id': fornecedor.id,
+                          'nome': fornecedor.toString()]])
     }
 
     protected void notFound() {

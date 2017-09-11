@@ -94,8 +94,17 @@ class DespesaController {
         def despesa = new Despesa(params)
         despesa.centroCusto = CentroCusto.get(params.centroCusto?.id)
 
-        despesa.valor = Util.parse(params.valor)
-        despesa.save()
+        despesa.valor = Util.parse(params.valor) * -1
+        despesa.dateCreated = new Date()
+        despesa.lastUpdated = new Date()
+
+        despesa.save(flush: true, failOnError: true)
+
+        if (! despesa.save(flush: true)) {
+            response.status = INTERNAL_SERVER_ERROR.value()
+            respond(['error': 'Ocorreu um erro interno no sistema. Contate o suporte técnico.'])
+            return
+        }
 
         def lancamento = new Lancamento(eventoFinanceiro: despesa)
 
@@ -109,11 +118,12 @@ class DespesaController {
         lancamento.papel = Papel.get(params.papel.id)
         lancamento.save(flush: true, failOnError: true)
 
-        despesa.save(flush: true, failOnError: true)
-
-        def despesaResponse = ['id': despesa.id, 'destino': despesa.lancamento.papel?.toString()]
-
-        render(['success': true, 'despesa': despesaResponse] as JSON)
+        response.status = CREATED.value()
+        respond([msg: "Despesa criada com sucesso", object: [data: despesa.data.format('dd/MM/yyy'),
+                                                             tipo: lancamento.tipoLancamento.descricao,
+                                                             valor: despesa.valor,
+                                                             origem: lancamento.papel.toString(),
+                                                             saldo: 0]])
     }
 
     def edit(Despesa despesaInstance) {

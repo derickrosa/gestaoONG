@@ -1,5 +1,8 @@
 <%@ page import="com.acception.cadastro.enums.TipoCusto; com.acception.cadastro.enums.RamoFuncionario" %>
 
+<asset:javascript src="plugins/jquery/jquery.dataTables.min.js"/>
+<asset:stylesheet src="jquery.dataTables.min.css"/>
+
 <h4 class="text-center">Funcionários Atuais do Centro de Custo</h4>
 
 <g:if test="${listaFuncionarios}">

@@ -1,5 +1,6 @@
 package com.acception.cadastro
 
+import com.acception.cadastro.enums.StatusLancamento
 import com.acception.cadastro.enums.TipoLancamento
 import com.acception.util.Util
 import grails.converters.JSON
@@ -80,17 +81,17 @@ class LancamentoController {
         lancamento.numeroTitulo = 0
         lancamento.dataEmissao = Date.parse('dd/MM/yyyy', params.dataCredito)
         lancamento.descricao = params.descricaoCredito
+        lancamento.statusLancamento = StatusLancamento.BAIXADO
         lancamento.centroCusto = CentroCusto.get(params.centroCustoCredito as Long)
         lancamento.papel = Papel.get(params.papelCredito as Long)
         lancamento.save(flush: true, failOnError: true)
 
-        render(['success': true, 'credito': ['id'         : lancamento.id,
-                                             'tipo'       : lancamento.tipoLancamento,
-                                             'descricao'  : lancamento.descricao,
-                                             'valor'      : lancamento.valor,
-                                             'data'       : lancamento.dataEmissao.format('dd/MM/yyyy'),
-                                             'centroCusto': ['nome': lancamento.centroCusto.toString(), 'id': lancamento.centroCusto.id],
-                                             'papel'      : lancamento.papel ? lancamento.papel.toString() : '']] as JSON)
+        response.status = CREATED.value()
+        respond([msg: "Crédito criado com sucesso", object: [data: lancamento.dataEmissao.format('dd/MM/yyy'),
+                                                             tipo: lancamento.tipoLancamento.descricao,
+                                                             valor: lancamento.valor,
+                                                             origem: lancamento.papel ? lancamento.papel.toString() : '',
+                                                             saldo: 0]])
     }
 
     @Transactional
