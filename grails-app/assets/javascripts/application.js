@@ -1,3 +1,4 @@
+//= require prototypes.js
 //= require /plugins/jquery/jquery-2.0.3.min.js
 //= require /plugins/jquery/jquery.mask.min.js
 //= require /plugins/jquery/jquery.maskMoney.min.js
@@ -18,7 +19,7 @@
 //= require sb-admin-2.min.js
 //= require jquery.steps.min.js
 //= require jquery.edittable2.js
-//= require configuracao-inputs.js
+//= require configuracoes.js
 
 /**
  * Aqui os métodos de configurações dos inputs provindos

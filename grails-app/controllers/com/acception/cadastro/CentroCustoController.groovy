@@ -16,17 +16,19 @@ import grails.transaction.Transactional
 class CentroCustoController {
     def exportService
     private static final okcontents = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']
-    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "POST", search: "POST", delete: "DELETE"]
 
     def index() {
         params?.remove('max')
-        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'codigo', 'ano', 'financiador', 'status'])
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'codigo', 'ano', 'anoInicial', 'anoFinal', 'financiador', 'status'])
         pesquisa = Util.trimMap(pesquisa)
 
         def criteria = {
             if (pesquisa.containsKey('nome')) ilike('nomeNormalizado', "%${Util.normalizar(pesquisa.nome)}%")
             if (pesquisa.containsKey('codigo')) eq('codigo', pesquisa.codigo)
             if (pesquisa.containsKey('ano')) eq('ano', pesquisa.ano as Integer)
+            if (pesquisa.containsKey('anoInicial')) ge('ano', pesquisa.anoInicial as Integer)
+            if (pesquisa.containsKey('anoFinal')) le('ano', pesquisa.anoFinal as Integer)
             if (pesquisa.containsKey('financiador')) {
                 financiador {
                     idEq(pesquisa.financiador as Long)
@@ -50,10 +52,24 @@ class CentroCustoController {
         }
 
         params.max = Math.min(params.max ?: 10, 100)
+        def model = [centroCustoInstanceList : CentroCusto.createCriteria().list(params, criteria),
+                     centroCustoInstanceCount: CentroCusto.createCriteria().count(criteria),
+                     pesquisa                : pesquisa]
 
-        [centroCustoInstanceList : CentroCusto.createCriteria().list(params, criteria),
-         centroCustoInstanceCount: CentroCusto.createCriteria().count(criteria),
-         pesquisa                : pesquisa]
+        withFormat {
+            html { model }
+            json { render model as JSON }
+        }
+    }
+
+    def search() {
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['anoInicial', 'anoFinal'])
+
+
+
+
+
+        respond(pesquisa)
     }
 
     def show(CentroCusto centroCustoInstance) {
