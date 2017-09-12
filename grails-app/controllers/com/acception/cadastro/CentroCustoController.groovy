@@ -16,17 +16,19 @@ import grails.transaction.Transactional
 class CentroCustoController {
     def exportService
     private static final okcontents = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']
-    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "POST", search: "POST", delete: "DELETE"]
 
     def index() {
         params?.remove('max')
-        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'codigo', 'ano', 'financiador', 'status'])
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'codigo', 'ano', 'anoInicial', 'anoFinal', 'financiador', 'status'])
         pesquisa = Util.trimMap(pesquisa)
 
         def criteria = {
             if (pesquisa.containsKey('nome')) ilike('nomeNormalizado', "%${Util.normalizar(pesquisa.nome)}%")
             if (pesquisa.containsKey('codigo')) eq('codigo', pesquisa.codigo)
             if (pesquisa.containsKey('ano')) eq('ano', pesquisa.ano as Integer)
+            if (pesquisa.containsKey('anoInicial')) ge('ano', pesquisa.anoInicial as Integer)
+            if (pesquisa.containsKey('anoFinal')) le('ano', pesquisa.anoFinal as Integer)
             if (pesquisa.containsKey('financiador')) {
                 financiador {
                     idEq(pesquisa.financiador as Long)
@@ -50,10 +52,24 @@ class CentroCustoController {
         }
 
         params.max = Math.min(params.max ?: 10, 100)
+        def model = [centroCustoInstanceList : CentroCusto.createCriteria().list(params, criteria),
+                     centroCustoInstanceCount: CentroCusto.createCriteria().count(criteria),
+                     pesquisa                : pesquisa]
 
-        [centroCustoInstanceList : CentroCusto.createCriteria().list(params, criteria),
-         centroCustoInstanceCount: CentroCusto.createCriteria().count(criteria),
-         pesquisa                : pesquisa]
+        withFormat {
+            html { model }
+            json { render model as JSON }
+        }
+    }
+
+    def search() {
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['anoInicial', 'anoFinal'])
+
+
+
+
+
+        respond(pesquisa)
     }
 
     def show(CentroCusto centroCustoInstance) {
@@ -446,5 +462,39 @@ class CentroCustoController {
         } else {
             render(['success': false] as JSON)
         }
+    }
+
+    def getExtratoFinanceiro(Long centroCustoId) {
+        CentroCusto centroCusto = CentroCusto.get(centroCustoId)
+
+        def extratoFinanceiro = []
+
+        def lancamentos = Lancamento.createCriteria().list {
+            eq('centroCusto', centroCusto)
+            eq('statusLancamento', StatusLancamento.BAIXADO)
+            order("dataEmissao", params.order)
+
+            if (params.dataInicio) {
+                ge('dataEmissao', Date.parse('dd/MM/yyyy', params.dataInicio))
+            }
+
+            if (params.dataFinal) {
+                le('dataEmissao', Date.parse('dd/MM/yyyy', params.dataFinal))
+            }
+        }
+
+        def saldo = 0
+
+        lancamentos.each { Lancamento lancamento ->
+            saldo += lancamento.valor
+
+            extratoFinanceiro << ['data': lancamento.dataEmissao.format('dd/MM/yyyy'),
+                                  'tipo': lancamento.eventoFinanceiro instanceof Adiantamento ? "Pagamento Adiantado" : lancamento.tipoLancamento.descricao,
+                                  'valor': lancamento.valor,
+                                  'origem': lancamento.papel ? lancamento.papel.toString() : '',
+                                  'saldo': saldo.round(2)]
+        }
+
+        respond(extratoFinanceiro)
     }
 }

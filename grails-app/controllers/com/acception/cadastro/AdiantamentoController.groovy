@@ -138,6 +138,8 @@ class AdiantamentoController {
         def pa = new Adiantamento(params)
 
         pa.valor = Util.parse(params.valor)
+        pa.dateCreated = new Date()
+        pa.lastUpdated = new Date()
 
         pa.lancamentoOriginal = new Lancamento()
         pa.lancamentoOriginal.numeroTitulo = pa.id.toString()
@@ -145,7 +147,7 @@ class AdiantamentoController {
         pa.lancamentoOriginal.save()
         pa.save()
 
-        pa.lancamentoOriginal.valor = pa.valor
+        pa.lancamentoOriginal.valor = - pa.valor
         pa.lancamentoOriginal.papel = Funcionario.get(params.papel.id)
         pa.lancamentoOriginal.tipoLancamento = TipoLancamento.DEBITO
         pa.lancamentoOriginal.dataEmissao = pa.data
@@ -156,11 +158,12 @@ class AdiantamentoController {
 
         pa.lancamentoOriginal.save()
 
-        def pagamentoAdiantado = ['id': pa.id]
-
-        Util.updateResponseWithValuesToSendBack(pagamentoAdiantado, pa, params.attributes)
-
-        render(['success': true, 'pagamentoAdiantado': pagamentoAdiantado] as JSON)
+        response.status = CREATED.value()
+        respond([msg: "Pagamento adiantado criado com sucesso", object: [data: pa.data.format('dd/MM/yyy'),
+                                                             tipo: pa.lancamentoOriginal.tipoLancamento.descricao,
+                                                             valor: pa.valor,
+                                                             origem: pa.lancamentoOriginal.papel ? pa.lancamentoOriginal.papel.toString() : '',
+                                                             saldo: 0]])
     }
 
     protected void notFound() {

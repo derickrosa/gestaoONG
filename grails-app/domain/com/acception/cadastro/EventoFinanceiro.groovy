@@ -17,7 +17,7 @@ abstract class EventoFinanceiro {
     static constraints = {
         data nullable: false
         descricao nullable: true, blank: true
-        valor nullable: false, min: 0D
+        valor nullable: false
         dateCreated nullable: false
         lastUpdated nullable: false
     }

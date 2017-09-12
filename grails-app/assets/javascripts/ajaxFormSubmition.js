@@ -5,56 +5,65 @@
 /**
  * Essa função cria uma submissão AJAX ao formulário disponibilizado e
  * deve ser chamada no onready da página. Desabilita todos os inputs do
- * tipo submit e coloca uma animação (carregando) dentro do botão de submit do
- * formulário.
+ * tipo submit (além do próprio form) e coloca uma animação (carregando)
+ * dentro do botão de submit do formulário.
  *
- * ATENÇÃO: alertas do tipo success e error são criados dentro do formulário
- * para serem renderizados de acordo com a resposta do servidor.
+ * ATENÇÃO: alertas do tipo success e error são criados dentro do formulário por
+ * default para serem renderizados de acordo com a resposta do servidor.
+ * Caso não queira esse comportamento, altere o parametro 'createAlerts' para false.
  *
  * @param {DOM Form} form formulário que será enviado via AJAX
  * @param {int delay} tempo de espera (em segundos) antes da submissão ser enviada. defaults 1
  * @param {string dataType} tipo de dado que será enviado e recebido do servidor. defaults 'json'
- * @param {function onSuccess} função que será executada caso os dados sejam enviados com sucesso ao servidor.
- *                              Os dados retornados pelo servidor e o formulário são repassados a essa função.
+ * @param {function onSuccess} função que será executada caso os dados sejam enviados com sucesso ao servidor. Os dados retornados pelo servidor e o formulário são repassados a essa função.
  * @param {function onError} semelhante a onSuccess, porém executada quando há um erro no servidor.
+ * @param {boolean} alertas devem ser criados? defaults true
+ * @param {boolean} resetForm form deve ser resetado ao final da submissão de sucesso? defaults true
  */
-function submitFormByAjax(form, delay, dataType, onSuccess, onError) {
+function submitFormByAjax(form, delay, dataType, onSuccess, onError, createAlerts, resetForm) {
     if (form === undefined) {
         console.error("Formulário não encontrado.");
         return;
     }
 
-    var delay = delay ? delay * 1000 : 1000;
-    var succesAlertComponent = form.find("div.alert-success");
-    var erroAlertComponent = form.find("div.alert-danger");
+    delay = delay !== undefined ? delay * 1000 : 1000;
+    createAlerts = createAlerts === undefined ? true : createAlerts === true;
+    resetForm = resetForm === undefined ? true : resetForm === true;
+    var succesAlertComponent;
+    var erroAlertComponent;
 
-    var criarAlertContainer = function () {
-        var alertsContainer = $('<div id="alertsContainer"></div>');
-        form.prepend(alertsContainer);
+    if (createAlerts) {
+        succesAlertComponent = form.find("div.alert-success");
+        erroAlertComponent = form.find("div.alert-danger");
 
-        return alertsContainer;
-    };
+        var criarAlertContainer = function () {
+            var alertsContainer = $('<div id="alertsContainer"></div>');
+            form.prepend(alertsContainer);
 
-    if (succesAlertComponent.length === 0) {
-        succesAlertComponent = $('<div class="alert alert-success" role="alert"></div>');
-        criarAlertContainer().prepend(succesAlertComponent);
+            return alertsContainer;
+        };
+
+        if (succesAlertComponent.length === 0) {
+            succesAlertComponent = $('<div class="alert alert-success" role="alert"></div>');
+            criarAlertContainer().prepend(succesAlertComponent);
+        }
+        if (erroAlertComponent.length === 0) {
+            var alertsContainer = form.find("div#alertsContainer");
+            if (alertsContainer.length == 0) var alertsContainer = criarAlertContainer();
+
+            erroAlertComponent = $('<div class="alert alert-danger" role="alert"></div>');
+            alertsContainer.prepend(erroAlertComponent);
+        }
+
+        succesAlertComponent.hide();
+        erroAlertComponent.hide();
     }
-    if (erroAlertComponent.length === 0) {
-        var alertsContainer = form.find("div#alertsContainer");
-        if (alertsContainer.length == 0) var alertsContainer = criarAlertContainer();
-
-        erroAlertComponent = $('<div class="alert alert-danger" role="alert"></div>');
-        alertsContainer.prepend(erroAlertComponent);
-    }
-
-    succesAlertComponent.hide();
-    erroAlertComponent.hide();
 
     form.submit(function (event) {
         event.preventDefault();
-        succesAlertComponent.hide();
-        erroAlertComponent.hide();
-        disableSubmits();
+        if (succesAlertComponent) succesAlertComponent.hide();
+        if (erroAlertComponent) erroAlertComponent.hide();
+        disableForm(form);
 
         var method = form.attr('method');
         var dataType = dataType ? dataType : 'json';
@@ -75,8 +84,8 @@ function submitFormByAjax(form, delay, dataType, onSuccess, onError) {
                 data: form.serialize(),
                 dataType: dataType,
                 success: function (data) {
-                    form[0].reset();
-                    if (data.msg) {
+                    if (resetForm) form[0].reset();
+                    if (data.msg && succesAlertComponent) {
                         succesAlertComponent.html(data.msg);
                         succesAlertComponent.show();
                     }
@@ -86,22 +95,22 @@ function submitFormByAjax(form, delay, dataType, onSuccess, onError) {
                 },
                 error: function (request) {
                     console.error(request);
-
-                    if (request.responseJSON.error) {
-                        erroAlertComponent.html(request.responseJSON.error);
-                        erroAlertComponent.show();
+                    if (erroAlertComponent) {
+                        if (dataType == 'json' && request.responseJSON.error) {
+                            erroAlertComponent.html(request.responseJSON.error);
+                            erroAlertComponent.show();
+                        }
+                        else if (request.responseText) {
+                            erroAlertComponent.html(request.responseText);
+                            erroAlertComponent.show();
+                        }
                     }
-                    else if (request.responseText) {
-                        erroAlertComponent.html(request.responseText);
-                        erroAlertComponent.show();
-                    }
-
                     if (onError && typeof onError == 'function') {
                         onError(request, form)
                     }
                 },
                 complete: function () {
-                    enableSubmits();
+                    enableForm(form);
                 }
             });
         };
@@ -112,14 +121,16 @@ function submitFormByAjax(form, delay, dataType, onSuccess, onError) {
     });
 }
 
-function disableSubmits() {
+function disableForm(form) {
     var submits = $('button:submit,input:submit');
     submits.append($('<i class="fa fa-cog fa-spin fa-fw"></i>'));
     submits.attr('disabled', 'disabled');
+    form.attr('disabled', 'disabled');
 }
 
-function enableSubmits() {
+function enableForm(form) {
     var submits = $('button:submit,input:submit');
     submits.removeAttr('disabled');
     submits.find("i.fa-spin").remove();
+    form.removeAttr('disabled');
 }

@@ -1,7 +1,7 @@
 <%@ page import="com.acception.cadastro.Funcionario; com.acception.cadastro.CentroCusto" %>
 
 <div class="row">
-    <div class="col-md-6 form-group fieldcontain">
+    <div class="col-md-12 form-group fieldcontain">
         <label for="centroCusto">
             <g:message code="despesa.centroCusto.label" default="Centro Custo"/>
 
@@ -39,7 +39,7 @@
 
         </label>
 
-        <input required="required" type="text" class="form-control currency" id="valor-PA" name="valor"
+        <input required="required" type="text" class="form-control money" id="valor-PA" name="valor"
                data-allow-negative="false" value="${adiantamentoInstance?.valor}">
     </div>
 

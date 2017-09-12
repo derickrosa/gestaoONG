@@ -18,7 +18,7 @@ input.error, select.error {
         <label for="centroCusto">
             <g:message code="despesa.centroCusto.label" default="Centro Custo"/>
         </label>
-        <g:select class="form-control select" id="centroCusto" name="centroCusto.id" from="${com.acception.cadastro.CentroCusto.list()}"
+        <g:select width="100" class="select" id="centroCusto" name="centroCusto.id" from="${com.acception.cadastro.CentroCusto.list()}"
                   optionKey="id" value="${centroCustoId ?: despesaInstance?.centroCusto?.id}"
                   noSelection="['': 'Selecione um centro de custo...']" required=""/>
     </div>
@@ -110,7 +110,7 @@ input.error, select.error {
 
         </label>
 
-        <input required="required" type="text" class="form-control currency" id="valor" name="valor"
+        <input required="required" type="text" class="form-control money" id="valor" name="valor"
                data-allow-negative="false" value="${despesaInstance?.valor}">
     </div>
 
@@ -129,11 +129,6 @@ input.error, select.error {
 
 <script>
     $(function() {
-        var makeChosenReadOnly = function (selectSelector) {
-            $(selectSelector + ' option:not(:selected)').attr('disabled', true);
-            $(selectSelector).trigger('chosen:updated')
-        };
-
         var refreshFormBasedOnTipoDespesa = function (tipoDespesa) {
             var showInput = function (elementId) {
                 $(elementId).prop("disabled", false).parent().show('slow')
@@ -241,11 +236,5 @@ input.error, select.error {
         $("#tipoDespesa").on('change', function () {
             refreshFormBasedOnTipoDespesa($(this).val());
         });
-
-        var centroCustoId = "${centroCustoId}";
-
-        if (centroCustoId) {
-            makeChosenReadOnly('#centroCusto')
-        }
     })
 </script>
