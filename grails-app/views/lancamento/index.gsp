@@ -8,9 +8,9 @@
 </head>
 
 <body>
-<p>
+%{--<p>
     <g:link class="btn btn-default" action="create"><span class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label" args="[entityName]" /></g:link>
-</p>
+</p>--}%
 
 <pesquisa:painel>
     <div class="form-group col-md-4">
@@ -47,8 +47,9 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <g:sortableColumn params="${pesquisa}" property="id" title="Identificador"/>
+            <g:sortableColumn params="${pesquisa}" property="id" title="Documento"/>
             <g:sortableColumn params="${pesquisa}" property="papel" title="${message(code: 'lancamento.dateCreated.label', default: 'Origem')}"/>
+            <g:sortableColumn params="${pesquisa}" property="centroCusto" title="${message(code: 'lancamento.dateCreated.label', default: 'Centro de Custo')}"/>
             <g:sortableColumn params="${pesquisa}" property="dataEmissao" title="${message(code: 'lancamento.dateCreated.label', default: 'Data de Emissão')}"/>
             <g:sortableColumn params="${pesquisa}" property="dataPagamento" title="${message(code: 'lancamento.dataPagamento.label', default: 'Data Pagamento')}"/>
             <g:sortableColumn params="${pesquisa}" property="tipoLancamento" title="${message(code: 'lancamento.parcela.label', default: 'Tipo de Lançamento')}"/>
@@ -60,6 +61,7 @@
             <tr>
                 <td><g:link action="show" id="${lancamentoInstance.id}">${fieldValue(bean: lancamentoInstance, field: "id")}</g:link></td>
                 <td>${fieldValue(bean: lancamentoInstance, field: "papel.participante.nome")}</td>
+                <td>${fieldValue(bean: lancamentoInstance, field: "centroCusto")}</td>
                 <td><g:formatDate date="${lancamentoInstance.dataEmissao}" format="dd/MM/yyyy"/> </td>
                 <td><g:formatDate date="${lancamentoInstance.dataPagamento}" format="dd/MM/yyyy"/></td>
                 <td>${fieldValue(bean: lancamentoInstance, field: "tipoLancamento.nome")}</td>
