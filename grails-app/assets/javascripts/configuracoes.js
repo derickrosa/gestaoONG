@@ -63,8 +63,96 @@ function configurarWizards() {
     }
 }
 
+function configurarFileUpload() {
+    var files = $("div.fileuploader");
+    var defaultFormat = "json";
+    var loadedFiles;
+
+    function getSelectedId(files) {
+        var selection = loadedFiles.filter(function (f) {
+            return f.name == files[0]
+        });
+
+        return selection[0].id;
+    }
+
+    files.each(function (i, e) {
+        var div = $(e);
+        var uploadUrl = div.data("upload-url");
+        var loadUrl = div.data("load-url");
+        var downloadUrl = div.data("download-url");
+        var deleteUrl = div.data("delete-url");
+
+        if (uploadUrl == null) {
+            console.error("Attribute 'Url' not found in: ");
+            console.error(e);
+            return;
+        }
+        else if (loadUrl == null) {
+            console.error("Attribute 'Load Url' not found in: ");
+            console.error(e);
+            return;
+        }
+        else if (downloadUrl == null) {
+            console.error("Attribute 'Download Url' not found in: ");
+            console.error(e);
+            return;
+        }
+        else if (deleteUrl == null) {
+            console.error("Attribute 'Delete Url' not found in: ");
+            console.error(e);
+            return;
+        }
+
+        function checkUrlFormat(url) {
+            if (!url.contains(".json") && !url.contains(".xml")) console.error("Format not found in " + url);
+        }
+
+        checkUrlFormat(loadUrl);
+        checkUrlFormat(uploadUrl);
+        //checkUrlFormat(deleteUrl);
+
+        div.uploadFile({
+            url: uploadUrl,
+            fileName: "file",
+            showDelete: true,
+            showDownload: true,
+            showPreview: true,
+            previewWidth: "50%",
+            dragDropStr: "<span><b>Arraste e solte arquivos aqui...</b></span>",
+            cancelStr: "Cancele",
+            uploadStr: "Enviar",
+            onLoad: function (obj) {
+                $.ajax({
+                    cache: false,
+                    url: loadUrl,
+                    dataType: defaultFormat,
+                    success: function (data) {
+                        loadedFiles = data;
+                        for (var i = 0; i < data.length; i++) {
+                            obj.createProgress(data[i].name, data[i].icon, data[i].size);
+                        }
+                    }
+                });
+            },
+            downloadCallback: function (files) {
+                var id = getSelectedId(files);
+                location.href = downloadUrl + "/" + id;
+            },
+            deleteCallback: function (files) {
+                var id = getSelectedId(files);
+                $.ajax({
+                    url: deleteUrl + "/" + id,
+                    dataType: defaultFormat,
+                    method: "DELETE"
+                });
+            }
+        });
+    });
+}
+
 function isScriptCarregado(script) {
-    if(!script.contains(".js")) script += ".js";
+    if (!script.contains(".js")) script += ".js";
     var scripts = $('script[type="text/javascript"]');
     for (var i = 0; i < scripts.length; i++) {
         var splitedScript = scripts[i].src.split("/");

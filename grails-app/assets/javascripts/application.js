@@ -30,4 +30,5 @@ $(document).ready(function(){
 	configurarDatas();
 	configurarSelects();
 	configurarWizards();
+	configurarFileUpload();
 });

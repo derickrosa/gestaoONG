@@ -62,16 +62,6 @@ class CentroCustoController {
         }
     }
 
-    def search() {
-        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['anoInicial', 'anoFinal'])
-
-
-
-
-
-        respond(pesquisa)
-    }
-
     def show(CentroCusto centroCustoInstance) {
         respond centroCustoInstance
     }

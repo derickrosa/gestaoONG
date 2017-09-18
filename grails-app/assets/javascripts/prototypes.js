@@ -11,6 +11,6 @@ String.prototype.format = function () {
     return content;
 };
 
-String.prototype.contains = function(substring){
+String.prototype.contains = function (substring) {
     return this.indexOf(substring) !== -1;
 };
