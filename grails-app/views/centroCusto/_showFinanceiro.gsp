@@ -61,7 +61,7 @@
                         </tr>
                     </g:if>
 
-                    <g:if test="${centroCustoInstance?.saldo != null}">
+                    %{--<g:if test="${centroCustoInstance?.saldo != null}">
                         <tr>
                             <th class="property-label">Saldo</th>
 
@@ -69,7 +69,7 @@
                                 R$ ${df.format(centroCustoInstance?.saldo)}
                             </td>
                         </tr>
-                    </g:if>
+                    </g:if>--}%
 
                     <g:if test="${centroCustoInstance?.saldoInicial != null}">
                         <tr>

@@ -15,6 +15,7 @@ class Atividade {
     Integer modulo
     Double valorPlanejado
 
+    CentroCusto centroCusto
 
     String objetivo
     TipoAtividade tipo
@@ -27,7 +28,7 @@ class Atividade {
     Cidade municipio
     String local
 
-    static hasMany = [arquivos: Arquivo, linhas: LinhaAcao, despesas: Despesa, relatorios: RelatorioAtividade, centroCusto: CentroCusto]
+    static hasMany = [arquivos: Arquivo, linhas: LinhaAcao, despesas: Despesa, relatorios: RelatorioAtividade]
     static belongsTo = [LinhaAcao, CentroCusto]
     static transients = ['periodo', 'subAtividades']
 

@@ -53,8 +53,8 @@ class CentroCusto {
     }
 
     def getSaldo() {
-        def despesas = Math.abs(this.valorTotalDespesas)
-        def entradas = this.valorTotalEntradas
+        def despesas = Math.abs(this.valorTotalDespesas) ?: 0
+        def entradas = this.valorTotalEntradas ?: 0
 
         return entradas - despesas
     }
@@ -88,7 +88,7 @@ class CentroCusto {
             projections {
                 sum "valor"
             }
-        }[0]
+        }[0]?: 0
     }
 
     def getValorTotalEntradas() {
@@ -100,7 +100,7 @@ class CentroCusto {
             projections {
                 sum "valor"
             }
-        }[0]
+        }[0]?: 0
     }
 
     String toString() {

@@ -78,7 +78,7 @@
                             id="${atividadeInstance.id}">${fieldValue(bean: atividadeInstance, field: "codigo")}</g:link></td>
                 <td>${fieldValue(bean: atividadeInstance, field: "nome")}</td>
                 <td>${fieldValue(bean: atividadeInstance, field: "tipo")}</td>
-                <td>${atividadeInstance.centroCusto*.nome.join(', ')}</td>
+                <td>${atividadeInstance.centroCusto*.nome?.join(', ')}</td>
                 <td><g:formatDate date="${atividadeInstance.inicio}" format="dd/MM/yyyy"/> - <g:formatDate date="${atividadeInstance.termino}" format="dd/MM/yyyy"/></td>
                 <td>${fieldValue(bean: atividadeInstance, field: "local")}</td>
                 <td>${fieldValue(bean: atividadeInstance, field: "status")}</td>
