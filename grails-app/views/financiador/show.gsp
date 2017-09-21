@@ -26,18 +26,6 @@
             <div class="panel-body">
 
                 <table class="table table-bordered financiador">
-
-                    <g:if test="${financiadorInstance?.codigo}">
-                        <tr>
-                            <th id="codigo-label" class="property-label"><g:message
-                                    code="financiador.codigo.label" default="Código"/></th>
-
-                            <td aria-labelledby="codigo-label"><g:fieldValue bean="${financiadorInstance}"
-                                                                             field="codigo"/></td>
-
-                        </tr>
-                    </g:if>
-
                     <g:if test="${financiadorInstance?.participante?.nome}">
                         <tr>
                             <th id="participante-nome-label" class="property-label"><g:message

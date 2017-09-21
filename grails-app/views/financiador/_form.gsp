@@ -8,94 +8,93 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
 
-<div class="row">
-<div class="col-md-2">
-<div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'codigo', 'error')} ">
-    <label for="codigo">
-        <g:message code="financiador.codigo.label" default="Código"/>
-        
-    </label>
-    <g:textField class="form-control"  name="codigo" maxlength="20" value="${financiadorInstance?.codigo}"/>
+                <div class="row">
 
-</div>
-</div>
-    <div class="col-md-10">
-<div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'nome', 'error')} ">
-    <label for="nome">
-        <g:message code="financiador.participante.nome.label" default="Nome Fantasia"/>
+                    <div class="col-md-10">
+                        <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'nome', 'error')} ">
+                            <label for="nome">
+                                <g:message code="financiador.participante.nome.label" default="Nome Fantasia"/>
 
-    </label>
-    <g:textField class="form-control"  name="participante.nome" maxlength="100" value="${financiadorInstance?.participante?.nome}"/>
+                            </label>
+                            <g:textField class="form-control" name="participante.nome" maxlength="100"
+                                         value="${financiadorInstance?.participante?.nome}"/>
 
-</div>
-        </div>
-</div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="row">
-<div class="col-md-10">
-<div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'razaoSocial', 'error')} ">
-    <label for="razaoSocial">
-        <g:message code="financiador.razaoSocial.label" default="Razão Social"/>
-        
-    </label>
-    <g:textField class="form-control"  name="participante.razaoSocial" maxlength="100" value="${financiadorInstance?.participante?.razaoSocial}"/>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'razaoSocial', 'error')} ">
+                            <label for="razaoSocial">
+                                <g:message code="financiador.razaoSocial.label" default="Razão Social"/>
 
-</div>
-</div>
-    <div class="col-md-2">
-<div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'sigla', 'error')} ">
-    <label for="sigla">
-        <g:message code="financiador.sigla.label" default="Sigla"/>
-        
-    </label>
-    <g:textField class="form-control"  name="sigla" maxlength="10" value="${financiadorInstance?.sigla}"/>
+                            </label>
+                            <g:textField class="form-control" name="participante.razaoSocial" maxlength="100"
+                                         value="${financiadorInstance?.participante?.razaoSocial}"/>
 
-</div>
-</div>
+                        </div>
+                    </div>
 
-</div>
+                    <div class="col-md-2">
+                        <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'sigla', 'error')} ">
+                            <label for="sigla">
+                                <g:message code="financiador.sigla.label" default="Sigla"/>
 
-%{--<div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'responsaveis', 'error')} ">
-    <label for="responsaveis">
-        <g:message code="financiador.responsaveis.label" default="Responsaveis"/>
-        
-    </label>
-    
-<ul class="list-group">
-<g:each in="${financiadorInstance?.responsaveis?}" var="r">
-    <li class="list-group"><g:link controller="responsavel" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></li>
-</g:each>
-<li class="list-group active">
-<g:link controller="responsavel" action="create" params="['financiador.id': financiadorInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'responsavel.label', default: 'Responsavel')])}</g:link>
-</li>
-</ul>
+                            </label>
+                            <g:textField class="form-control" name="sigla" maxlength="10"
+                                         value="${financiadorInstance?.sigla}"/>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                %{--<div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'responsaveis', 'error')} ">
+                    <label for="responsaveis">
+                        <g:message code="financiador.responsaveis.label" default="Responsaveis"/>
+
+                    </label>
+
+                <ul class="list-group">
+                <g:each in="${financiadorInstance?.responsaveis?}" var="r">
+                    <li class="list-group"><g:link controller="responsavel" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></li>
+                </g:each>
+                <li class="list-group active">
+                <g:link controller="responsavel" action="create" params="['financiador.id': financiadorInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'responsavel.label', default: 'Responsavel')])}</g:link>
+                </li>
+                </ul>
 
 
-</div>--}%
-<div class="row">
-<div class="col-md-10">
-    <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'cnpj', 'error')} ">
-        <label for="cnpj">
-            <g:message code="financiador.participante.cnpj.label" default="Cnpj"/>
+                </div>--}%
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'cnpj', 'error')} ">
+                            <label for="cnpj">
+                                <g:message code="financiador.participante.cnpj.label" default="Cnpj"/>
 
-        </label>
-        <g:textField class="form-control cnpj"  name="participante.cnpj" maxlength="18" value="${financiadorInstance?.participante?.cnpj}"/>
+                            </label>
+                            <g:textField class="form-control cnpj" name="participante.cnpj" maxlength="18"
+                                         value="${financiadorInstance?.participante?.cnpj}"/>
 
-    </div>
-</div>
-    <div class="col-md-2">
-<div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'setor', 'error')} ">
-    <label for="setor">
-        <g:message code="financiador.setor.label" default="Setor"/>
-        
-    </label>
-    <g:select name="setor" from="${com.acception.cadastro.enums.Setor?.values()}" class="form-control" keys="${com.acception.cadastro.enums.Setor.values()*.name()}" value="${financiadorInstance?.setor?.name()}"  noSelection="['': 'Selecione...']"/>
+                        </div>
+                    </div>
 
-</div>
-        </div>
-    </div>
+                    <div class="col-md-2">
+                        <div class="form-group fieldcontain ${hasErrors(bean: financiadorInstance, field: 'setor', 'error')} ">
+                            <label for="setor">
+                                <g:message code="financiador.setor.label" default="Setor"/>
 
-        </div>
+                            </label>
+                            <g:select name="setor" from="${com.acception.cadastro.enums.Setor?.values()}"
+                                      class="form-control" keys="${com.acception.cadastro.enums.Setor.values()*.name()}"
+                                      value="${financiadorInstance?.setor?.name()}" noSelection="['': 'Selecione...']"/>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
         <!-- /.panel -->
     </div>
@@ -157,16 +156,16 @@
         ]
     });
 
-    $( document ).ready(function() {
+    $(document).ready(function () {
         $.ajax({
             url: '${createLink(action: 'findSolicitacoes',controller:'financiador')}',
-            type: 	'POST',
-            data: 	{
+            type: 'POST',
+            data: {
                 ajax: true,
                 idFinanciador: '${financiadorInstance.id}'
             },
             complete: function (result) {
-                if(result.responseText == '[]')
+                if (result.responseText == '[]')
                     table.loadJsonData('[["",""]]');
                 else table.loadJsonData(result.responseText);
             }
