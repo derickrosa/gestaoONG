@@ -1,5 +1,6 @@
 package com.acception.cadastro
 
+import com.acception.cadastro.enums.StatusAdiantamento
 import com.acception.cadastro.enums.StatusLancamento
 import com.acception.cadastro.enums.TipoLancamento
 import com.acception.util.Util
@@ -16,7 +17,7 @@ class AdiantamentoController {
 
     def index() {
         params?.remove('max')
-        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['dataInicio', 'dataFinal', 'centroCusto'])
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['dataInicio', 'dataFinal', 'centroCusto', 'status'])
         pesquisa = Util.trimMap(pesquisa)
 
         Closure criteria = {
@@ -33,6 +34,8 @@ class AdiantamentoController {
                     idEq(pesquisa.centroCusto as Long)
                 }
             }
+            if (pesquisa.containsKey('status'))
+                eq('statusAdiantamento', StatusAdiantamento.valueOf(pesquisa.status))
         }
 
         if (params?.exportFormat && params.exportFormat != "html") {
@@ -41,9 +44,9 @@ class AdiantamentoController {
 
             def adiantamentoInstanceList = Adiantamento.createCriteria().list(params, criteria)
 
-            List fields = ['id', 'data', 'centroCusto', 'descricao']
-            Map labels = ['id': 'Identificador', 'data': 'Data', 'centroCusto': 'Centro de Custo', 'descricao': 'Descrição']
-            Map parameters = ["column.widths": [0.1, 0.1, 0.2, 0.6]]
+            List fields = ['id', 'data', 'centroCusto', 'descricao', 'statusAdiantamento']
+            Map labels = ['id': 'Identificador', 'data': 'Data', 'centroCusto': 'Centro de Custo', 'descricao': 'Descrição', 'statusAdiantamento': 'Status']
+            Map parameters = ["column.widths": [0.1, 0.1, 0.2, 1, 0.1]]
 
             exportService.export(params.exportFormat, response.outputStream, adiantamentoInstanceList, fields, labels, null, parameters)
             return

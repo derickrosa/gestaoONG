@@ -23,4 +23,9 @@ enum StatusAdiantamento {
     String getKey(){
         name()
     }
+
+    @Override
+    String toString() {
+        return nome
+    }
 }

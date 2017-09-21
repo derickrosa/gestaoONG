@@ -29,6 +29,12 @@
                   value="${pesquisa?.centroCusto}"/>
     </div>
 
+    <div class="form-group col-md-2">
+        <label for="pesquisa.status">Status</label>
+        <g:select name="pesquisa.status" from="${com.acception.cadastro.enums.StatusAdiantamento.values()}"
+                  class="form-control" noSelection="['': 'Todos']" optionKey="key"
+                  value="${pesquisa?.status}"/>
+    </div>
 </pesquisa:painel>
 
 <g:if test="${adiantamentoInstanceCount > 0}">
@@ -40,6 +46,7 @@
             <th><g:message code="adiantamento.lancamentoOriginal.label" default="Lancamento Original"/></th>
             <th><g:message code="adiantamento.centroCusto.label" default="Centro Custo"/></th>
             <th><g:message code="adiantamento.descricao.label" default="Descrição"/></th>
+            <th><g:message code="adiantamento.statusAdiantamento.label" default="Status"/></th>
         </tr>
         </thead>
         <tbody>
@@ -50,6 +57,7 @@
                 <td><g:link controller="lancamento" action="show" id="${adiantamentoInstance?.lancamentoOriginal?.id}">${fieldValue(bean: adiantamentoInstance, field: "lancamentoOriginal")}</g:link></td>
                 <td><g:link controller="centroCusto" action="show" id="${adiantamentoInstance?.centroCusto?.id}">${fieldValue(bean: adiantamentoInstance, field: "centroCusto")}</g:link></td>
                 <td><g:fieldValue field="descricao" bean="${adiantamentoInstance}"/></td>
+                <td><g:fieldValue field="statusAdiantamento" bean="${adiantamentoInstance}"/></td>
             </tr>
         </g:each>
         </tbody>
