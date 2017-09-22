@@ -66,14 +66,22 @@ function configurarWizards() {
 function configurarFileUpload() {
     var files = $("div.fileuploader");
     var defaultFormat = "json";
-    var loadedFiles;
+    var loadedFiles = [];
 
-    function getSelectedId(files) {
+    function getSelectedId(data) {
+        if (data.id) return data.id;
+
+        var name = '';
+        if (data.constructor === String) name = data;
+        else if (data.constructor === Array) name = data[0];
+
         var selection = loadedFiles.filter(function (f) {
-            return f.name == files[0]
+            return f.name == name
         });
 
-        return selection[0].id;
+        if (selection[0]) return selection[0].id;
+
+        return null;
     }
 
     files.each(function (i, e) {
@@ -110,7 +118,6 @@ function configurarFileUpload() {
 
         checkUrlFormat(loadUrl);
         checkUrlFormat(uploadUrl);
-        //checkUrlFormat(deleteUrl);
 
         div.uploadFile({
             url: uploadUrl,
@@ -141,11 +148,15 @@ function configurarFileUpload() {
             },
             deleteCallback: function (files) {
                 var id = getSelectedId(files);
+                if (id == null) return;
                 $.ajax({
                     url: deleteUrl + "/" + id,
                     dataType: defaultFormat,
                     method: "DELETE"
                 });
+            },
+            onSuccess: function (files, data) {
+                loadedFiles.push(data);
             }
         });
     });

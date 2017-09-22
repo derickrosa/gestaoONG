@@ -19,7 +19,13 @@ class ArquivoController {
 
     def find() {
         Atividade atividade = Atividade.get(params.long("atividade.id"))
-        respond(atividade?.arquivos)
+        if (atividade) {
+            respond(atividade?.arquivos)
+            return
+        }
+
+        CentroCusto centroCusto = CentroCusto.get(params.long("centroCusto.id"))
+        if (centroCusto) respond(centroCusto?.arquivos)
     }
 
     def show(Arquivo arquivoInstance) {
@@ -28,22 +34,24 @@ class ArquivoController {
 
     @Transactional
     def create() {
-        Atividade atividade = Atividade.get(params.long("atividade.id"))
-        if (atividade == null) {
-            notFound()
-            return
-        }
+        Arquivo arquivoInstance = null;
 
-        def fileName = []
         def f = request.getFile('file')
         if (f) {
-            Arquivo arquivoInstance = arquivoService.save(atividade, f.bytes as byte[],
-                    f.contentType as String, f.size as Long, f.originalFilename as String)
-
-            fileName.add([id: arquivoInstance.id])
+            Atividade atividade = Atividade.get(params.long("atividade.id"))
+            if (atividade) {
+                arquivoInstance = arquivoService.save(atividade, f.bytes as byte[],
+                        f.contentType as String, f.size as Long, f.originalFilename as String)
+            } else {
+                CentroCusto centroCusto = CentroCusto.get(params.long("centroCusto.id"))
+                if (centroCusto) {
+                    arquivoInstance = arquivoService.save(centroCusto, f.bytes as byte[],
+                            f.contentType as String, f.size as Long, f.originalFilename as String)
+                }
+            }
         }
 
-        respond(fileName)
+        respond(arquivoInstance)
     }
 
     @Transactional

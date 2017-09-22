@@ -5,8 +5,6 @@
     <meta name="layout" content="layout-restrito">
     <g:set var="entityName" value="${message(code: 'atividade.label', default: 'Atividade')}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
-    <asset:stylesheet src="jquery.uploadfile.css"/>
-    <asset:javascript src="jquery.uploadfile.min.js"/>
 </head>
 
 <body>

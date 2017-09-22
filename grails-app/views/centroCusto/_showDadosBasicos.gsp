@@ -1,52 +1,3 @@
-<asset:javascript src="jquery.uploadfile.min.js"/>
-<asset:stylesheet src="jquery.uploadfile.css"/>
-
-<script type="application/javascript">
-    $(document).ready(function(){
-        $("#fileuploader").uploadFile({
-            url:"${createLink(action: 'carregarArquivo', controller: 'centroCusto',id: "${centroCustoInstance.id}")}",
-            fileName:"file",
-            showDelete: true,
-            showDownload:true,
-            showPreview:true,
-            previewHeight: "200px",
-            previewWidth: "200px",
-            statusBarWidth:'320px',
-            onLoad:function(obj)
-            {
-                $.ajax({
-                    cache: false,
-                    url: "${createLink(action:'getFiles',id: "${centroCustoInstance.id}")}",
-                    dataType: "json",
-                    success: function(data)
-                    {
-                        for(var i=0;i<data.length;i++)
-                        {
-                            obj.createProgress(data[i].name,data[i].path,data[i].size,data[i].id);
-                        }
-                    }
-                });
-            },
-            downloadCallback:function(id,pd)
-            {
-                location.href = "${createLink(action: 'baixarArquivo', controller: 'centroCusto')}?idArquivo=" + id
-            },
-            deleteCallback: function (id, pd) {
-                $.ajax({
-                    url: "${createLink(action:'deletarArquivo',id: "${centroCustoInstance.id}")}",
-                    dataType: "json",
-                    data: {idArquivo:id},
-                    success: function(data)
-                    {
-                        console.log('Documento removido...')
-                    }
-                });
-            }
-        });
-    });
-</script>
-
-
 <table class="table table-bordered centroCusto">
     <g:if test="${centroCustoInstance?.codigo}">
         <tr>
@@ -124,7 +75,11 @@
             </div>
 
             <div class="panel-body">
-                <div id="fileuploader">Upload</div>
+                <div class="fileuploader"
+                     data-load-url="${createLink(controller: 'arquivo', action: 'find.json', params: ['centroCusto.id': centroCustoInstance.id])}"
+                     data-upload-url="${createLink(controller: 'arquivo', action: 'create.json', params: ['centroCusto.id': centroCustoInstance.id])}"
+                     data-download-url="${createLink(controller: 'arquivo', action: 'download')}"
+                     data-delete-url="${createLink(controller: 'arquivo', action: 'delete')}">Upload</div>
             </div>
         </div>
     </div>

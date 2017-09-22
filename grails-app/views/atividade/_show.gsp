@@ -105,7 +105,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">Arquivos</div>
             <div class="panel-body">
-                <div id="fileuploader" class="fileuploader"
+                <div class="fileuploader"
                      data-load-url="${createLink(controller: 'arquivo', action: 'find.json', params: ['atividade.id': atividadeInstance.id])}"
                      data-upload-url="${createLink(controller: 'arquivo', action: 'create.json', params: ['atividade.id': atividadeInstance.id])}"
                      data-download-url="${createLink(controller: 'arquivo', action: 'download')}"
