@@ -1,7 +1,5 @@
 <%@ page import="com.acception.cadastro.Lancamento; com.acception.cadastro.enums.TipoLancamento" %>
 
-<g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
-
 <asset:stylesheet src="bootstrap/bootstrap-tables/bootstrap-table.min.css"/>
 <asset:javascript src="plugins/bootstrap/bootstrap-tables/bootstrap-table-min.js"/>
 <asset:javascript src="plugins/bootstrap/bootstrap-tables/bootstrap-table-pt-BR.js"/>
@@ -68,17 +66,13 @@
             <tr>
                 <th class="property-label">Total Entradas</th>
 
-                <td>
-                    R$ ${df.format(centroCustoInstance?.valorTotalEntradas)}
-                </td>
+                <td><g:formatNumber number="${centroCustoInstance?.valorTotalEntradas}" type="currency"/></td>
             </tr>
 
             <tr>
                 <th class="property-label">Total Despesas</th>
 
-                <td>
-                    R$ ${df.format(Math.abs(centroCustoInstance?.valorTotalDespesas))}
-                </td>
+                <td><g:formatNumber number="${centroCustoInstance?.valorTotalDespesas}" type="currency"/></td>
             </tr>
 
             <tr>
@@ -89,12 +83,12 @@
 
                     <g:if test="${saldo < 0}">
                         <span class="text-danger">
-                            R$ ${df.format(centroCustoInstance?.saldo)}
+                            <g:formatNumber number="${centroCustoInstance?.saldo}" type="currency"/>
                         </span>
                     </g:if>
                     <g:else>
                         <span class="text-success">
-                            R$ ${df.format(centroCustoInstance?.saldo)}
+                            <g:formatNumber number="${centroCustoInstance?.saldo}" type="currency"/>
                         </span>
                     </g:else>
                 </td>

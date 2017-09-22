@@ -63,7 +63,7 @@ class CentroCustoController {
     }
 
     def show(CentroCusto centroCustoInstance) {
-        respond centroCustoInstance
+        [centroCustoInstance: centroCustoInstance]
     }
 
     def create() {

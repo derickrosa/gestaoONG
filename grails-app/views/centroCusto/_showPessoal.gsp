@@ -1,5 +1,4 @@
 <%@ page import="com.acception.cadastro.enums.TipoCusto; com.acception.cadastro.enums.RamoFuncionario" %>
-<g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
 
 <asset:stylesheet src="dataTables.bootstrap.css"/>
 <asset:javascript src="jquery.dataTables.min.js"/>
@@ -70,7 +69,7 @@
                     <tr>
                         <td>${f}</td>
                         <td>${f.setor}</td>
-                        <td>R$ ${df.format(f.salario)}</td>
+                        <td><g:formatNumber number="${f.salario}" type="currency"/></td>
                     </tr>
                 </g:each>
                 </tbody>

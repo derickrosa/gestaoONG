@@ -1,46 +1,35 @@
 <%@ page import="com.acception.cadastro.enums.Moeda" %>
-<g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
 
 <g:if test="${orcamento}">
     <table class="table table-bordered centroCusto">
-
         <g:if test="${orcamento?.ano}">
             <tr>
                 <th id="orcamento.ano-label" class="property-label" width="34%">Ano</th>
-
                 <td aria-labelledby="orcamento.ano-label">${orcamento.ano}</td>
-
             </tr>
         </g:if>
 
         <g:if test="${orcamento?.valorTotal}">
             <tr>
                 <th id="orcamento.valorTotal-label" class="property-label">Valor Total</th>
-
-                <td aria-labelledby="orcamento.valorTotal-label">${orcamento.moeda.representacao} ${df.format(orcamento.valorTotal)}</td>
+                <td aria-labelledby="orcamento.valorTotal-label"><g:formatNumber number="${orcamento.valorTotal}" type="currency" currencySymbol="${orcamento.moeda.representacao}"/></td>
             </tr>
         </g:if>
 
         <g:if test="${orcamento?.moeda}">
             <tr>
                 <th id="orcamento.moeda-label" class="property-label">Moeda</th>
-
-                <td aria-labelledby="orcamento.moeda-label"><g:fieldValue bean="${orcamento}"
-                                                                          field="moeda"/></td>
+                <td aria-labelledby="orcamento.moeda-label"><g:fieldValue bean="${orcamento}" field="moeda"/></td>
             </tr>
         </g:if>
 
         <g:if test="${orcamento?.moeda != Moeda.REAL && orcamento?.valorCambial}">
             <tr>
                 <th id="orcamento.valorCambial-label" class="property-label">Valor Cambial</th>
-
-                <td aria-labelledby="orcamento.valorCambial-label">R$ ${df.format(orcamento.valorCambial)}</td>
+                <td aria-labelledby="orcamento.valorCambial-label"><g:formatNumber number="${orcamento.valorCambial}" type="currency"/></td>
             </tr>
         </g:if>
-
-        <tr></tr>
     </table>
-
     %{--Caso seja orçamento atual, então devemos disponibilizar um botão para replanejar o orçamento--}%
     <g:if test="${isOrcamentoAtual}">
         <div class="row text-center">
@@ -52,7 +41,6 @@
                 <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Replanejar Orçamento
             </a>
         </div>
-
         <br>
     </g:if>
 
@@ -79,7 +67,7 @@
                         <tr>
                             <td style="text-align: center; vertical-align: middle;">${item.codigo}</td>
                             <td style="text-align: center; vertical-align: middle;">${item.nome}</td>
-                            <td style="text-align: center; vertical-align: middle;">${orcamento.moeda.representacao} ${df.format(item.valor)}</td>
+                            <td style="text-align: center; vertical-align: middle;"><g:formatNumber number="${item.valor}" type="currency" currencySymbol="${orcamento.moeda.representacao}"/></td>
                             <td style="text-align: center; vertical-align: middle;">${item.tipoCusto}</td>
                             <td>
                         <g:if test="${item.salariosFuncionarios}">
@@ -108,7 +96,7 @@
                                         <g:each in="${item.salariosFuncionarios}" var="s">
                                             <tr>
                                                 <td>${s.funcionario}</td>
-                                                <td>R$ ${df.format(s.valor)}</td>
+                                                <td><g:formatNumber number="${s.valor}" type="currency"/></td>
                                             </tr>
                                         </g:each>
 

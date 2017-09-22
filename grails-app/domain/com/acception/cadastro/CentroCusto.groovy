@@ -28,7 +28,7 @@ class CentroCusto {
 
     static belongsTo = [financiador: Financiador]
 
-    static transients = ['saldo', 'saldoInicial', 'orcamentoAtual', 'orcamentoOriginal', 'despesas', 'funcionarios']
+    static transients = ['saldo', 'saldoInicial', 'orcamentoAtual', 'orcamentoOriginal', 'despesas', 'funcionarios', 'valorTotalDespesas', 'valorTotalEntradas']
 
     static constraints = {
         dataInicio nullable: true
@@ -52,9 +52,9 @@ class CentroCusto {
         }
     }
 
-    def getSaldo() {
-        def despesas = Math.abs(this.valorTotalDespesas) ?: 0
-        def entradas = this.valorTotalEntradas ?: 0
+    Double getSaldo() {
+        Double despesas = Math.abs(this.valorTotalDespesas)
+        Double entradas = this.valorTotalEntradas
 
         return entradas - despesas
     }
@@ -76,10 +76,10 @@ class CentroCusto {
     }
 
     def getFuncionarios() {
-        return orcamentos.itensOrcamentarios.salariosFuncionarios.collect{it.funcionario}.flatten().unique()
+        return orcamentos.itensOrcamentarios.salariosFuncionarios.collect { it.funcionario }.flatten().unique()
     }
 
-    def getValorTotalDespesas() {
+    Double getValorTotalDespesas() {
         return Lancamento.createCriteria().list {
             eq('centroCusto', this)
             eq('statusLancamento', StatusLancamento.BAIXADO)
@@ -88,10 +88,10 @@ class CentroCusto {
             projections {
                 sum "valor"
             }
-        }[0]?: 0
+        }[0] as Double ?: 0D
     }
 
-    def getValorTotalEntradas() {
+    Double getValorTotalEntradas() {
         return Lancamento.createCriteria().list {
             eq('centroCusto', this)
             eq('statusLancamento', StatusLancamento.BAIXADO)
@@ -100,7 +100,7 @@ class CentroCusto {
             projections {
                 sum "valor"
             }
-        }[0]?: 0
+        }[0] as Double ?: 0D
     }
 
     String toString() {

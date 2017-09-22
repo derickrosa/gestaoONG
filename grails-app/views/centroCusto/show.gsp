@@ -5,17 +5,19 @@
     <meta name="layout" content="layout-restrito">
     <g:set var="entityName" value="${message(code: 'centroCusto.label', default: 'Centro de Custo')}"/>
     <title><g:message code="default.show.label" args="[entityName]"/></title>
-    <g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
 </head>
 
 <body>
 
 <p>
-    <g:link class="btn btn-default" action="index"><span class="glyphicon glyphicon-list"></span> <g:message
-            code="default.list.label" args="[entityName]"/></g:link>
-    <g:link class="btn btn-default" action="create"><span
-            class="glyphicon glyphicon-plus"></span> <g:message code="default.new.label"
-                                                                args="[entityName]"/></g:link>
+    <g:link class="btn btn-default" action="index">
+        <span class="glyphicon glyphicon-list"></span>
+        <g:message code="default.list.label" args="[entityName]"/>
+    </g:link>
+    <g:link class="btn btn-default" action="create">
+        <span class="glyphicon glyphicon-plus"></span>
+        <g:message code="default.new.label" args="[entityName]"/>
+    </g:link>
 </p>
 
 <ul class="nav nav-tabs">

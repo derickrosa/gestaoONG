@@ -21,8 +21,8 @@
             <tr>
                 <td>${f.funcionario}</td>
                 <td>${f.funcionario.setor}</td>
-                <td>R$ ${df.format(f.valor)}</td>
-                <td>R$ ${df.format(f.funcionario.salario)}</td>
+                <td><g:formatNumber number="${f.valor}" type="currency"/></td>
+                <td><g:formatNumber number="${f.funcionario.salario}" type="currency"/></td>
             </tr>
         </g:each>
         </tbody>
