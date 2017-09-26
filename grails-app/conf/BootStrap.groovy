@@ -1,6 +1,8 @@
+import com.acception.cadastro.Adiantamento
 import com.acception.cadastro.Arquivo
 import com.acception.cadastro.Cidade
 import com.acception.cadastro.Estado
+import com.acception.cadastro.Lancamento
 import com.acception.security.Role
 import grails.converters.JSON
 import grails.util.Environment
@@ -80,6 +82,15 @@ class BootStrap {
                     icon: ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'].contains(it.contentType) ?
                             "${grailsLinkGenerator.link(controller: 'arquivo', action: 'download', id: it.id, absolute: true)}?${System.currentTimeMillis()}" :
                             "${grailsLinkGenerator.contextPath}/assets/fileinput/document.png"
+            ]
+        }
+
+        JSON.registerObjectMarshaller(Lancamento) {
+            [
+                    'data'  : it.dataEmissao.format('dd/MM/yyyy'),
+                    'tipo'  : it.eventoFinanceiro instanceof Adiantamento ? "Pagamento Adiantado" : it.tipoLancamento.descricao,
+                    'valor' : it.valor,
+                    'origem': it.papel ? it.papel.toString() : ''
             ]
         }
     }

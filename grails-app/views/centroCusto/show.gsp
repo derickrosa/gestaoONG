@@ -94,9 +94,7 @@
 </g:form>
 
 <script>
-    $(document).ready(function()
-    {
-
+    $(document).ready(function(){
         var showHistorico = ${params.showOrcamento ?: false};
 
         if (showHistorico) {

@@ -7,7 +7,8 @@ enum TipoDespesa {
     ATIVIDADE('Atividade'),
     PESSOAL('Pessoal'),
     ADIANTAMENTO('Adiantamento'),
-    CUSTO_ADMINISTRATIVO('Custo Administrativo')
+    CUSTO_ADMINISTRATIVO('Custo Administrativo'),
+    INVESTIMENTO('Investimento')
 
 
     String nome
@@ -17,7 +18,7 @@ enum TipoDespesa {
     }
 
     static def list() {
-        [ATIVIDADE, PESSOAL, ADIANTAMENTO, CUSTO_ADMINISTRATIVO]
+        [ATIVIDADE, PESSOAL, ADIANTAMENTO, CUSTO_ADMINISTRATIVO, INVESTIMENTO]
     }
 
     String getKey(){

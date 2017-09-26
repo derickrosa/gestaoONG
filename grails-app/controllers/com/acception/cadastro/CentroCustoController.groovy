@@ -382,38 +382,4 @@ class CentroCustoController {
             render(['success': false] as JSON)
         }
     }
-
-    def getExtratoFinanceiro(Long centroCustoId) {
-        CentroCusto centroCusto = CentroCusto.get(centroCustoId)
-
-        def extratoFinanceiro = []
-
-        def lancamentos = Lancamento.createCriteria().list {
-            eq('centroCusto', centroCusto)
-            eq('statusLancamento', StatusLancamento.BAIXADO)
-            order("dataEmissao", params.order)
-
-            if (params.dataInicio) {
-                ge('dataEmissao', Date.parse('dd/MM/yyyy', params.dataInicio))
-            }
-
-            if (params.dataFinal) {
-                le('dataEmissao', Date.parse('dd/MM/yyyy', params.dataFinal))
-            }
-        }
-
-        def saldo = 0
-
-        lancamentos.each { Lancamento lancamento ->
-            saldo += lancamento.valor
-
-            extratoFinanceiro << ['data': lancamento.dataEmissao.format('dd/MM/yyyy'),
-                                  'tipo': lancamento.eventoFinanceiro instanceof Adiantamento ? "Pagamento Adiantado" : lancamento.tipoLancamento.descricao,
-                                  'valor': lancamento.valor,
-                                  'origem': lancamento.papel ? lancamento.papel.toString() : '',
-                                  'saldo': saldo.round(2)]
-        }
-
-        respond(extratoFinanceiro)
-    }
 }

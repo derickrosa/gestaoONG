@@ -196,6 +196,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         '/despesa/**'                   : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
         '/adiantamento/**'              : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
         '/relatorioAtividade/**'        : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
-        '/cidade/cidadePorEstado/**'    : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA']
+        '/cidade/cidadePorEstado/**'    : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/extratoFinanceiro/**'         : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA']
 ]
 
