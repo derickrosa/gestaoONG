@@ -1,5 +1,3 @@
-<g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
-
 <style>
 #tabelaDespesas td {
     text-align: center;
@@ -61,23 +59,11 @@
                         </tr>
                     </g:if>
 
-                    %{--<g:if test="${centroCustoInstance?.saldo != null}">
-                        <tr>
-                            <th class="property-label">Saldo</th>
-
-                            <td>
-                                R$ ${df.format(centroCustoInstance?.saldo)}
-                            </td>
-                        </tr>
-                    </g:if>--}%
-
                     <g:if test="${centroCustoInstance?.saldoInicial != null}">
                         <tr>
                             <th class="property-label">Saldo Inicial</th>
 
-                            <td>
-                                R$ ${df.format(centroCustoInstance?.saldoInicial)}
-                            </td>
+                            <td><g:formatNumber number="${centroCustoInstance?.saldoInicial}" type="currency"/></td>
                         </tr>
                     </g:if>
 

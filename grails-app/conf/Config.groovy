@@ -174,6 +174,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         '/j_spring_security_exit_user'  : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA', 'isFullyAuthenticated()'],
         '/assets/**'                    : ['permitAll'],
         '/recuperarSenha/**'            : ['permitAll'],
+        '/arquivo/**'                   : ['permitAll'],
         '/console/**'                   : ['ROLE_SUPORTE'],
         '/plugins/console*/**'          : ['ROLE_SUPORTE'],
         '/role/**'                      : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
@@ -195,6 +196,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         '/despesa/**'                   : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
         '/adiantamento/**'              : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
         '/relatorioAtividade/**'        : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
-        '/cidade/cidadePorEstado/**'    : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA']
+        '/cidade/cidadePorEstado/**'    : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/extratoFinanceiro/**'         : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA']
 ]
 

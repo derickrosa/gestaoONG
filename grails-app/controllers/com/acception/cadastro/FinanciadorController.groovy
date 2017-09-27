@@ -15,7 +15,7 @@ class FinanciadorController {
     def index() {
         params?.remove('max')
 
-        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'codigo', 'cnpj', 'sigla', 'setor'])
+        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['nome', 'cnpj', 'sigla', 'setor'])
         pesquisa = Util.trimMap(pesquisa)
 
         def criteria = {
@@ -23,7 +23,6 @@ class FinanciadorController {
                 if (pesquisa.containsKey('nome')) ilike('nomeNormalizado', "%${Util.normalizar(pesquisa.nome)}%")
                 if (pesquisa.containsKey('cnpj')) eq('cnpj', Util.cnpjToRaw(pesquisa.cnpj))
             }
-            if (pesquisa.containsKey('codigo')) eq('codigo', pesquisa.codigo)
             if (pesquisa.containsKey('sigla')) ilike('sigla', pesquisa.sigla)
             if (pesquisa.containsKey('setor')) eq('setor', Setor.valueOf(pesquisa.setor))
         }
@@ -34,10 +33,10 @@ class FinanciadorController {
 
             def financiadorInstanceList = Financiador.createCriteria().list(params, criteria)
 
-            List fields = ['participante.nome', 'codigo', 'participante.cnpj', 'sigla', 'setor', 'dateCreated']
-            Map labels = ['participante.nome': 'Nome', 'codigo': 'Código', 'participante.cnpj': 'CNPJ',
+            List fields = ['participante.nome', 'participante.cnpj', 'sigla', 'setor', 'dateCreated']
+            Map labels = ['participante.nome': 'Nome', 'participante.cnpj': 'CNPJ',
                           'sigla'            : 'Sigla', 'setor': 'Setor', 'dateCreated': 'Data Cadastro']
-            Map parameters = ["column.widths": [0.4, 0.2, 0.3, 0.2, 0.2, 0.2]]
+            Map parameters = ["column.widths": [0.4, 0.3, 0.2, 0.2, 0.2]]
 
             exportService.export(params.exportFormat, response.outputStream, financiadorInstanceList, fields, labels, [:], parameters)
             return

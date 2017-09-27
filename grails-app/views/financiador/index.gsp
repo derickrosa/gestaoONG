@@ -17,11 +17,6 @@
 </p>
 
 <pesquisa:painel>
-    <div class="form-group col-md-2">
-        <label class="control-label" for="pesquisa.codigo">Código:</label>
-        <g:textField class="form-control" name="pesquisa.codigo" value="${pesquisa?.codigo}"/>
-    </div>
-
     <div class="form-group col-md-4">
         <label class="control-label" for="pesquisa.nome">Nome:</label>
         <g:textField class="form-control" name="pesquisa.nome" value="${pesquisa?.nome}"/>
@@ -48,7 +43,7 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <g:sortableColumn params="${pesquisa}" property="codigo" title="${message(code: 'financiador.codigo.label', default: 'Codigo')}"/>
+            <g:sortableColumn params="${pesquisa}" property="id" title="Identificador"/>
             <g:sortableColumn params="${pesquisa}" property="participante.nome" title="${message(code: 'financiador.nome.label', default: 'Nome')}"/>
             <g:sortableColumn params="${pesquisa}" property="participante.cnpj" title="${message(code: 'financiador.cnpj.label', default: 'CNPJ')}"/>
             <g:sortableColumn params="${pesquisa}" property="sigla" title="${message(code: 'financiador.sigla.label', default: 'Sigla')}"/>
@@ -58,7 +53,7 @@
         <tbody>
         <g:each in="${financiadorInstanceList}" var="financiadorInstance">
             <tr>
-                <td><g:link action="show" id="${financiadorInstance.id}">${fieldValue(bean: financiadorInstance, field: "codigo")}</g:link></td>
+                <td><g:link action="show" id="${financiadorInstance.id}">${financiadorInstance.id}</g:link></td>
                 <td>${fieldValue(bean: financiadorInstance, field: "participante.nome")}</td>
                 <td><g:formatCnpj cnpj="${financiadorInstance.participante.cnpj}"/></td>
                 <td>${fieldValue(bean: financiadorInstance, field: "sigla")}</td>

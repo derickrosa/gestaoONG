@@ -19,6 +19,7 @@
 //= require sb-admin-2.min.js
 //= require jquery.steps.min.js
 //= require jquery.edittable2.js
+//= require jquery.uploadfile.min.js
 //= require configuracoes.js
 
 /**
@@ -30,4 +31,5 @@ $(document).ready(function(){
 	configurarDatas();
 	configurarSelects();
 	configurarWizards();
+	configurarFileUpload();
 });

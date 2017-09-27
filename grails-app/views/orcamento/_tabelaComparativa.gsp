@@ -1,7 +1,5 @@
 <%@ page import="com.acception.cadastro.ItemOrcamentario; com.acception.cadastro.Orcamento" %>
 
-<g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
-
 <%
     listaOrcamentos = listaOrcamentos.sort { it.dateCreated }
 
@@ -35,7 +33,7 @@
                     <g:set var="itemOrcamentario" value="${orcamento.itensOrcamentarios.find { it.codigo == codigo}}"/>
 
                     <g:if test="${itemOrcamentario}">
-                        <td>R$ ${df.format(itemOrcamentario.valor)}</td>
+                        <td><g:formatNumber number="${itemOrcamentario.valor}" type="currency"/></td>
                     </g:if>
                     <g:else>
                         <td>--</td>

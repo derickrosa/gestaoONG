@@ -62,18 +62,8 @@ class CentroCustoController {
         }
     }
 
-    def search() {
-        Map<String, String> pesquisa = params.pesquisa ?: params.subMap(['anoInicial', 'anoFinal'])
-
-
-
-
-
-        respond(pesquisa)
-    }
-
     def show(CentroCusto centroCustoInstance) {
-        respond centroCustoInstance
+        [centroCustoInstance: centroCustoInstance]
     }
 
     def create() {
@@ -343,77 +333,6 @@ class CentroCustoController {
         }
     }
 
-    @Transactional
-    def carregarArquivo(Long id) {
-        def centroCustoInstance = CentroCusto.get(id)
-        def fileName = []
-        def f = request.getFile('file')
-        if (f) {
-            Arquivo arquivoInstance = new Arquivo()
-            arquivoInstance.bytes = f.bytes
-            arquivoInstance.contentType = f.contentType
-            arquivoInstance.size = f.size
-            arquivoInstance.fileName = f.originalFilename
-            arquivoInstance.save(flush: true)
-            centroCustoInstance.addToArquivos(arquivoInstance)
-            centroCustoInstance.save(flush: true)
-            fileName.add([id: arquivoInstance.id])
-        }
-        render(fileName as JSON)
-    }
-
-    @Transactional
-    def deletarArquivo(Long id) {
-        def centroCustoInstance = CentroCusto.get(id)
-        Arquivo arquivoInstance = Arquivo.get(params.idArquivo as Long)
-        centroCustoInstance.removeFromArquivos(arquivoInstance)
-        centroCustoInstance.save(flush: true)
-        arquivoInstance.delete(flush: true)
-        render([success: 'ok'] as JSON)
-    }
-
-    def baixarArquivo() {
-        Arquivo arquivoInstance = Arquivo.get(params.idArquivo as Long)
-        if (arquivoInstance == null) {
-            flash.message = "Document not found."
-            redirect(action: 'show')
-        } else {
-            response.setContentType("APPLICATION/OCTET-STREAM")
-            response.setHeader("Content-Disposition", "Attachment;Filename=\"${arquivoInstance.fileName}\"")
-            def outputStream = response.getOutputStream()
-            outputStream << arquivoInstance.bytes
-            outputStream.flush()
-            outputStream.close()
-        }
-    }
-
-    def getFiles(Long id) {
-        def centroCusto = CentroCusto.get(params.id as Long)
-        def arquivos = []
-        centroCusto?.arquivos?.sort { -it?.fileName?.size() }.each { arquivoInstance ->
-            if (okcontents.contains(arquivoInstance.contentType)) {
-                arquivos.add([name: arquivoInstance.fileName, path: createLink(action: 'imagem', id: arquivoInstance.id), size: arquivoInstance.size, id: arquivoInstance.id])
-            } else {
-                arquivos.add([name: arquivoInstance.fileName, path: assetPath([src: 'fileinput/document.png', absolute: true]), size: arquivoInstance.size, id: arquivoInstance.id])
-            }
-        }
-        render(arquivos as JSON)
-    }
-
-    def imagem(Long id) {
-        def arquivoInstance = Arquivo.get(id)
-        if (!arquivoInstance || !arquivoInstance.bytes || !arquivoInstance.contentType) {
-            response.sendError(404)
-            return
-        }
-
-        response.contentType = arquivoInstance.contentType
-        response.contentLength = arquivoInstance.bytes.size()
-        OutputStream out = response.outputStream
-        out.write(arquivoInstance.bytes)
-        out.close()
-    }
-
     def getAtividadesFromCentroCusto(Long centroCustoId) {
         if (centroCustoId) {
             def centroCusto = CentroCusto.get(centroCustoId)
@@ -462,39 +381,5 @@ class CentroCustoController {
         } else {
             render(['success': false] as JSON)
         }
-    }
-
-    def getExtratoFinanceiro(Long centroCustoId) {
-        CentroCusto centroCusto = CentroCusto.get(centroCustoId)
-
-        def extratoFinanceiro = []
-
-        def lancamentos = Lancamento.createCriteria().list {
-            eq('centroCusto', centroCusto)
-            eq('statusLancamento', StatusLancamento.BAIXADO)
-            order("dataEmissao", params.order)
-
-            if (params.dataInicio) {
-                ge('dataEmissao', Date.parse('dd/MM/yyyy', params.dataInicio))
-            }
-
-            if (params.dataFinal) {
-                le('dataEmissao', Date.parse('dd/MM/yyyy', params.dataFinal))
-            }
-        }
-
-        def saldo = 0
-
-        lancamentos.each { Lancamento lancamento ->
-            saldo += lancamento.valor
-
-            extratoFinanceiro << ['data': lancamento.dataEmissao.format('dd/MM/yyyy'),
-                                  'tipo': lancamento.eventoFinanceiro instanceof Adiantamento ? "Pagamento Adiantado" : lancamento.tipoLancamento.descricao,
-                                  'valor': lancamento.valor,
-                                  'origem': lancamento.papel ? lancamento.papel.toString() : '',
-                                  'saldo': saldo.round(2)]
-        }
-
-        respond(extratoFinanceiro)
     }
 }

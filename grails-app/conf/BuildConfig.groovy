@@ -80,15 +80,9 @@ grails.project.dependency.resolution = {
         runtime ':console:1.5.5'
         runtime ":fixed-flat-file:0.4.1"
 
-        compile "org.grails.plugins:export:1.6"
-        // Uncomment these to enable additional asset-pipeline capabilities
-        //compile ":sass-asset-pipeline:1.9.0"
-        //compile ":less-asset-pipeline:1.10.0"
-        //compile ":coffee-asset-pipeline:1.8.0"
-        //compile ":handlebars-asset-pipeline:1.3.0.3"
-
         // plugins for the compile step
         compile ":scaffolding:2.1.2"
+        compile "org.grails.plugins:export:1.6"
         compile ':cache:1.1.8'
         compile ":asset-pipeline:2.1.5"
         compile ":fixtures:1.3"

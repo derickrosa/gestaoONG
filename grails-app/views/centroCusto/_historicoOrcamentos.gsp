@@ -26,7 +26,7 @@
             </g:elseif>
         >
             <td>${i + 1}</td>
-            <td>R$ ${df.format(orcamento.valorTotal)}</td>
+            <td><g:formatNumber number="${orcamento.valorTotal}" type="currency"/></td>
             <td>${orcamento.ano}</td>
             <td><g:formatDate date="${orcamento.dateCreated}" format="dd/MM/yyyy"/></td>
             <td>

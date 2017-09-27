@@ -1,26 +1,34 @@
-<%@ page import="com.acception.cadastro.Lancamento; com.acception.cadastro.enums.TipoLancamento" %>
-
-<g:set var="df" value="${new java.text.DecimalFormat('###,##0.00')}"/>
+<%@ page import="com.acception.cadastro.enums.StatusLancamento;" %>
 
 <asset:stylesheet src="bootstrap/bootstrap-tables/bootstrap-table.min.css"/>
 <asset:javascript src="plugins/bootstrap/bootstrap-tables/bootstrap-table-min.js"/>
 <asset:javascript src="plugins/bootstrap/bootstrap-tables/bootstrap-table-pt-BR.js"/>
+<export:resource/>
 
-<script>
-    function atualizarExtratoFinanceiro() {
-        $("#extratoFinanceiro").bootstrapTable('refresh',
-                {
-                    query: {
-                        dataInicio: $("#dataInicio").val(),
-                        dataFinal: $("#dataFinal").val()
-                    }
-                }
-        );
+
+<script type="application/javascript">
+    $(document).ready(function () {
+        var pesquisaExtrato = $("form#pesquisa-extrato");
+
+        pesquisaExtrato.submit(function (event) {
+            event.preventDefault();
+            atualizarExtratoFinanceiro(pesquisaExtrato);
+        });
+
+        atualizarExtratoFinanceiro(pesquisaExtrato);
+    });
+
+    function atualizarExtratoFinanceiro(form) {
+        $("#extratoFinanceiro").bootstrapTable('refresh', {
+            url: form[0].action,
+            query: serializeFormToJSON(form)
+        });
+
+        updateExportLinks(form.serialize());
     }
 
     function currencyFormatter(value, row, index) {
         var className = value >= 0 ? "text-success" : "text-danger";
-
         return '<span class="' + className + '">R$ ' + value.toFixed(2) + '</span>'
     }
 
@@ -41,6 +49,38 @@
         } else {
             return 0;
         }
+    }
+
+    function responseHandler(res) {
+        if (res.lancamentoList) {
+            var saldo = 0;
+            for (var i = 0; i < res.lancamentoList.length; i++) {
+                saldo += res.lancamentoList[i].valor;
+                res.lancamentoList[i].saldo = saldo;
+            }
+
+            return res.lancamentoList;
+        }
+
+        return res;
+    }
+
+    function updateExportLinks(pesquisaUrl) {
+        pesquisaUrl = "&" + pesquisaUrl;
+
+        var exportLinks = $("div.export span.menuButton a");
+        exportLinks.attr('href', function (i, a) {
+            return a.split("&centroCusto")[0] + pesquisaUrl;
+        });
+    }
+
+    function serializeFormToJSON(form) {
+        var json = [];
+        form.serializeArray().forEach(function (item) {
+            json[item.name] = item.value;
+        });
+
+        return json;
     }
 </script>
 
@@ -68,17 +108,13 @@
             <tr>
                 <th class="property-label">Total Entradas</th>
 
-                <td>
-                    R$ ${df.format(centroCustoInstance?.valorTotalEntradas)}
-                </td>
+                <td><g:formatNumber number="${centroCustoInstance?.valorTotalEntradas}" type="currency"/></td>
             </tr>
 
             <tr>
                 <th class="property-label">Total Despesas</th>
 
-                <td>
-                    R$ ${df.format(Math.abs(centroCustoInstance?.valorTotalDespesas))}
-                </td>
+                <td><g:formatNumber number="${centroCustoInstance?.valorTotalDespesas}" type="currency"/></td>
             </tr>
 
             <tr>
@@ -89,12 +125,12 @@
 
                     <g:if test="${saldo < 0}">
                         <span class="text-danger">
-                            R$ ${df.format(centroCustoInstance?.saldo)}
+                            <g:formatNumber number="${centroCustoInstance?.saldo}" type="currency"/>
                         </span>
                     </g:if>
                     <g:else>
                         <span class="text-success">
-                            R$ ${df.format(centroCustoInstance?.saldo)}
+                            <g:formatNumber number="${centroCustoInstance?.saldo}" type="currency"/>
                         </span>
                     </g:else>
                 </td>
@@ -103,20 +139,27 @@
     </div>
 </div>
 
-<div class="form-group col-md-6">
-    <label>Data de Emissão:</label>
-    <div class="input-group input-daterange">
-        <input type="text" class="form-control" name="dataInicio" id="dataInicio">
-        <div class="input-group-addon">até</div>
-        <input type="text" class="form-control" name="dataFinal" id="dataFinal">
-        <span class="input-group-btn">
-            <button class="btn btn-primary" type="button" onclick="atualizarExtratoFinanceiro()">Procurar</button>
-        </span>
-    </div>
-</div>
+<g:form name="pesquisa-extrato" controller="extratoFinanceiro" action="index.json">
+    <g:hiddenField name="centroCusto.id" value="${centroCustoInstance.id}"/>
+    <g:hiddenField name="status" value="${StatusLancamento.BAIXADO}"/>
 
-<table class="table table-hover text-center" data-toggle="table" data-pagination='true' id="extratoFinanceiro" data-url="${createLink(controller: 'centroCusto',
-        action: 'getExtratoFinanceiro.json', params: ['centroCustoId': centroCustoInstance.id])}">
+    <div class="form-group col-md-6">
+        <label>Data de Emissão:</label>
+
+        <div class="input-group input-daterange">
+            <input type="text" class="form-control" name="dataInicio" id="dataInicio">
+
+            <div class="input-group-addon">até</div>
+            <input type="text" class="form-control" name="dataFinal" id="dataFinal">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">Procurar</button>
+            </span>
+        </div>
+    </div>
+</g:form>
+
+<table class="table table-hover text-center" data-toggle="table" data-pagination='true' id="extratoFinanceiro"
+       data-response-handler="responseHandler">
     <thead>
     <tr>
         <th class="text-center" data-field="data" data-sortable="true" data-sorter="dateSorter">Data</th>
@@ -128,9 +171,10 @@
     </thead>
 
     <tbody>
-
     </tbody>
 </table>
+
+<export:formats controller="extratoFinanceiro" action="index" formats="['excel', 'pdf']"/>
 
 <g:render template="/despesa/modalCreate" model="[centroCustoId: centroCustoInstance.id]"/>
 <g:render template="/lancamento/modalCreate" model="[centroCustoId: centroCustoInstance.id]"/>
