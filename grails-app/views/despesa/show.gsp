@@ -16,12 +16,6 @@
 <body>
 <div id="content">
     <div class="inner" style="min-height: 700px;">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1><g:message code="default.show.label" args="[entityName]"/></h1>
-            </div>
-        </div>
-        <hr/>
         <!--BLOCK SECTION -->
         <div class="nav" role="navigation">
             <p>
