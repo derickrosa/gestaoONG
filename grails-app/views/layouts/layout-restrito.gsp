@@ -37,7 +37,6 @@
             <div class="alert alert-info" role="status">${flash.message}</div>
         </g:if>
 
-
         <g:layoutBody/>
 
         <sec:ifSwitched>

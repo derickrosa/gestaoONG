@@ -11,7 +11,7 @@ class RoleController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Role.list(params), model: [roleInstanceCount: Role.count()]
+        [roleInstanceList: Role.list(params), roleInstanceCount: Role.count()]
     }
 
     def show(Role roleInstance) {
@@ -34,6 +34,7 @@ class RoleController {
             return
         }
 
+        roleInstance.nivelAcesso = Role.last().nivelAcesso + 1
         roleInstance.save flush: true
 
         request.withFormat {
@@ -79,7 +80,7 @@ class RoleController {
             return
         }
 
-        if(UserRole.countByRole(roleInstance) > 0){
+        if (UserRole.countByRole(roleInstance) > 0) {
             flash.error = "Existem usuário adastrados com essa autoridade."
             redirect(action: 'index', method: 'GET')
             return

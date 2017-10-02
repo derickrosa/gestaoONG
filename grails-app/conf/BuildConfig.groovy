@@ -67,7 +67,6 @@ grails.project.dependency.resolution = {
 
     plugins {
         compile ":spring-security-core:2.0-RC5"
-        compile "org.grails.plugins:spring-security-ui:1.0-RC3"
         // plugins for the build system only
         build ":tomcat:7.0.55.2" // or ":tomcat:8.0.20"
         // plugins needed at runtime but not for compilation
@@ -92,5 +91,6 @@ grails.project.dependency.resolution = {
         compile ":audit-logging:1.0.7"
         compile ":simple-captcha:1.0.0"
         compile ":rest:0.8"
+        compile "org.grails.plugins:jxl:0.54"
     }
 }
