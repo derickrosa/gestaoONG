@@ -27,9 +27,9 @@
  * do script configuracao-inputs.js devem ser invocados
  */
 $(document).ready(function(){
+	configurarWizards();
 	configurarMascaras();
 	configurarDatas();
 	configurarSelects();
-	configurarWizards();
 	configurarFileUpload();
 });

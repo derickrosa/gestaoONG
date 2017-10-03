@@ -15,8 +15,8 @@ function configurarMascaras() {
     $(".agencia").mask("9999999999");
     $(".conta").mask("999999999999");
     $(".number").mask("9999999999999999999");
-    $(".decimalmask").mask("99.9");
     $('.decimal').mask('#.##0,00', {reverse: true});
+    $('.currency').mask('#.##0,00', {reverse: true});
     $('.percentual').mask('000.00 %');
     $('.text').mask('');
     $('.money').maskMoney({prefix: 'R$ ', decimal: ',', thousands: '.', affixesStay: false});
@@ -38,13 +38,15 @@ function configurarSelects() {
 function configurarWizards() {
     var wizard = $("#wizard");
     if (wizard) {
-        var form = wizard.closest("#form");
-        if (form == null || form === undefined || form.length == 0) form = wizard.find("#form");
+        var form = wizard.closest("form");
+        if (form == null || form === undefined || form.length == 0) form = wizard.find("form");
+
 
         form.validate({
             errorPlacement: function errorPlacement(error, element) {
                 element.before(error);
-            }
+            },
+            rules: {}
         });
 
         wizard.steps({
@@ -58,6 +60,20 @@ function configurarWizards() {
             onFinishing: function (event, currentIndex) {
                 form.validate().settings.ignore = ":disabled";
                 return form.valid();
+            },
+            onFinished: function (event, currentIndex)
+            {
+                form.submit();
+            },
+
+            labels: {
+                cancel: "Cancelar",
+                current: "current step:",
+                pagination: "Paginação",
+                finish: "Finalizar",
+                next: "Próximo",
+                previous: "Anterior",
+                loading: "Carregando ..."
             }
         });
     }

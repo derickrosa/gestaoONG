@@ -1,5 +1,6 @@
 import com.acception.cadastro.Adiantamento
 import com.acception.cadastro.Arquivo
+import com.acception.cadastro.Banco
 import com.acception.cadastro.Cidade
 import com.acception.cadastro.Estado
 import com.acception.cadastro.Lancamento
@@ -44,6 +45,7 @@ class BootStrap {
             fixtureLoader.load("cidades_st")
         }
         if (Role.count() == 0) fixtureLoader.load("users")
+        if (Banco.count() == 0) fixtureLoader.load("bancos")
     }
 
     void registerMarchallers() {
