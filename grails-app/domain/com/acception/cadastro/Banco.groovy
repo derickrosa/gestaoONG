@@ -25,6 +25,6 @@ class Banco {
     }
 
     String toString() {
-        "${codigo} - ${nome}"
+        "${nome} (${codigo})"
     }
 }

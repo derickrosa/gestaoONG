@@ -6,11 +6,7 @@
     <g:set var="entityName" value="${message(code: 'user.label', default: 'User')}"/>
     <title>Meu Usuário</title>
 
-    <script type="text/javascript">
-        $(document).ready(function(){
-            submitFormByAjax($("form#form-portador"));
-        });
-    </script>
+
 </head>
 
 <body>
@@ -57,24 +53,6 @@
 </table>
 
 
-<modal:criarUsandoBotaoAtivacao id="alterarSenhaModal" modalTitle="Alterar Senha" buttonClass="danger"
-                                buttonIconClass="glyphicon-lock" buttonTitle="Alterar Senha">
 
-    <g:form name="form-portador" controller="user" action="changePassword">
-        <g:hiddenField name="id" value="${userInstance?.id}"/>
-        <p class="form-control-static">Usuário: <strong class="text-uppercase">${userInstance.username}</strong></p>
-
-        <div class="form-group">
-            <input type="password" name="senha" id="senha" placeholder="Nova Senha" class="form-control" required/>
-        </div>
-
-        <div class="input-group">
-            <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" placeholder="Nova Senha" required>
-            <span class="input-group-btn">
-                <button class="btn btn-primary" type="submit">Alterar</button>
-            </span>
-        </div>
-    </g:form>
-</modal:criarUsandoBotaoAtivacao>
 </body>
 </html>

@@ -14,9 +14,9 @@
     <g:link class="btn btn-default" action="index"><span class="glyphicon glyphicon-list"></span> <g:message
             code="default.list.label" args="[entityName]"/></g:link>
 </p>
-<g:form url="[resource: centroCustoInstance, action: 'save']" enctype="multipart/form-data" id="form">
-    <g:render template="form"/>
-</g:form>
+<g:uploadForm controller="centroCusto" action="save" enctype="multipart/form-data">
+    <g:render template="form" model="[centroCustoInstance: centroCustoInstance]"/>
+</g:uploadForm>
 </body>
 
 </html>

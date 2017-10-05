@@ -1,5 +1,6 @@
 import com.acception.cadastro.Adiantamento
 import com.acception.cadastro.Arquivo
+import com.acception.cadastro.Banco
 import com.acception.cadastro.Cidade
 import com.acception.cadastro.Estado
 import com.acception.cadastro.Lancamento
@@ -16,7 +17,6 @@ class BootStrap {
     def init = { servletContext ->
         systemInicialLog()
         loadFixtures()
-        loadPerfisAcesso()
         registerMarchallers()
     }
     def destroy = {
@@ -44,32 +44,8 @@ class BootStrap {
             fixtureLoader.load("cidades_r")
             fixtureLoader.load("cidades_st")
         }
-        if (Role.count() == 0)
-            fixtureLoader.load("users")
-    }
-
-    void loadPerfisAcesso() {
-        if (!Role.findByAuthority('ROLE_SUPORTE')) {
-            def role = new Role(nome: 'Suporte Acception', authority: 'ROLE_SUPORTE')
-            role.save(flush: true, failOnError: true)
-        }
-        if (!Role.findByAuthority('ROLE_FINANCIADOR')) {
-            def role = new Role(nome: 'Financiador', authority: 'ROLE_FINANCIADOR')
-            role.save(flush: true, failOnError: true)
-        }
-        if (!Role.findByAuthority('ROLE_RESPONSAVEL')) {
-            def role = new Role(nome: 'Responsável', authority: 'ROLE_RESPONSAVEL')
-            role.save(flush: true, failOnError: true)
-        }
-        if (!Role.findByAuthority('ROLE_FUNCIONARIO')) {
-            def role = new Role(nome: 'Funcionário', authority: 'ROLE_FUNCIONARIO')
-            role.save(flush: true, failOnError: true)
-        }
-
-        if (!Role.findByAuthority('ROLE_ADMINISTRADOR_SISTEMA')) {
-            def role = new Role(nome: 'Administrador do Sistema', authority: 'ROLE_ADMINISTRADOR_SISTEMA')
-            role.save(flush: true, failOnError: true)
-        }
+        if (Role.count() == 0) fixtureLoader.load("users")
+        if (Banco.count() == 0) fixtureLoader.load("bancos")
     }
 
     void registerMarchallers() {

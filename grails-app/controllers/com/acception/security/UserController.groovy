@@ -1,11 +1,13 @@
 package com.acception.security
 
-import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
+import grails.plugin.springsecurity.SpringSecurityUtils
 
-@Transactional(readOnly = false)
+import static org.springframework.http.HttpStatus.*
+
 class UserController {
     def springSecurityService
+    def userService
+
     static allowedMethods = [save: "POST", update: "PUT", changePassword: "POST", delete: "DELETE"]
 
     def index(Integer max) {
@@ -25,17 +27,85 @@ class UserController {
         respond userInstance
     }
 
+    def create() {
+        def roleList = Role.porNivelAcesso.list()
+        if (SpringSecurityUtils.ifNotGranted("ROLE_SUPORTE")) roleList.removeAll { it.nivelAcesso == 0 }
+
+        [userInstance: new User(params), authorityList: roleList]
+    }
+
+    def edit(User userInstance) {
+        def roleList = Role.porNivelAcesso.list()
+        if (SpringSecurityUtils.ifNotGranted("ROLE_SUPORTE")) roleList.removeAll { it.nivelAcesso == 0 }
+
+        [userInstance: userInstance, authorityList: roleList]
+    }
+
+    def save(User user) {
+        if (user == null) {
+            notFound()
+            return
+        }
+
+        try {
+            user = userService.save(user, params.list('roles'))
+            flash.message = "Usuário ${user.nome} criado."
+            redirect(action: 'show', id: user.id)
+        }
+        catch (Exception e) {
+            e.printStackTrace()
+            flash.error = "Um erro ocorreu."
+            redirect(action: 'create')
+        }
+    }
+
+    def update() {
+        User user = User.get(params.long('id'))
+        if (user == null) {
+            notFound()
+            return
+        }
+        long version = params.long('version')
+        if (version != null && user.version > version) {
+            flash.error = "Operação não permitida. Outro usuário do sistema tentou alterar essa instância."
+            redirect(action: 'index')
+            return
+        }
+
+        try {
+            user.properties = params
+            user = userService.save(user, params.list('roles'))
+            flash.message = "Usuário ${user.nome} alterado."
+            redirect(action: 'show', id: user.id)
+        }
+        catch (Exception e) {
+            e.printStackTrace()
+            flash.error = "Um erro ocorreu."
+            redirect(action: 'edit', params: params)
+        }
+    }
+
+    def delete(User userInstance) {
+        if (userInstance == null) {
+            notFound()
+            return
+        }
+
+        userService.delete(userInstance)
+        flash.message = "Usuário deletado."
+        redirect(action: 'index')
+    }
+
     def changePassword() {
         User user = User.get(params.long('id'))
         String senha = params['senha']
         String confirmarSenha = params['confirmarSenha']
 
-        if(user == null || senha?.isEmpty() || confirmarSenha?.isEmpty()){
+        if (user == null || senha?.isEmpty() || confirmarSenha?.isEmpty()) {
             response.status = NOT_ACCEPTABLE.value()
             respond([error: "Parâmetros insuficientes."])
             return
-        }
-        else if(!senha.equals(confirmarSenha)){
+        } else if (!senha.equals(confirmarSenha)) {
             response.status = NOT_ACCEPTABLE.value()
             respond([error: "Senhas são diferentes."])
             return
@@ -48,89 +118,13 @@ class UserController {
         respond([msg: 'Senha alterada com sucesso'])
     }
 
-    def create() {
-        def roleList = []
-        User currentUser = springSecurityService.currentUser
-        if (currentUser.containsAuthorities('ROLE_ADMINISTRADOR_SISTEMA') || currentUser.containsAuthorities('ROLE_SUPORTE')) {
-            roleList = Role.list()
-        }
-        [userInstance: new User(params), authorityList: roleList, edit: false]
-    }
-
     def meuUsuario() {
-        def user = springSecurityService.currentUser
-        [userInstance: user]
-    }
-
-    def edit(User userInstance) {
-        return [userInstance: userInstance, authorityList: Role.list(), edit: true]
-    }
-
-    @Transactional
-    def update(User userInstance) {
-        if (userInstance == null) {
-            notFound()
-            return
-        }
-
-        if (userInstance.hasErrors()) {
-            respond userInstance.errors, view: 'edit'
-            return
-        }
-        log.debug("Parametros: ${params}.")
-
-        for (role in Role.list()) {
-            if (params["${role.authority}"]) {
-                UserRole auth = new UserRole(user: userInstance, role: role)
-                auth.save(flush: true)
-            } else {
-                def existingLink = UserRole.findByUserAndRole(userInstance, role)
-                if (existingLink) {
-                    existingLink.delete(flush: true)
-                }
-            }
-        }
-
-        userInstance.save flush: true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])
-                redirect userInstance
-            }
-            '*' { respond userInstance, [status: OK] }
-        }
+        redirect(action: 'show', id: springSecurityService.currentUser?.id)
     }
 
     def isSamePassword() {
         def user = User.get(params.long('userID'))
         respond([isSamePassword: springSecurityService.passwordEncoder.isPasswordValid(user.password, params.password.toString(), null)])
-    }
-
-    @Transactional
-    def delete(User userInstance) {
-        log.debug("Removendo usuário.")
-        if (userInstance == null) {
-            notFound()
-            return
-        }
-        try {
-            UserRole.findAllByUser(userInstance).each { ur ->
-                ur.delete(flush: true)
-            }
-
-            userInstance.delete(flush: true)
-
-        } catch (Exception e) {
-            flash.message = "Não foi possível excluir o usuário, pois ele está relacionado a um papel. Primeiro desassioce-o das suas permissões ou o desative ao invés de excluí-lo."
-        }
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NO_CONTENT }
-        }
     }
 
     protected void notFound() {

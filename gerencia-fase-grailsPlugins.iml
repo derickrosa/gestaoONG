@@ -12,7 +12,6 @@
           <root url="file://$MODULE_DIR$/target/work/plugins/jquery-ui-1.10.4/web-app" relative="/" />
           <root url="file://$MODULE_DIR$/target/work/plugins/console-1.5.5/web-app" relative="/" />
           <root url="file://$MODULE_DIR$/target/work/plugins/console-1.5.5/grails-app/views" relative="/" />
-          <root url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/views" relative="/" />
           <root url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4/web-app" relative="/" />
           <root url="file://$MODULE_DIR$/target/work/plugins/audit-logging-1.0.7/grails-app/views" relative="/" />
           <root url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5/grails-app/views" relative="/" />
@@ -85,6 +84,9 @@
     <content url="file://$MODULE_DIR$/target/work/plugins/jquery-ui-1.10.4">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/jquery-ui-1.10.4/grails-app/taglib" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/jxl-0.54">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/jxl-0.54/src/groovy" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/mail-1.0.7">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/mail-1.0.7/src/groovy" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/mail-1.0.7/grails-app/i18n" isTestSource="false" />
@@ -114,14 +116,6 @@
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5/grails-app/controllers" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5/grails-app/services" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0-RC5/grails-app/taglib" isTestSource="false" />
-    </content>
-    <content url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3">
-      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/controllers" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/domain" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/services" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-ui-1.0-RC3/grails-app/taglib" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/tomcat-7.0.55.2">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/tomcat-7.0.55.2/src/java" isTestSource="false" />

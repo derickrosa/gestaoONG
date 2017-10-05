@@ -67,7 +67,13 @@ class CentroCustoController {
     }
 
     def create() {
-        respond new CentroCusto(params)
+        if (Financiador.count() == 0) {
+            flash.error = "Ainda não há Financiadores cadastrados. Para cadastrar um Centro Custo é necessário cadastrar primeiramente um Financiador."
+            redirect(controller: 'financiador', action: 'index')
+            return
+        }
+
+        [centroCustoInstance: new CentroCusto(params)]
     }
 
     @Transactional

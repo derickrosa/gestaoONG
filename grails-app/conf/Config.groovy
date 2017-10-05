@@ -156,7 +156,7 @@ grails.plugin.console.enabled = true
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.useSwitchUserFilter = true
-grails.plugin.springsecurity.password.algorithm = 'bcrypt'
+grails.plugin.springsecurity.password.algorithm = 'SHA-256'
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.acception.security.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.acception.security.UserRole'
 grails.plugin.springsecurity.authority.className = 'com.acception.security.Role'
@@ -197,6 +197,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         '/adiantamento/**'              : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
         '/relatorioAtividade/**'        : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
         '/cidade/cidadePorEstado/**'    : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
-        '/extratoFinanceiro/**'         : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA']
+        '/extratoFinanceiro/**'         : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA'],
+        '/relatorio/**'                 : ['ROLE_SUPORTE', 'ROLE_ADMINISTRADOR_SISTEMA']
 ]
 

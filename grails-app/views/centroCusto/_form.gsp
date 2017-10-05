@@ -68,10 +68,8 @@
                 <div class="form-group ${hasErrors(bean: centroCustoInstance, field: 'codigo', 'has-error')}">
                     <label for="codigo">
                         <g:message code="centroCusto.codigo.label" default="Código"/>
-
                     </label>
-                    <g:field type="number" class="form-control required" maxlength="4" required="required" name="codigo" value="${centroCustoInstance?.codigo}"/>
-
+                    <input type="number" id="codigo" name="codigo" class="form-control" value="${centroCustoInstance?.codigo}" min="0" minlength="4" required/>
                 </div>
             </div>
 
@@ -79,29 +77,14 @@
                 <div class="form-group fieldcontain ${hasErrors(bean: centroCustoInstance, field: 'nome', 'error')} ">
                     <label for="nome">
                         <g:message code="centroCusto.nome.label" default="Nome"/>
-
                     </label>
                     <g:textField class="form-control" required="required" name="nome" value="${centroCustoInstance?.nome}"/>
-
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-12">
-                <div class="form-group fieldcontain ${hasErrors(bean: centroCustoInstance, field: 'descricao', 'error')} ">
-                    <label for="descricao">
-                        <g:message code="centroCusto.descricao.label" default="Descrição"/>
-
-                    </label>
-                    <g:textField class="form-control" required="required" name="descricao"
-                                 value="${centroCustoInstance?.descricao}"/>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="financiador">Financiador</label>
 
@@ -111,7 +94,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="responsavel">Responsável</label>
 
@@ -129,21 +112,18 @@
 
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group fieldcontain ${hasErrors(bean: centroCustoInstance, field: 'ano', 'error')} ">
                     <label for="ano">
                         <g:message code="centroCusto.ano.label" default="Ano"/>
-
                     </label>
-                    <g:field class="form-control" id="ano" required="required" name="ano" type="number" min="0"
+                    <g:field class="form-control" id="ano" required="required" name="ano" type="number" min="1900"
                              value="${centroCustoInstance.ano}"/>
                 </div>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-md-3">
                 <div class="form-group fieldcontain ${hasErrors(bean: centroCustoInstance, field: 'statusProjeto', 'error')} ">
                     <label for="statusProjeto">
                         <g:message code="centroCusto.statusProjeto.label" default="Status Projeto"/>
@@ -158,38 +138,35 @@
         </div>
 
         <div class="row">
-            <div class="form-group fieldcontain ${hasErrors(bean: centroCustoInstance, field: 'dataInicio', 'error')} col-md-6">
-                <label class="control-label" for="dataInicio">
-                    <g:message code="centroCusto.dataInicio.label" default="Data Início"/>
-                </label>
-                <input required="required" name="dataInicio" format="dd/MM/yyyy"
-                       value="${formatDate(format: "dd/MM/yyyy", date: centroCustoInstance?.dataInicio)}"
-                       class="form-control datepicker"/>
-
+            <div class="form-group col-md-6">
+                <label>Período:</label>
+                <div class="input-group input-daterange">
+                    <input type="text" class="form-control datepicker" name="dataInicio" id="dataInicio" value="${centroCustoInstance?.dataInicio}" placeholder="Data Início" required>
+                    <div class="input-group-addon">até</div>
+                    <input type="text" class="form-control" name="dataFinal" id="dataFinal" value="${centroCustoInstance?.dataFinal}" placeholder="Data Fim" required>
+                </div>
             </div>
 
-            <div class="form-group fieldcontain ${hasErrors(bean: centroCustoInstance, field: 'dataFinal', 'error')} col-md-6">
-                <label class="control-label" for="dataFinal">
-                    <g:message code="centroCusto.dataFinal.label" default="Data Término"/>
-
+            <div class="form-group col-md-6">
+                <label for="planoDeTrabalho">
+                    <g:message code="centroCusto.planoDeTrabalho.label" default="Plano De Trabalho"/>
                 </label>
-                <input required="required" name="dataFinal" format="dd/MM/yyyy"
-                       value="${formatDate(format: "dd/MM/yyyy", date: centroCustoInstance?.dataFinal)}"
-                       class="form-control datepicker"/>
 
+                <input type="hidden" id="previousPlanoDeTrabalho" name="previousPlanoDeTrabalho" value="${centroCustoInstance.planoDeTrabalho?.id}">
+                <input type="hidden" id="numFilesUploaded" name="numFilesUploaded" value="${centroCustoInstance.planoDeTrabalho ? 1 : 0}">
+                <input type="file" id="planoDeTrabalho" name="planoDeTrabalho">
             </div>
         </div>
 
-        <div class="form-group fieldcontain ${hasErrors(bean: centroCustoInstance, field: 'planoDeTrabalho', 'error')} ">
-            <label for="planoDeTrabalho">
-                <g:message code="centroCusto.planoDeTrabalho.label" default="Plano De Trabalho"/>
-            </label>
-
-            <input type="hidden" id="previousPlanoDeTrabalho" name="previousPlanoDeTrabalho"
-                   value="${centroCustoInstance.planoDeTrabalho?.id}">
-            <input type="hidden" id="numFilesUploaded" name="numFilesUploaded"
-                   value="${centroCustoInstance.planoDeTrabalho ? 1 : 0}">
-            <input type="file" id="planoDeTrabalho" name="planoDeTrabalho">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group fieldcontain ${hasErrors(bean: centroCustoInstance, field: 'descricao', 'error')} ">
+                    <label for="descricao">
+                        <g:message code="centroCusto.descricao.label" default="Descrição"/>
+                    </label>
+                    <g:textArea rows="5" class="form-control" required="required" name="descricao" placeholder="Descreva seu Centro de Custo aqui." value="${centroCustoInstance?.descricao}"/>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -207,34 +184,28 @@
                             <div class="col-md-3 form-group">
                                 <label for="orcamento.ano">Ano</label>
 
-                                <input type="number" min="0" id="orcamento.ano" name="orcamento.ano" class="form-control"
+                                <input type="number" min="1900" id="orcamento.ano" name="orcamento.ano" class="form-control"
                                        value="${centroCustoInstance.orcamentoAtual?.ano}" required>
                             </div>
 
                             <div class="col-md-3 form-group">
                                 <label for="valorTotalOrcamento">Valor Total</label>
-
-                                <input type="text" id="valorTotalOrcamento" name="valorTotalOrcamento"
-                                       class="form-control currency"
+                                <input type="text" id="valorTotalOrcamento" name="valorTotalOrcamento" class="form-control currency"
                                        required value="${centroCustoInstance.orcamentoAtual?.valorTotal}">
                             </div>
 
                             <div class="col-md-3 form-group">
                                 <label for="orcamento.moeda">Moeda</label>
-
                                 <g:select class="form-control" name="orcamento.moeda" from="${Moeda.values()}"
                                           keys="${Moeda.values()*.name()}"
                                           value="${centroCustoInstance.orcamentoAtual?.moeda?.name()}" required="required"/>
-
                             </div>
 
                             <div class="col-md-3 form-group">
                                 <label for="valorCambialOrcamento">Valor Cambial</label>
-
                                 <input type="text" id="valorCambialOrcamento" name="valorCambialOrcamento"
-                                       class="form-control currency"
-                                       required value="${centroCustoInstance.orcamentoAtual?.valorCambial}
-                                ">
+                                       class="form-control currency" required
+                                       value="${centroCustoInstance.orcamentoAtual?.valorCambial}">
                             </div>
                         </div>
                     </div>
@@ -262,7 +233,7 @@
         <div class="row">
             <div class="col-md-6 form-group">
                 <label>Banco</label>
-                <g:select class="form-control" name="contaBancaria.banco.id" from="${com.acception.cadastro.Banco.list()}"
+                <g:select class="form-control select" name="contaBancaria.banco.id" from="${com.acception.cadastro.Banco.list()}"
                           required="required" noSelection="['': 'Selecione um banco...']" optionKey="id" value="${centroCustoInstance.contaBancaria?.banco?.id}"/>
             </div>
 
@@ -295,16 +266,6 @@
                 <g:field type="text" maxlength="2" name="contaBancaria.dvConta" class="form-control" required="required" value="${centroCustoInstance.contaBancaria?.dvConta}"/>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-6 form-group">
-                <label>Saldo</label>
-
-                <g:textField name="saldoInicialContaBancaria" class="form-control currency" required="required"
-                             value="${centroCustoInstance.saldo}" data-allow-zero="true"/>
-
-            </div>
-        </div>
     </section>
 </div>
 
@@ -331,29 +292,8 @@
     </div>
 </div>
 
-<script>
-    var form = $("#form");
-    form.validate({
-        errorPlacement: function errorPlacement(error, element) { element.before(error); },
-        rules: {
-            codigo: {
-                minlength: 4
-            }
-        }
-    });
-</script>
-
-<!-- PAGE LEVEL SCRIPTS -->
-
 
 <script>
-    var initializeDatepicker = function () {
-        $('.datepicker').datepicker({
-            format: 'dd/mm/yyyy',
-            language: 'pt-BR',
-            autoclose: true
-        });
-    };
 
     var initializeFileInput = function () {
         $('#planoDeTrabalho').fileinput({
@@ -370,7 +310,7 @@
             initialPreviewConfig: [
                 {
                     type: "object",
-                    caption: "${centroCustoInstance?.planoDeTrabalho?.nome}",
+                    caption: "${centroCustoInstance?.planoDeTrabalho?.nome}"
                 }
             ],
             initialPreviewShowDelete: false,
@@ -504,7 +444,7 @@
             },
             row_template: ['codigo', 'nome', 'currency', 'tipoCusto', 'listaFuncionarios', 'listaFuncionariosSalario', 'id'],
             headerCols: ['Código', 'Nome', 'Valor', 'Tipo Custo'],
-            first_row: false,
+            first_row: false
         });
 
         $("#itensOrcamentarios").on("focusin", "td:nth-child(3) input", function () {
@@ -671,8 +611,6 @@
     };
 
     $(function () {
-        initializeDatepicker();
-
         initializeFileInput();
 
         initializeTableItensOrcamentarios();
