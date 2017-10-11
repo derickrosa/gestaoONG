@@ -5,14 +5,15 @@ class ResumoViagem {
     Date dateCreated
     Date lastUpdated
 
-    Atividade atividade
-    List<Despesa> despesas
+    Funcionario funcionario
+    Adiantamento adiantamento
 
-    static belongsTo = [adiantamento: Adiantamento]
-
-    static transients = ['despesas']
+    static hasMany = [despesas: Despesa]
+    static belongsTo = [atividade: Atividade, contaAtividade:ContaAtividade]
 
     static constraints = {
         atividade nullable: false
+        adiantamento nullable: true
+        despesas nullable: true
     }
 }

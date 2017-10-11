@@ -184,14 +184,19 @@ class FinanciadorController {
             def ids = financiadorInstance?.responsaveis?.collect { it.id }
             ids.each { id ->
 
-                if (!params?.listaResponsaveis?.id.contains(id.toString())) {
+                if (!params?.listaResponsaveis?.id?.contains(id.toString())) {
 
                     def responsavel = Responsavel.get(id)
                     def partic = responsavel.participante
+                    def centroC = CentroCusto.findByResponsavel(responsavel)
                     financiadorInstance.removeFromResponsaveis(responsavel)
                     partic.removeFromPapeis(responsavel)
                     responsavel.participante = null
                     responsavel.financiador = null
+                    if(centroC){
+                        centroC.responsavel = null
+                        centroC.save(flush: true, failOnError: true)
+                    }
                     responsavel.delete(flush: true, failOnError: true)
                     partic.delete(flush: true, failOnError: true)
                 }
@@ -202,7 +207,7 @@ class FinanciadorController {
                 if (params?.listaResponsaveis?.id?.class?.array && params?.listaResponsaveis?.id?.size() > i) {
                     responsavel = Responsavel.get(Long.parseLong(params.listaResponsaveis?.id[i]))
 
-                } else if (i == 0) {
+                } else if (i == 0 && params.listaResponsaveis?.id) {
                     responsavel = Responsavel.get(Long.parseLong(params.listaResponsaveis?.id))
 
                 }
@@ -246,10 +251,15 @@ class FinanciadorController {
                 if (params?.listaResponsaveis?.id != id.toString()) {
                     def responsavel = Responsavel.get(id)
                     def partic = responsavel.participante
+                    def centroC = CentroCusto.findByResponsavel(responsavel)
                     financiadorInstance.removeFromResponsaveis(responsavel)
                     partic.removeFromPapeis(responsavel)
                     responsavel.participante = null
                     responsavel.financiador = null
+                    if(centroC){
+                        centroC.responsavel = null
+                        centroC.save(flush: true, failOnError: true)
+                    }
                     responsavel.delete(flush: true, failOnError: true)
                     partic.delete(flush: true, failOnError: true)
                 }

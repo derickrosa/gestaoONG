@@ -28,7 +28,7 @@ class Atividade {
     Cidade municipio
     String local
 
-    static hasMany = [arquivos: Arquivo, linhas: LinhaAcao, despesas: Despesa, relatorios: RelatorioAtividade]
+    static hasMany = [arquivos: Arquivo, linhas: LinhaAcao, despesas: Despesa, relatorios: RelatorioAtividade, resumos:ResumoViagem]
     static belongsTo = [LinhaAcao, CentroCusto]
     static transients = ['periodo', 'subAtividades']
 
@@ -51,6 +51,7 @@ class Atividade {
         relatorios nullable: true
         modulo nullable: true
         valorPlanejado nullable: true
+        resumos nullable: true
     }
 
     void setNome(String nome) {
