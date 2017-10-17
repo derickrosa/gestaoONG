@@ -2,5 +2,7 @@
 .idea/*
 .project/*
 .slcache/*
+.gradle/*
+build/*
 ./target/*
 target/
